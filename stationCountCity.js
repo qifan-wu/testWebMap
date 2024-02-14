@@ -38,13 +38,25 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
 function createCityMarkers(stationCount) {
     var markers = L.markerClusterGroup();
     stationCount.forEach(function (city) {
-        var marker = L.marker(new L.LatLng(city.lat, city.lon));
-        marker.bindPopup(document.createTextNode(city.n_station).textContent);
+        var icon = L.divIcon({
+            className: 'custom-marker',
+            html: '<div class="marker-circle">' + city.n_station + '</div>'
+        });
+
+        var marker = L.marker(new L.LatLng(city.lat, city.lon), { icon: icon });
+        // marker.bindPopup(document.createTextNode(city.n_station).textContent);
+        marker.on('click', function() {
+            zoomToCity(city.lat, city.lon);
+        });
+
         markers.addLayer(marker);
     });
     map.addLayer(markers);
 }
 
+function zoomToCity(lat, lon) {
+    map.setView([lat, lon], 12); // Adjust the zoom level as needed
+}
 
 axios.get('data/city_ranking.json')
     .then(function (response) {
