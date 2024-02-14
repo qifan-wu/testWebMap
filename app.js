@@ -11,55 +11,49 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 
 
-map.on('zoomend', function () {
-    // Get the new bounding box
-    var bounds = map.getBounds();
-    var bbox = bounds.toBBoxString();
+// map.on('load', function () {
+//     // Get the new bounding box
+//     var bounds = map.getBounds();
+//     var bbox = bounds.toBBoxString();
 
-    console.log(new Date().toLocaleString());
+//     console.log(new Date().toLocaleString());
 
-    // Define an Overpass API query for subway stations
-    var overpassQuery = `
-            // area["name"="New York"]->.a;
-            // (node["railway"="station"]["station"="subway"](area.a);
-            // way["railway"="station"]["station"="subway"](area.a);
-            // rel["railway"="station"]["station"="subway"](area.a);
-            // );
-            // out body;
+//     // Define an Overpass API query for subway stations
+//     var overpassQuery = `
+//             area["name"="New York"]->.a;
+//             (node["railway"="station"]["station"="subway"](area.a);
+//             way["railway"="station"]["station"="subway"](area.a);
+//             rel["railway"="station"]["station"="subway"](area.a);
+//             );
+//             out body;
+//         `;
 
-            (node["amenity"~".*"](around:1000,40.7128,-74.0060);
-            node["leisure"~".*"](around:1000,40.7128,-74.0060);
-            node["shop"~".*"](around:1000,40.7128,-74.0060);
-            node["historic"~".*"](around:1000,40.7128,-74.0060);
-            );out body;
-        `;
+//     // Make a request to the Overpass API
+//     fetch('https://overpass-api.de/api/interpreter', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/x-www-form-urlencoded'
+//         },
+//         body: 'data=' + encodeURIComponent(overpassQuery)
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         data.elements.forEach(element => {
+//             var lat, lon, name;
+//             // debugger;
+//             if (element.type === 'node' && 'lat' in element && 'lon' in element) {
+//                 lat = element.lat;
+//                 lon = element.lon;
+//                 name = (element.tags && 'name' in element.tags) ? element.tags.name : 'Subway Station';
 
-    // Make a request to the Overpass API
-    fetch('https://overpass-api.de/api/interpreter', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: 'data=' + encodeURIComponent(overpassQuery)
-    })
-    .then(response => response.json())
-    .then(data => {
-        data.elements.forEach(element => {
-            var lat, lon, name;
-            // debugger;
-            if (element.type === 'node' && 'lat' in element && 'lon' in element) {
-                lat = element.lat;
-                lon = element.lon;
-                name = (element.tags && 'name' in element.tags) ? element.tags.name : 'Subway Station';
+//                 // Create a marker for each subway station
+//                 var marker = L.marker([lat, lon]).addTo(map);
+//                 marker.bindPopup(`<b>${name}</b>`).openPopup();
+//             }
 
-                // Create a marker for each subway station
-                var marker = L.marker([lat, lon]).addTo(map);
-                marker.bindPopup(`<b>${name}</b>`).openPopup();
-            }
+//         });
+//         console.log(new Date().toLocaleString());
 
-        });
-        console.log(new Date().toLocaleString());
-
-    })
-    .catch(error => console.error('Error fetching data:', error));
-});
+//     })
+//     .catch(error => console.error('Error fetching data:', error));
+// });

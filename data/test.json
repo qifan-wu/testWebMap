@@ -1,0 +1,111 @@
+[{
+        "country": "UnitedStates",
+        "city": "Atlanta",
+        "n_SIPOI": 83.0,
+        "d_SIPOI": 28.5,
+        "n_SIPOI_norm_pop": 0.0518508635,
+        "n_station": 24.0,
+        "lon": "-84.3923723626725",
+        "lat": " 33.7655769566963",
+        "poi_saturation": 85.8
+    },
+    {
+        "country": "UnitedStates",
+        "city": "Baltimore",
+        "n_SIPOI": 175.0,
+        "d_SIPOI": 34.0,
+        "n_SIPOI_norm_pop": 0.0631448495,
+        "n_station": 11.0,
+        "lon": "-76.6416188693581",
+        "lat": " 39.3124570272559",
+        "poi_saturation": 78.16
+    },
+    {
+        "country": "UnitedStates",
+        "city": "Boston",
+        "n_SIPOI": 217.5,
+        "d_SIPOI": 41.5,
+        "n_SIPOI_norm_pop": 0.0496826529,
+        "n_station": 34.0,
+        "lon": "-71.0631942293053",
+        "lat": " 42.3453376926098",
+        "poi_saturation": 74.5
+    },
+    {
+        "country": "UnitedStates",
+        "city": "Chicago",
+        "n_SIPOI": 150.0,
+        "d_SIPOI": 35.0,
+        "n_SIPOI_norm_pop": 0.0398971695,
+        "n_station": 88.0,
+        "lon": "-87.6697516622838",
+        "lat": " 41.8902611273026",
+        "poi_saturation": 66.21
+    },
+    {
+        "country": "UnitedStates",
+        "city": "Cleveland",
+        "n_SIPOI": 49.0,
+        "d_SIPOI": 14.0,
+        "n_SIPOI_norm_pop": 0.0625143257,
+        "n_station": 15.0,
+        "lon": "-81.7130890278062",
+        "lat": " 41.4726923270051",
+        "poi_saturation": 81.5
+    },
+    {
+        "country": "UnitedStates",
+        "city": "Los Angeles",
+        "n_SIPOI": 203.0,
+        "d_SIPOI": 37.0,
+        "n_SIPOI_norm_pop": 0.0369710046,
+        "n_station": 15.0,
+        "lon": "-118.299749122457",
+        "lat": " 34.0854842093502",
+        "poi_saturation": 67.86
+    },
+    {
+        "country": "UnitedStates",
+        "city": "Miami",
+        "n_SIPOI": 60.0,
+        "d_SIPOI": 13.5,
+        "n_SIPOI_norm_pop": 0.0233517201,
+        "n_station": 10.0,
+        "lon": "-80.214657301634",
+        "lat": " 25.7721818122825",
+        "poi_saturation": 73.04
+    },
+    {
+        "country": "UnitedStates",
+        "city": "New York City",
+        "n_SIPOI": 280.5,
+        "d_SIPOI": 42.0,
+        "n_SIPOI_norm_pop": 0.0262137026,
+        "n_station": 368.0,
+        "lon": "-73.9402983465076",
+        "lat": " 40.719743231138",
+        "poi_saturation": 60.96
+    },
+    {
+        "country": "UnitedStates",
+        "city": "Philadelphia",
+        "n_SIPOI": 191.5,
+        "d_SIPOI": 33.0,
+        "n_SIPOI_norm_pop": 0.0392004091,
+        "n_station": 48.0,
+        "lon": "-75.1583202797007",
+        "lat": " 39.9722761772367",
+        "poi_saturation": 76.49
+    },
+    {
+        "country": "UnitedStates",
+        "city": "San Francisco",
+        "n_SIPOI": 703.0,
+        "d_SIPOI": 83.0,
+        "n_SIPOI_norm_pop": 0.0624114441,
+        "n_station": 8.0,
+        "lon": "-122.417379704582",
+        "lat": " 37.7647513184011",
+        "poi_saturation": 71.33
+    }
+]
