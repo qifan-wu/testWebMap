@@ -46,7 +46,7 @@ function createCityMarkers(stationCount) {
 }
 
 
-axios.get('data/test.json')
+axios.get('data/city_ranking.json')
     .then(function (response) {
         var stationCount = response.data;
         createCityMarkers(stationCount);
