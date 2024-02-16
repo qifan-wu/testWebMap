@@ -15,9 +15,15 @@
 
     <script src="https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/gh/kartenkarsten/leaflet-layer-overpass/blob/master/src/OverPassLayer.js"></script> -->
 
-    <script src="./leaflet-overpass-layer-develop/dist/OverPassLayer.bundle.js"></script>
+    <!-- <script src="./leaflet-layer-overpass-master/src/MinZoomIndicator.js"></script>
+    <script src="./leaflet-layer-overpass-master/src/OverPassLayer.js"></script> -->
+
+
+
 <style>
+
         #map {
             height: 600px;
         }
@@ -40,14 +46,15 @@
     </div>
     <!-- <script src="app.js"></script> -->
     <!-- <script src="test.js"></script> -->
-    <script>
-        var map = L.map('map').setView([0, 0], 2);
-        var basemap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        })
-        map.addLayer(basemap);
+    <!-- <script src="./bower_components/leaflet-layer-overpass/dist/OverPassLayer.js"></script> -->
+    <!-- <script src="./bower_components/leaflet-layer-overpass/dist/OverPassLayer.css"></script> -->
+    <!-- <script src="./bower_components/leaflet/dist/leaflet.js"></script> -->
+    <!-- <script src="./leaflet-layer-overpass-master/dist/OverPassLayer.js"></script> -->
+    <script src="./leaflet-overpass-layer-develop/dist/OverPassLayer.bundle.js"></script>
+    <script src="./leaflet-overpass-layer-develop/dist/OverPassLayer.css"></script>
+
+    <script type="module" src="./src/test.js">
+
     </script>
-    <script type="module" src="src/stationsDisplay.js"></script>
-    <!-- <script type="module" src="src/test.js"></script> -->
 </body>
 </html>

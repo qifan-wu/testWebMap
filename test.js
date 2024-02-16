@@ -7,12 +7,6 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
 
 
 
-
-
-
-
-
-
 // Function to fetch subway station data using Overpass API
 function fetchSubwayStations(city) {
 axios.get('https://overpass-api.de/api/interpreter', {
