@@ -1,9 +1,9 @@
 
 
-// var attr_osm = 'Map data &copy; <a href="http://openstreetmap.org/">OpenStreetMap</a> contributors',
-// attr_overpass = 'POI via <a href="http://www.overpass-api.de/">Overpass API</a>';
-// var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {opacity: 0.7, attribution: [attr_osm, attr_overpass].join(', ')});
-
+var attr_osm = 'Map data &copy; <a href="http://openstreetmap.org/">OpenStreetMap</a> contributors',
+attr_overpass = 'POI via <a href="http://www.overpass-api.de/">Overpass API</a>';
+var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {opacity: 0.7, attribution: [attr_osm, attr_overpass].join(', ')});
+map.addLayer(osm);
 map.setView(new L.LatLng(40.7128, -74.0060), 14);
 
 //OverPassAPI overlay
