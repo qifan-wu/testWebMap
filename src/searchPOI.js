@@ -8,6 +8,9 @@ export function searchPOI(lat, lon) {
     // const eastBound = lon + searchGridLen;
     // const northBound = lat + searchGridLen;
     // const southBound = lat - searchGridLen;
+    // if (map.hasLayer(opl)) {
+    //     map.removeLayer(opl);
+    // }
     var poiQuery = `(
         node(around:1000, ${lat}, ${lon})[amenity];
         node(around:1000, ${lat}, ${lon})[leisure];
