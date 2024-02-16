@@ -1,9 +1,11 @@
 import { map, stationsDataFile } from './universal.js'
 import { searchPOI } from './searchPOI.js';
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+var basemap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
+})
+// basemap.addTo(map);
+map.addLayer(basemap);
 
 function createStationMarkers(stationsData) {
     var markers = L.markerClusterGroup();
@@ -11,6 +13,7 @@ function createStationMarkers(stationsData) {
         var marker = L.marker(new L.LatLng(station.lat, station.lon));
         // marker.bindPopup(document.createTextNode(city.n_station).textContent);
         marker.on('click', function() {
+            console.log('click');
             searchPOI(station.lat, station.lon);
         });
 
