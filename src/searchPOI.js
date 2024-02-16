@@ -23,7 +23,13 @@ export function searchPOI(lat, lon) {
         'query': poiQuery,
 
         onSuccess: function(data) {
-        var poiGroup= L.markerClusterGroup({ showCoverageOnHover: true, disableClusteringAtZoom:18 });
+        var poiGroup= L.markerClusterGroup({
+            showCoverageOnHover: true,
+            disableClusteringAtZoom:18,
+
+            iconCreateFunction: function(cluster) {
+                return L.divIcon({ html: '<h2>' + cluster.getChildCount() + '</h2>' });
+            }});
         for (var i=0; i<data.elements.length; i++) {
             var e = data.elements[i];
             var pos = new L.LatLng(e.lat, e.lon);
