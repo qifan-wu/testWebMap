@@ -71,12 +71,6 @@ export function searchPOI(lat, lon) {
 
     var selectedStation = L.marker([lat, lon], {icon: subwayIcon}).addTo(map);
 
-    var rangeCircle = L.divIcon({
-        className: 'rangeCircle',
-        html: 'C'
-    })
-    L.circle([lat, lon], { icon: rangeCircle }).addTo(map);
-
     var opl = new L.OverPassLayer({
         minZoom: 14,
         'query': poiQuery,
@@ -112,7 +106,26 @@ export function searchPOI(lat, lon) {
 
     if (overlayMaps.hasOwnProperty("POI")) {
         map.removeLayer(overlayMaps["POI"]);
+
     }
+    if (overlayMaps.hasOwnProperty("border")) {
+        map.removeLayer(overlayMaps["border"]);
+    }
+
+    // add border circle for 1km
+    var borderCircle = L.circle([lat, lon], {
+        color: '#1C4966',
+        opacity: 0.7,
+        fillColor: '#f03',
+        fillOpacity: 0.1,
+        radius: 1000,
+        weight: '3',
+        dashArray: '10, 10',
+        dashOffset: '10'
+    });
+    borderCircle.addTo(map);
+    overlayMaps.border = borderCircle;
+
     map.addLayer(opl);
     overlayMaps.POI = opl;
     console.log('zzzzz');
