@@ -52,6 +52,31 @@ export function createStationMarkers(stationsData) {
 
 
 export function searchPOI(lat, lon) {
+    // add selected subway station marker
+    if (overlayMaps.hasOwnProperty("selectedStation")) {
+        map.removeLayer(overlayMaps["selectedStation"]);
+    }
+    var selectedStation = L.marker([lat, lon], {icon: subwayIcon});
+    selectedStation.addTo(map);
+    overlayMaps.selectedStation = selectedStation;
+
+    // add border circle for 1km
+    if (overlayMaps.hasOwnProperty("border")) {
+        map.removeLayer(overlayMaps["border"]);
+    }
+    var borderCircle = L.circle([lat, lon], {
+        color: '#1C4966',
+        opacity: 0.7,
+        fillColor: '#f03',
+        fillOpacity: 0.1,
+        radius: 1000,
+        weight: '3',
+        dashArray: '10, 10',
+        dashOffset: '10'
+    });
+    borderCircle.addTo(map);
+    overlayMaps.border = borderCircle;
+
 
     // const westBound = lon - searchGridLen;
     // const eastBound = lon + searchGridLen;
@@ -68,8 +93,6 @@ export function searchPOI(lat, lon) {
         out qt;`;
 
     map.setView(new L.LatLng(lat, lon), 15);
-
-    var selectedStation = L.marker([lat, lon], {icon: subwayIcon}).addTo(map);
 
     var opl = new L.OverPassLayer({
         minZoom: 14,
@@ -106,26 +129,7 @@ export function searchPOI(lat, lon) {
 
     if (overlayMaps.hasOwnProperty("POI")) {
         map.removeLayer(overlayMaps["POI"]);
-
     }
-    if (overlayMaps.hasOwnProperty("border")) {
-        map.removeLayer(overlayMaps["border"]);
-    }
-
-    // add border circle for 1km
-    var borderCircle = L.circle([lat, lon], {
-        color: '#1C4966',
-        opacity: 0.7,
-        fillColor: '#f03',
-        fillOpacity: 0.1,
-        radius: 1000,
-        weight: '3',
-        dashArray: '10, 10',
-        dashOffset: '10'
-    });
-    borderCircle.addTo(map);
-    overlayMaps.border = borderCircle;
-
     map.addLayer(opl);
     overlayMaps.POI = opl;
     console.log('zzzzz');
