@@ -98,33 +98,38 @@ export function searchPOI(lat, lon) {
         minZoom: 14,
         'query': poiQuery,
 
-        // onSuccess: function(data) {
-        // var poiGroup= L.markerClusterGroup({
-        //     showCoverageOnHover: true,
-        //     disableClusteringAtZoom:18,
+        onSuccess: function(data) {
+            var poiGroup= L.markerClusterGroup({
+                showCoverageOnHover: true,
+                disableClusteringAtZoom:18,
 
-        //     iconCreateFunction: function(cluster) {
-        //         return L.divIcon({ html: '<h2>' + cluster.getChildCount() + '</h2>' });
-        //     }});
-        // for (var i=0; i<data.elements.length; i++) {
-        //     var e = data.elements[i];
-        //     var pos = new L.LatLng(e.lat, e.lon);
-        //     // console.info(e.tags);
-        //     L.marker(pos,{
-        //         // icon:restaurantIcon,
-        //         title:e.tags.name, //shows restaurants names
-        //         tipus:e.tags.amenity
-        //     }).on('click', markerOnClick).addTo(poiGroup); //add markers to the cluster
-        // }
-        // // opl.addLayer(poiGroup);
-        // // map.addLayer(poiGroup); //to add the cluster to the map
-        // // layerControl.addOverlay(opl, "POI");
+                // iconCreateFunction: function(cluster) {
+                //     return L.divIcon({ html: '<h2>' + cluster.getChildCount() + '</h2>' });
+                //     }
+                });
+            for (var i=0; i<data.elements.length; i++) {
+                var e = data.elements[i];
+                var pos = new L.LatLng(e.lat, e.lon);
+                // console.info(e.tags);
+                L.marker(pos,{
+                    // icon:restaurantIcon,
+                    title:e.tags.name, //shows restaurants names
+                    tipus:e.tags.amenity
+                }).on('click', markerOnClick).addTo(poiGroup); //add markers to the cluster
+            }
+            // opl.addLayer(poiGroup);
+            if (overlayMaps.hasOwnProperty("POI_sub")) {
+                map.removeLayer(overlayMaps["POI_sub"]);
+            }
+            map.addLayer(poiGroup); //to add the cluster to the map
+            overlayMaps.POI_sub = poiGroup;
+            // layerControl.addOverlay(opl, "POI");
 
-        // function markerOnClick(event){
-        //     var restaurante = event.target.options.tipus + " " +event.target.options.title;
-        //     event.target.bindPopup(restaurante).openPopup();
-        // }
-        // },
+            function markerOnClick(event){
+                var restaurante = event.target.options.tipus + " " +event.target.options.title;
+                event.target.bindPopup(restaurante).openPopup();
+            }
+        },
     });
 
     if (overlayMaps.hasOwnProperty("POI")) {
