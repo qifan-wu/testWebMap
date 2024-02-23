@@ -16,7 +16,15 @@
     <script src="https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
 
-    <script src="./leaflet-overpass-layer-develop/dist/OverPassLayer.bundle.js"></script>
+    <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
+    <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.css">
+
+
+    <script src="./plugins/leaflet-overpass-layer-develop/dist/OverPassLayer.bundle.js"></script>
+    <script src="./plugins/overpass-frontend-master/dist/overpass-frontend.js"></script>
+    <script src="./plugins/overpass-layer-master/dist/overpass-layer.js"></script>
+    <!-- <script src="./plugins/overpass-layer-master/node_modules/leaflet-textpath/leaflet.textpath.js"></script> -->
 <style>
         #map {
             height: 600px;
@@ -27,6 +35,11 @@
             left: 50%;
             transform: translate(-50%, -50%);
             display: none;
+        }
+        .my_polyline {
+            stroke: red;
+            fill: red;
+            fill-opacity: 0.5;
         }
 </style>
 </head>

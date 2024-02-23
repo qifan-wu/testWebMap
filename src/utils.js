@@ -1,6 +1,6 @@
 import { searchGridLen } from './constants.js'
 import { overlayMaps, layerControl, test } from './base.js'
-import { subwayIcon } from './icons.js';
+import { subwayIcon, targetIcon, poiIcon} from './icons.js';
 
 // Show subway stations worldwide on the map
 export function createStationMarkers(stationsData) {
@@ -35,7 +35,11 @@ export function createStationMarkers(stationsData) {
                 map.removeLayer(overlayMaps["stations"]);
             }
 
-            var opl = searchPOI(station.lat, station.lon);
+            displaySelectStation(station.lat, station.lon);
+
+            searchPOI(station.lat, station.lon);
+            // searchPOIFrontend(station.lat, station.lon);
+            // testFrontendLayer(station.lat, station.lon);
 
         });
 
@@ -50,15 +54,172 @@ export function createStationMarkers(stationsData) {
     return stationMarkers;
 };
 
+export function handleSearchedPlace(data, searchedRes) {
+    searchedRes.clearLayers();
 
-export function searchPOI(lat, lon) {
+    if (overlayMaps.hasOwnProperty("selected")) {
+        map.removeLayer(overlayMaps["selected"]);
+    }
+    if (overlayMaps.hasOwnProperty("border")) {
+        map.removeLayer(overlayMaps["border"]);
+    }
+    if (overlayMaps.hasOwnProperty("POI")) {
+        map.removeLayer(overlayMaps["POI"]);
+    }
+
+    for (var i = data.results.length - 1; i >= 0; i--) {
+        var target = data.results[i];
+
+        var targetMarker = L.marker(target.latlng, {icon: targetIcon});
+        targetMarker.on('click', function() {
+            console.log(target.latlng.lat, target.latlng.lng);
+            searchPOI(target.latlng.lat, target.latlng.lng);
+        }
+        )
+        searchedRes.addLayer(targetMarker);
+        overlayMaps["selected"] = targetMarker;
+    };
+
+};
+
+
+
+
+export function testFrontendLayer(lat, lon) {
+    var poiQuery = `(
+        nwr(around:1000, ${lat}, ${lon})[amenity];
+        nwr(around:1000, ${lat}, ${lon})[historic];);
+        out qt;`;
+
+    map.setView(new L.LatLng(lat, lon), 15);
+    const overpassFrontend = new OverpassFrontend('//overpass-api.de/api/interpreter')
+    var opl = new OverPassLayer({
+        overpassFrontend: overpassFrontend,
+        query: 'nwr[amenity]',
+        minZoom: 16,
+        feature: {
+            title: '{{ tags.name }}',
+            style: { width: 1, color: 'black' }
+        }
+    })
+    opl.addTo(map);
+}
+
+export function searchPOIFrontend(lat, lon) {
     // add selected subway station marker
-    if (overlayMaps.hasOwnProperty("selectedStation")) {
-        map.removeLayer(overlayMaps["selectedStation"]);
+    displaySelectStation(lat, lon);
+
+    // add border circle for 1km
+    if (overlayMaps.hasOwnProperty("border")) {
+        map.removeLayer(overlayMaps["border"]);
+    }
+    var borderCircle = L.circle([lat, lon], {
+        color: '#1C4966',
+        opacity: 0.7,
+        fillColor: '#f03',
+        fillOpacity: 0.1,
+        radius: 1000,
+        weight: '3',
+        dashArray: '10, 10',
+        dashOffset: '10'
+    });
+    borderCircle.addTo(map);
+    overlayMaps.border = borderCircle;
+
+    map.fitBounds(borderCircle.getBounds());
+
+    // const OverpassFrontend = require('overpass-frontend')
+
+    const overpassFrontend = new OverpassFrontend('//overpass-api.de/api/interpreter')
+    // var poiQuery = `(
+    //     nwr(around:1000, ${lat}, ${lon})[amenity];
+    //     out geom
+    //     `;
+
+    // var bounds = generateCircle(lat, lon, 1000);
+    // const radius = 0.01;
+    // var bounds = {
+    //     "type": "Feature",
+    //     "geometry": {
+    //         "type": "Polygon",
+    //         "coordinates": [
+    //         [
+    //             [lat - radius, lon - radius],
+    //             [lat + radius, lon - radius],
+    //             [lat + radius, lon + radius],
+    //             [lat - radius, lon + radius],
+    //             [lat - radius, lon - radius]
+    //         ]
+    //         ]
+    //     },
+    //     "properties": {
+    //         "name": "Square Box"
+    //     }
+    // }
+
+    var bounds = { minlat: lat-searchGridLen, maxlat: lat+searchGridLen, minlon: lon-searchGridLen, maxlon: lon+searchGridLen }
+
+    var poiQuery = `
+        (
+        nwr[amenity];
+        nwr[leisure];
+        nwr[shop];
+        nwr[historic];
+        )
+    `
+    overpassFrontend.BBoxQuery(
+        // 'nwr[amenity=restaurant]',
+        poiQuery,
+        // { minlat: lat-0.01, maxlat: lat+0.01, minlon: lon-0.01, maxlon: lon+0.01 },
+        { bounds },
+        {
+            properties: OverpassFrontend.ALL
+        },
+        function (err, result) {
+            console.log('* ' + result.tags.name + ' (' + result.id + ')');
+            displayResults(result);
+        },
+        function (err) {
+            if (err) { console.log(err) };
+        }
+    )
+};
+
+export function displayResults(result) {
+    let popup = "";
+
+    if (result.type == "node") {
+        var poiMarker = L.marker(new L.LatLng(result.data.lat, result.data.lon), {icon: poiIcon});
+        poiMarker.addTo(map);
+
+        for (var key in result.tags) {
+            popup += '<b>' + key + '</b>: ' + result.tags[key] + '<br>';
+        }
+
+        poiMarker.bindPopup(popup).openPopup();
+    }
+
+    else if (result.type == "way") {
+        var latLngs = result.data.geometry.map(node => [node.lat, node.lon]);
+        var wayMarker = L.polyline(latLngs, {
+            className: 'my_polyline'
+        });
+        wayMarker.addTo(map);
+        wayMarker.bindPopup('<p>' + result.tags.name + '</p>').openPopup();
+    }
+}
+
+export function displaySelectStation(lat, lon) {
+    // add selected subway station marker
+    if (overlayMaps.hasOwnProperty("selected")) {
+        map.removeLayer(overlayMaps["selected"]);
     }
     var selectedStation = L.marker([lat, lon], {icon: subwayIcon});
     selectedStation.addTo(map);
-    overlayMaps.selectedStation = selectedStation;
+    overlayMaps.selected = selectedStation;
+
+}
+export function searchPOI(lat, lon) {
 
     // add border circle for 1km
     if (overlayMaps.hasOwnProperty("border")) {
@@ -99,31 +260,36 @@ export function searchPOI(lat, lon) {
         'query': poiQuery,
 
         // onSuccess: function(data) {
-        // var poiGroup= L.markerClusterGroup({
-        //     showCoverageOnHover: true,
-        //     disableClusteringAtZoom:18,
+        //     var poiGroup= L.markerClusterGroup({
+        //         showCoverageOnHover: true,
+        //         disableClusteringAtZoom:18,
 
-        //     iconCreateFunction: function(cluster) {
-        //         return L.divIcon({ html: '<h2>' + cluster.getChildCount() + '</h2>' });
-        //     }});
-        // for (var i=0; i<data.elements.length; i++) {
-        //     var e = data.elements[i];
-        //     var pos = new L.LatLng(e.lat, e.lon);
-        //     // console.info(e.tags);
-        //     L.marker(pos,{
-        //         // icon:restaurantIcon,
-        //         title:e.tags.name, //shows restaurants names
-        //         tipus:e.tags.amenity
-        //     }).on('click', markerOnClick).addTo(poiGroup); //add markers to the cluster
-        // }
-        // // opl.addLayer(poiGroup);
-        // // map.addLayer(poiGroup); //to add the cluster to the map
-        // // layerControl.addOverlay(opl, "POI");
+        //         // iconCreateFunction: function(cluster) {
+        //         //     return L.divIcon({ html: '<h2>' + cluster.getChildCount() + '</h2>' });
+        //         //     }
+        //         });
+        //     for (var i=0; i<data.elements.length; i++) {
+        //         var e = data.elements[i];
+        //         var pos = new L.LatLng(e.lat, e.lon);
+        //         // console.info(e.tags);
+        //         L.marker(pos,{
+        //             // icon:restaurantIcon,
+        //             title:e.tags.name, //shows restaurants names
+        //             tipus:e.tags.amenity
+        //         }).on('click', markerOnClick).addTo(poiGroup); //add markers to the cluster
+        //     }
+        //     // opl.addLayer(poiGroup);
+        //     if (overlayMaps.hasOwnProperty("POI_sub")) {
+        //         map.removeLayer(overlayMaps["POI_sub"]);
+        //     }
+        //     map.addLayer(poiGroup); //to add the cluster to the map
+        //     overlayMaps.POI_sub = poiGroup;
+        //     // layerControl.addOverlay(opl, "POI");
 
-        // function markerOnClick(event){
-        //     var restaurante = event.target.options.tipus + " " +event.target.options.title;
-        //     event.target.bindPopup(restaurante).openPopup();
-        // }
+        //     function markerOnClick(event){
+        //         var restaurante = event.target.options.tipus + " " +event.target.options.title;
+        //         event.target.bindPopup(restaurante).openPopup();
+        //     }
         // },
     });
 
@@ -134,4 +300,43 @@ export function searchPOI(lat, lon) {
     overlayMaps.POI = opl;
     console.log('zzzzz');
     return opl;
+};
+
+
+
+
+
+
+
+export function generateCircle(lat, lon, radius, numPoints = 64) {
+    const coordinates = [];
+    const angleStep = (2 * Math.PI) / numPoints;
+
+    for (let i = 0; i < numPoints; i++) {
+        const angle = i * angleStep;
+        const x = lon + radius * Math.cos(angle);
+        const y = lat + radius * Math.sin(angle);
+        coordinates.push([x, y]); // GeoJSON uses [longitude, latitude]
+    }
+
+    // Close the polygon by adding the first point again
+    coordinates.push(coordinates[0]);
+
+    // Create GeoJSON feature
+    const circleFeature = {
+        type: "Feature",
+        properties: {},
+        geometry: {
+            type: "Polygon",
+            coordinates: [coordinates]
+        }
+    };
+
+    // Create GeoJSON FeatureCollection
+    const featureCollection = {
+        type: "FeatureCollection",
+        features: [circleFeature]
+    };
+
+    return featureCollection;
 };
