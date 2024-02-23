@@ -36,6 +36,7 @@ export function createStationMarkers(stationsData) {
             }
 
             displaySelectStation(station.lat, station.lon);
+
             searchPOI(station.lat, station.lon);
             // searchPOIFrontend(station.lat, station.lon);
             // testFrontendLayer(station.lat, station.lon);
@@ -106,12 +107,7 @@ export function testFrontendLayer(lat, lon) {
 
 export function searchPOIFrontend(lat, lon) {
     // add selected subway station marker
-    if (overlayMaps.hasOwnProperty("selectedStation")) {
-        map.removeLayer(overlayMaps["selectedStation"]);
-    }
-    var selectedStation = L.marker([lat, lon], {icon: subwayIcon});
-    selectedStation.addTo(map);
-    overlayMaps.selectedStation = selectedStation;
+    displaySelectStation(lat, lon);
 
     // add border circle for 1km
     if (overlayMaps.hasOwnProperty("border")) {
