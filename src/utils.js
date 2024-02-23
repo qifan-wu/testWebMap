@@ -26,7 +26,8 @@ export function createStationMarkers(stationsData) {
     );
     stationsData.forEach(function (station) {
         var stationMarker = L.marker(new L.LatLng(station.lat, station.lon), {icon: subwayIcon});
-        // marker.bindPopup(document.createTextNode(city.n_station).textContent);
+
+    // marker.bindPopup(document.createTextNode(city.n_station).textContent);
         stationMarker.on('click', function() {
             console.log('clicked');
 
@@ -34,6 +35,7 @@ export function createStationMarkers(stationsData) {
                 map.removeControl(overlayMaps["stations"]);
                 map.removeLayer(overlayMaps["stations"]);
             }
+
 
             displaySelectStation(station.lat, station.lon);
 
@@ -45,6 +47,10 @@ export function createStationMarkers(stationsData) {
 
         overlayMaps["stations"] = stationMarker;
         stationMarkers.addLayer(stationMarker);
+        stationMarker.on('mouseover', function(e) {
+            this.bindPopup("osm_id: " + station.osm_id + "<br>name: " + station.name).openPopup();
+        });
+
     });
 
     map.addLayer(stationMarkers);
@@ -216,6 +222,7 @@ export function displaySelectStation(lat, lon) {
     }
     var selectedStation = L.marker([lat, lon], {icon: subwayIcon});
     selectedStation.addTo(map);
+
     overlayMaps.selected = selectedStation;
 
 }
