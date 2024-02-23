@@ -1,6 +1,6 @@
 import { searchGridLen } from './constants.js'
 import { overlayMaps, layerControl, test } from './base.js'
-import { subwayIcon, poiIcon} from './icons.js';
+import { subwayIcon, targetIcon, poiIcon} from './icons.js';
 
 // Show subway stations worldwide on the map
 export function createStationMarkers(stationsData) {
@@ -35,8 +35,10 @@ export function createStationMarkers(stationsData) {
                 map.removeLayer(overlayMaps["stations"]);
             }
 
-            // var opl = searchPOI(station.lat, station.lon);
-            searchPOIFrontend(station.lat, station.lon);
+            displaySelectStation(station.lat, station.lon);
+            searchPOI(station.lat, station.lon);
+            // searchPOIFrontend(station.lat, station.lon);
+            // testFrontendLayer(station.lat, station.lon);
 
         });
 
@@ -51,39 +53,56 @@ export function createStationMarkers(stationsData) {
     return stationMarkers;
 };
 
-export function generateCircle(lat, lon, radius, numPoints = 64) {
-    const coordinates = [];
-    const angleStep = (2 * Math.PI) / numPoints;
+export function handleSearchedPlace(data, searchedRes) {
+    searchedRes.clearLayers();
 
-    for (let i = 0; i < numPoints; i++) {
-        const angle = i * angleStep;
-        const x = lon + radius * Math.cos(angle);
-        const y = lat + radius * Math.sin(angle);
-        coordinates.push([x, y]); // GeoJSON uses [longitude, latitude]
+    if (overlayMaps.hasOwnProperty("selected")) {
+        map.removeLayer(overlayMaps["selected"]);
+    }
+    if (overlayMaps.hasOwnProperty("border")) {
+        map.removeLayer(overlayMaps["border"]);
+    }
+    if (overlayMaps.hasOwnProperty("POI")) {
+        map.removeLayer(overlayMaps["POI"]);
     }
 
-    // Close the polygon by adding the first point again
-    coordinates.push(coordinates[0]);
+    for (var i = data.results.length - 1; i >= 0; i--) {
+        var target = data.results[i];
 
-    // Create GeoJSON feature
-    const circleFeature = {
-        type: "Feature",
-        properties: {},
-        geometry: {
-            type: "Polygon",
-            coordinates: [coordinates]
+        var targetMarker = L.marker(target.latlng, {icon: targetIcon});
+        targetMarker.on('click', function() {
+            console.log(target.latlng.lat, target.latlng.lng);
+            searchPOI(target.latlng.lat, target.latlng.lng);
         }
+        )
+        searchedRes.addLayer(targetMarker);
+        overlayMaps["selected"] = targetMarker;
     };
 
-    // Create GeoJSON FeatureCollection
-    const featureCollection = {
-        type: "FeatureCollection",
-        features: [circleFeature]
-    };
-
-    return featureCollection;
 };
 
+
+
+
+export function testFrontendLayer(lat, lon) {
+    var poiQuery = `(
+        nwr(around:1000, ${lat}, ${lon})[amenity];
+        nwr(around:1000, ${lat}, ${lon})[historic];);
+        out qt;`;
+
+    map.setView(new L.LatLng(lat, lon), 15);
+    const overpassFrontend = new OverpassFrontend('//overpass-api.de/api/interpreter')
+    var opl = new OverPassLayer({
+        overpassFrontend: overpassFrontend,
+        query: 'nwr[amenity]',
+        minZoom: 16,
+        feature: {
+            title: '{{ tags.name }}',
+            style: { width: 1, color: 'black' }
+        }
+    })
+    opl.addTo(map);
+}
 
 export function searchPOIFrontend(lat, lon) {
     // add selected subway station marker
@@ -161,51 +180,50 @@ export function searchPOIFrontend(lat, lon) {
             properties: OverpassFrontend.ALL
         },
         function (err, result) {
-
-            // console.log('* ' + result.tags.name + ' (' + result.id + ')')
-            let popup = "";
-
-            if (result.type == "node") {
-                var poiMarker = L.marker(new L.LatLng(result.data.lat, result.data.lon), {icon: poiIcon});
-                poiMarker.addTo(map);
-
-                for (var key in result.tags) {
-                    popup += '<b>' + key + '</b>: ' + result.tags[key] + '<br>';
-                }
-
-                poiMarker.bindPopup(popup).openPopup();
-            }
-
-            else if (result.type == "way") {
-                var latLngs = result.data.geometry.map(node => [node.lat, node.lon]);
-                var wayMarker = L.polyline(latLngs, {
-                    className: 'my_polyline'
-                });
-                wayMarker.addTo(map);
-                wayMarker.bindPopup('<p>' + result.tags.name + '</p>').openPopup();
-            }
-
-            // else if (result.type == "relation") {
-            //     debugger;
-            // }
+            console.log('* ' + result.tags.name + ' (' + result.id + ')');
+            displayResults(result);
         },
         function (err) {
-            if (err) { console.log(err) }
+            if (err) { console.log(err) };
         }
     )
-
-
-    console.log("ttttttt");
 };
 
-export function searchPOI(lat, lon) {
+export function displayResults(result) {
+    let popup = "";
+
+    if (result.type == "node") {
+        var poiMarker = L.marker(new L.LatLng(result.data.lat, result.data.lon), {icon: poiIcon});
+        poiMarker.addTo(map);
+
+        for (var key in result.tags) {
+            popup += '<b>' + key + '</b>: ' + result.tags[key] + '<br>';
+        }
+
+        poiMarker.bindPopup(popup).openPopup();
+    }
+
+    else if (result.type == "way") {
+        var latLngs = result.data.geometry.map(node => [node.lat, node.lon]);
+        var wayMarker = L.polyline(latLngs, {
+            className: 'my_polyline'
+        });
+        wayMarker.addTo(map);
+        wayMarker.bindPopup('<p>' + result.tags.name + '</p>').openPopup();
+    }
+}
+
+export function displaySelectStation(lat, lon) {
     // add selected subway station marker
-    if (overlayMaps.hasOwnProperty("selectedStation")) {
-        map.removeLayer(overlayMaps["selectedStation"]);
+    if (overlayMaps.hasOwnProperty("selected")) {
+        map.removeLayer(overlayMaps["selected"]);
     }
     var selectedStation = L.marker([lat, lon], {icon: subwayIcon});
     selectedStation.addTo(map);
-    overlayMaps.selectedStation = selectedStation;
+    overlayMaps.selected = selectedStation;
+
+}
+export function searchPOI(lat, lon) {
 
     // add border circle for 1km
     if (overlayMaps.hasOwnProperty("border")) {
@@ -233,10 +251,10 @@ export function searchPOI(lat, lon) {
     //     map.removeLayer(opl);
     // }
     var poiQuery = `(
-        nwr(around:1000, ${lat}, ${lon})[amenity];
-        nwr(around:1000, ${lat}, ${lon})[leisure];
-        nwr(around:1000, ${lat}, ${lon})[shop];
-        nwr(around:1000, ${lat}, ${lon})[historic];);
+        node(around:1000, ${lat}, ${lon})[amenity];
+        node(around:1000, ${lat}, ${lon})[leisure];
+        node(around:1000, ${lat}, ${lon})[shop];
+        node(around:1000, ${lat}, ${lon})[historic];);
         out qt;`;
 
     map.setView(new L.LatLng(lat, lon), 15);
@@ -286,4 +304,43 @@ export function searchPOI(lat, lon) {
     overlayMaps.POI = opl;
     console.log('zzzzz');
     return opl;
+};
+
+
+
+
+
+
+
+export function generateCircle(lat, lon, radius, numPoints = 64) {
+    const coordinates = [];
+    const angleStep = (2 * Math.PI) / numPoints;
+
+    for (let i = 0; i < numPoints; i++) {
+        const angle = i * angleStep;
+        const x = lon + radius * Math.cos(angle);
+        const y = lat + radius * Math.sin(angle);
+        coordinates.push([x, y]); // GeoJSON uses [longitude, latitude]
+    }
+
+    // Close the polygon by adding the first point again
+    coordinates.push(coordinates[0]);
+
+    // Create GeoJSON feature
+    const circleFeature = {
+        type: "Feature",
+        properties: {},
+        geometry: {
+            type: "Polygon",
+            coordinates: [coordinates]
+        }
+    };
+
+    // Create GeoJSON FeatureCollection
+    const featureCollection = {
+        type: "FeatureCollection",
+        features: [circleFeature]
+    };
+
+    return featureCollection;
 };

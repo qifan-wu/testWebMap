@@ -1,5 +1,5 @@
 import { stationsDataFile } from './constants.js'
-import { createStationMarkers} from './utils.js';
+import { createStationMarkers, handleSearchedPlace} from './utils.js';
 
 var osmBaseMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -26,7 +26,12 @@ L.control.scale().addTo(map);
 
 layerControl.addTo(map);
 
-
+//search box
+var searchControl = new L.esri.Controls.Geosearch().addTo(map);
+var searchedRes = new L.LayerGroup().addTo(map);
+searchControl.on('results', function(data){
+    handleSearchedPlace(data, searchedRes);
+});
 
 axios.get(stationsDataFile)
     .then(function (response) {
@@ -39,3 +44,4 @@ axios.get(stationsDataFile)
         console.error("error fetching cache: ", error)
     });
 
+console.warn = () => {};
