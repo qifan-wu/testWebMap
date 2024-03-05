@@ -39,9 +39,9 @@ export function createStationMarkers(stationsData) {
 
             displaySelectStation(station.lat, station.lon);
 
-            searchPOI(station.lat, station.lon);
+            // searchPOI(station.lat, station.lon);
             // searchPOIFrontend(station.lat, station.lon);
-            // testFrontendLayer(station.lat, station.lon);
+            testFrontendLayer(station.lat, station.lon);
 
         });
 
@@ -92,22 +92,30 @@ export function handleSearchedPlace(data, searchedRes) {
 
 
 export function testFrontendLayer(lat, lon) {
-    var poiQuery = `(
-        nwr(around:1000, ${lat}, ${lon})[amenity];
-        nwr(around:1000, ${lat}, ${lon})[historic];);
-        out qt;`;
+
+    const overpassURL = '//overpass-api.de/api/interpreter';
 
     map.setView(new L.LatLng(lat, lon), 15);
-    const overpassFrontend = new OverpassFrontend('//overpass-api.de/api/interpreter')
-    var opl = new OverPassLayer({
+    const overpassFrontend = new OverpassFrontend(overpassURL, {
+        timeGap: 10,
+        effortPerRequest: 100
+    });
+
+    var poiQuery = `nwr(around:1000,${lat},${lon})[amenity]`;
+
+    var opl = new OverpassLayer({
         overpassFrontend: overpassFrontend,
-        query: 'nwr[amenity]',
-        minZoom: 16,
+        query: poiQuery,
+
+        minZoom: 13,
         feature: {
             title: '{{ tags.name }}',
             style: { width: 1, color: 'black' }
         }
-    })
+    });
+
+
+    // opl.setBounds(bounds);
     opl.addTo(map);
 }
 
