@@ -5,24 +5,6 @@ import { subwayIcon, targetIcon, poiIcon} from './icons.js';
 // Show subway stations worldwide on the map
 export function createStationMarkers(stationsData) {
     var stationMarkers = L.markerClusterGroup(
-        // {
-        // spiderfyShapePositions: function(count, centerPt) {
-        //     var distanceFromCenter = 35,
-        //         markerDistance = 45,
-        //         lineLength = markerDistance * (count - 1),
-        //         lineStart = centerPt.y - lineLength / 2,
-        //         res = [],
-        //         i;
-
-        //     res.length = count;
-
-        //     for (i = count - 1; i >= 0; i--) {
-        //         res[i] = new Point(centerPt.x + distanceFromCenter, lineStart + markerDistance * i);
-        //     }
-
-        //     return res;
-        // }
-        // }
     );
     stationsData.forEach(function (station) {
         var stationMarker = L.marker(new L.LatLng(station.lat, station.lon), {icon: subwayIcon});
@@ -95,7 +77,20 @@ export function handleSearchedPlace(data, searchedRes) {
 export function displayAllPOI(lat, lon) {
     addBorderCircle(lat, lon);
     displaySelectStation(lat, lon);
-    searchAllPOI(lat, lon);
+    const categories = ["amenity", "leisure", "shop", "historic"];
+    var opl_arr = [];
+    for (let i=0; i<categories.length; i++) {
+        let category = categories[i];
+        var opl = searchAllPOI(lat, lon, category);
+        opl_arr.push(opl);
+    }
+    var opl_group = L.layerGroup(opl_arr);
+
+    if (overlayMaps.hasOwnProperty("POI_group")) {
+        map.removeLayer(overlayMaps["POI_group"]);
+    }
+    overlayMaps.POI_group = opl_group;
+    opl_group.addTo(map);
 }
 
 export function popupInfo(result) {
@@ -114,7 +109,7 @@ export function genQueryHelper(lat, lon, category, values) {
     return poiQuery;
 };
 
-export function searchAllPOI(lat, lon) {
+export function searchAllPOI(lat, lon, category) {
     const overpassURL = '//overpass-api.de/api/interpreter';
 
     map.setView(new L.LatLng(lat, lon), 15);
@@ -133,7 +128,22 @@ export function searchAllPOI(lat, lon) {
     // poiQuery += genQueryHelper("amenity", SOPOI_CAT["amenity"]);
     // poiQuery += ')';
     // console.log(poiQuery);
-    let poiQuery = genQueryHelper(lat, lon, "amenity", SOPOI_CAT["amenity"]);
+    let poiQuery = genQueryHelper(lat, lon, category, SOPOI_CAT[category]);
+
+    var poi_color = 'grey';
+
+    if (category == "amenity") {
+        poi_color = 'red';
+    }
+    else if (category == "leisure"){
+        poi_color = 'green';
+    }
+    else if (category == "shop"){
+        poi_color = 'orange';
+    }
+    else if (category == "historic"){
+        poi_color = 'blue';
+    }
 
     var opl = new OverpassLayer({
         overpassFrontend: overpassFrontend,
@@ -144,21 +154,14 @@ export function searchAllPOI(lat, lon) {
             title: '{{ tags.name }}',
             style: {
                 width: 1,
-                color: 'red',
-                fillColor: 'green',
+                color: poi_color,
+                fillColor: poi_color,
+                opacity: 0.9,
                 fillOpacity: 0.5
             }
         }
     });
 
-    if (overlayMaps.hasOwnProperty("POI")) {
-        map.removeLayer(overlayMaps["POI"]);
-    }
-
-    // opl.addTo(map);
-    map.addLayer(opl);
-    overlayMaps.POI = opl;
-    console.log('zzzzz');
     return opl;
 
 }
