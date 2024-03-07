@@ -1,4 +1,4 @@
-import { searchGridLen } from './constants.js'
+import { SEARCH_GRID_LEN, SOPOI_CAT } from './constants.js'
 import { overlayMaps, layerControl, test } from './base.js'
 import { subwayIcon, targetIcon, poiIcon} from './icons.js';
 
@@ -98,6 +98,22 @@ export function displayAllPOI(lat, lon) {
     searchAllPOI(lat, lon);
 }
 
+export function popupInfo(result) {
+    let popup = "";
+    for (var key in result.tags) {
+        popup += '<b>' + key + '</b>: ' + result.tags[key] + '<br>';
+    }
+    return popup;
+}
+
+export function genQueryHelper(lat, lon, category, values) {
+    const queryHelp = values.map(value => `t["${category}"]=="${value}"`).join(" || ");
+    let poiQuery = `nwr(around:1000,${lat},${lon})(if:`;
+    poiQuery += queryHelp;
+    poiQuery += ')';
+    return poiQuery;
+};
+
 export function searchAllPOI(lat, lon) {
     const overpassURL = '//overpass-api.de/api/interpreter';
 
@@ -107,7 +123,17 @@ export function searchAllPOI(lat, lon) {
         effortPerRequest: 100
     });
 
-    var poiQuery = `nwr(around:1000,${lat},${lon})[amenity]`;
+    // var poiQuery = `nwr(around:1000,${lat},${lon})[amenity]`;
+    // var poiQuery = `nwr(around:1000,${lat},${lon})(
+    //     if:t["amenity"]=="school" || t["amenity"] == "university"
+    //     )`;
+
+    // var poiQuery = `nwr(around:1000,${lat},${lon})(if:`;
+    // poiQuery += genQueryHelper("amenity", ["school", "university"]);
+    // poiQuery += genQueryHelper("amenity", SOPOI_CAT["amenity"]);
+    // poiQuery += ')';
+    // console.log(poiQuery);
+    let poiQuery = genQueryHelper(lat, lon, "amenity", SOPOI_CAT["amenity"]);
 
     var opl = new OverpassLayer({
         overpassFrontend: overpassFrontend,
@@ -116,7 +142,12 @@ export function searchAllPOI(lat, lon) {
         minZoom: 13,
         feature: {
             title: '{{ tags.name }}',
-            style: { width: 1, color: 'red' }
+            style: {
+                width: 1,
+                color: 'red',
+                fillColor: 'green',
+                fillOpacity: 0.5
+            }
         }
     });
 
@@ -132,109 +163,7 @@ export function searchAllPOI(lat, lon) {
 
 }
 
-export function searchPOIFrontend(lat, lon) {
-    // add selected subway station marker
-    displaySelectStation(lat, lon);
 
-    // add border circle for 1km
-    if (overlayMaps.hasOwnProperty("border")) {
-        map.removeLayer(overlayMaps["border"]);
-    }
-    var borderCircle = L.circle([lat, lon], {
-        color: '#1C4966',
-        opacity: 0.7,
-        fillColor: '#f03',
-        fillOpacity: 0.1,
-        radius: 1000,
-        weight: '3',
-        dashArray: '10, 10',
-        dashOffset: '10'
-    });
-    borderCircle.addTo(map);
-    overlayMaps.border = borderCircle;
-
-    map.fitBounds(borderCircle.getBounds());
-
-    // const OverpassFrontend = require('overpass-frontend')
-
-    const overpassFrontend = new OverpassFrontend('//overpass-api.de/api/interpreter')
-    // var poiQuery = `(
-    //     nwr(around:1000, ${lat}, ${lon})[amenity];
-    //     out geom
-    //     `;
-
-    // var bounds = generateCircle(lat, lon, 1000);
-    // const radius = 0.01;
-    // var bounds = {
-    //     "type": "Feature",
-    //     "geometry": {
-    //         "type": "Polygon",
-    //         "coordinates": [
-    //         [
-    //             [lat - radius, lon - radius],
-    //             [lat + radius, lon - radius],
-    //             [lat + radius, lon + radius],
-    //             [lat - radius, lon + radius],
-    //             [lat - radius, lon - radius]
-    //         ]
-    //         ]
-    //     },
-    //     "properties": {
-    //         "name": "Square Box"
-    //     }
-    // }
-
-    var bounds = { minlat: lat-searchGridLen, maxlat: lat+searchGridLen, minlon: lon-searchGridLen, maxlon: lon+searchGridLen }
-
-    var poiQuery = `
-        (
-        nwr[amenity];
-        nwr[leisure];
-        nwr[shop];
-        nwr[historic];
-        )
-    `
-    overpassFrontend.BBoxQuery(
-        // 'nwr[amenity=restaurant]',
-        poiQuery,
-        // { minlat: lat-0.01, maxlat: lat+0.01, minlon: lon-0.01, maxlon: lon+0.01 },
-        { bounds },
-        {
-            properties: OverpassFrontend.ALL
-        },
-        function (err, result) {
-            console.log('* ' + result.tags.name + ' (' + result.id + ')');
-            displayResults(result);
-        },
-        function (err) {
-            if (err) { console.log(err) };
-        }
-    )
-};
-
-export function displayResults(result) {
-    let popup = "";
-
-    if (result.type == "node") {
-        var poiMarker = L.marker(new L.LatLng(result.data.lat, result.data.lon), {icon: poiIcon});
-        poiMarker.addTo(map);
-
-        for (var key in result.tags) {
-            popup += '<b>' + key + '</b>: ' + result.tags[key] + '<br>';
-        }
-
-        poiMarker.bindPopup(popup).openPopup();
-    }
-
-    else if (result.type == "way") {
-        var latLngs = result.data.geometry.map(node => [node.lat, node.lon]);
-        var wayMarker = L.polyline(latLngs, {
-            className: 'my_polyline'
-        });
-        wayMarker.addTo(map);
-        wayMarker.bindPopup('<p>' + result.tags.name + '</p>').openPopup();
-    }
-}
 
 export function displaySelectStation(lat, lon) {
     // add selected subway station marker
@@ -385,3 +314,107 @@ export function generateCircle(lat, lon, radius, numPoints = 64) {
 
     return featureCollection;
 };
+
+export function searchPOIFrontend(lat, lon) {
+    // add selected subway station marker
+    displaySelectStation(lat, lon);
+
+    // add border circle for 1km
+    if (overlayMaps.hasOwnProperty("border")) {
+        map.removeLayer(overlayMaps["border"]);
+    }
+    var borderCircle = L.circle([lat, lon], {
+        color: '#1C4966',
+        opacity: 0.7,
+        fillColor: '#f03',
+        fillOpacity: 0.1,
+        radius: 1000,
+        weight: '3',
+        dashArray: '10, 10',
+        dashOffset: '10'
+    });
+    borderCircle.addTo(map);
+    overlayMaps.border = borderCircle;
+
+    map.fitBounds(borderCircle.getBounds());
+
+    // const OverpassFrontend = require('overpass-frontend')
+
+    const overpassFrontend = new OverpassFrontend('//overpass-api.de/api/interpreter')
+    // var poiQuery = `(
+    //     nwr(around:1000, ${lat}, ${lon})[amenity];
+    //     out geom
+    //     `;
+
+    // var bounds = generateCircle(lat, lon, 1000);
+    // const radius = 0.01;
+    // var bounds = {
+    //     "type": "Feature",
+    //     "geometry": {
+    //         "type": "Polygon",
+    //         "coordinates": [
+    //         [
+    //             [lat - radius, lon - radius],
+    //             [lat + radius, lon - radius],
+    //             [lat + radius, lon + radius],
+    //             [lat - radius, lon + radius],
+    //             [lat - radius, lon - radius]
+    //         ]
+    //         ]
+    //     },
+    //     "properties": {
+    //         "name": "Square Box"
+    //     }
+    // }
+
+    var bounds = { minlat: lat-SEARCH_GRID_LEN, maxlat: lat+SEARCH_GRID_LEN, minlon: lon-SEARCH_GRID_LEN, maxlon: lon+SEARCH_GRID_LEN }
+
+    var poiQuery = `
+        (
+        nwr[amenity];
+        nwr[leisure];
+        nwr[shop];
+        nwr[historic];
+        )
+    `
+    overpassFrontend.BBoxQuery(
+        // 'nwr[amenity=restaurant]',
+        poiQuery,
+        // { minlat: lat-0.01, maxlat: lat+0.01, minlon: lon-0.01, maxlon: lon+0.01 },
+        { bounds },
+        {
+            properties: OverpassFrontend.ALL
+        },
+        function (err, result) {
+            console.log('* ' + result.tags.name + ' (' + result.id + ')');
+            displayResults(result);
+        },
+        function (err) {
+            if (err) { console.log(err) };
+        }
+    )
+};
+
+export function displayResults(result) {
+    let popup = "";
+
+    if (result.type == "node") {
+        var poiMarker = L.marker(new L.LatLng(result.data.lat, result.data.lon), {icon: poiIcon});
+        poiMarker.addTo(map);
+
+        for (var key in result.tags) {
+            popup += '<b>' + key + '</b>: ' + result.tags[key] + '<br>';
+        }
+
+        poiMarker.bindPopup(popup).openPopup();
+    }
+
+    else if (result.type == "way") {
+        var latLngs = result.data.geometry.map(node => [node.lat, node.lon]);
+        var wayMarker = L.polyline(latLngs, {
+            className: 'my_polyline'
+        });
+        wayMarker.addTo(map);
+        wayMarker.bindPopup('<p>' + result.tags.name + '</p>').openPopup();
+    }
+}

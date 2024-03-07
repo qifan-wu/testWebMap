@@ -1,4 +1,4 @@
-import { stationsDataFile } from './constants.js'
+import { STATIONS_DATA_FILE } from './constants.js'
 import { createStationMarkers, handleSearchedPlace} from './utils.js';
 
 var osmBaseMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -33,7 +33,7 @@ searchControl.on('results', function(data){
     handleSearchedPlace(data, searchedRes);
 });
 
-axios.get(stationsDataFile)
+axios.get(STATIONS_DATA_FILE)
     .then(function (response) {
         var stationsData = response.data;
         console.log(new Date().toLocaleString());
