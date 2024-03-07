@@ -151,7 +151,18 @@ export function searchAllPOI(lat, lon, category) {
 
         minZoom: 13,
         feature: {
-            title: '{{ tags.name }}',
+            // title: '{{ tags.name }}',
+            title: function (info) {
+                var title = '';
+                title += '<b>' + 'id' + '</b>: ' + info.id + '<br>';
+                title += '<b>' + 'osm_id' + '</b>: ' + info.osm_id + '<br>';
+
+                for (var key in info.tags) {
+                    title += '<b>' + key + '</b>: ' + info.tags[key] + '<br>';
+                }
+                return title;
+                // return escapeHtml(ob.tags.name || ob.tags.operator || ob.tags.ref || ob.id);
+            },
             style: {
                 width: 1,
                 color: poi_color,
