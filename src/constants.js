@@ -2,7 +2,8 @@
 
 export const STATIONS_DATA_FILE = 'data/stations_all.json'
 
-export const SEARCH_GRID_LEN = 0.009; // Approximately 1km in lat/lon
+export const SEARCH_RADIUS = 0.009; // Approximately 1km in lat/lon
+export const SEARCH_RADIUS_METER = 1000;
 
 // export function addLayerToMap(layer) {
 //     map.addLayer(layer);
@@ -49,3 +50,8 @@ export const SOPOI_CAT = {
         "memorial", "monument", "cemetery", "heritage"
     ]
 };
+
+export const HIGHWAY_TYPES = "motorway,trunk,primary,secondary,tertiary,unclassified,residential";
+
+
+export const OHSOME_ENDPOINT = "https://api.ohsome.org/v1/elements";

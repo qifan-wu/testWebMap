@@ -1,6 +1,7 @@
-import { SEARCH_GRID_LEN, SOPOI_CAT } from './constants.js'
+import { SEARCH_RADIUS, SOPOI_CAT } from './constants.js'
 import { overlayMaps, layerControl, test } from './base.js'
-import { subwayIcon, targetIcon, poiIcon} from './icons.js';
+import { subwayIcon, targetIcon, poiIcon} from './icons.js'
+import { displayStatistics } from './statistics.js'
 
 // Show subway stations worldwide on the map
 export function createStationMarkers(stationsData) {
@@ -25,7 +26,7 @@ export function createStationMarkers(stationsData) {
             // searchPOIFrontend(station.lat, station.lon);
             displayAllPOI(station.lat, station.lon);
 
-
+            displayStatistics(station.lat, station.lon);
         });
 
         overlayMaps["stations"] = stationMarker;
@@ -91,14 +92,6 @@ export function displayAllPOI(lat, lon) {
     }
     overlayMaps.POI_group = opl_group;
     opl_group.addTo(map);
-}
-
-export function popupInfo(result) {
-    let popup = "";
-    for (var key in result.tags) {
-        popup += '<b>' + key + '</b>: ' + result.tags[key] + '<br>';
-    }
-    return popup;
 }
 
 export function genQueryHelper(lat, lon, category, values) {
@@ -381,7 +374,7 @@ export function searchPOIFrontend(lat, lon) {
     //     }
     // }
 
-    var bounds = { minlat: lat-SEARCH_GRID_LEN, maxlat: lat+SEARCH_GRID_LEN, minlon: lon-SEARCH_GRID_LEN, maxlon: lon+SEARCH_GRID_LEN }
+    var bounds = { minlat: lat-SEARCH_RADIUS, maxlat: lat+SEARCH_RADIUS, minlon: lon-SEARCH_RADIUS, maxlon: lon+SEARCH_RADIUS }
 
     var poiQuery = `
         (

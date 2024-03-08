@@ -39,9 +39,25 @@
 
     <!-- <script src="./plugins/overpass-layer-master/node_modules/leaflet-textpath/leaflet.textpath.js"></script> -->
 <style>
-        #map {
-            height: 600px;
+        #map, #panel {
+            display: inline-block;
+            vertical-align: top;
         }
+
+        /* Set the width of the map to 70% and the panel to 30% of the viewport width */
+        #map {
+            width: 70%;
+            height: 100vh; /* Adjust the height as needed */
+        }
+
+        #panel {
+            width: 30%;
+            padding: 10px;
+            float:right;
+            height: 100vh; /* Adjust the height as needed */
+            box-sizing: border-box;
+        }
+
         #loading-spinner {
             position: absolute;
             top: 50%;
@@ -59,18 +75,23 @@
 
 <body>
     <div id="map"></div>
-    <div id="loading-spinner"></div>
-    <div id="sidebar">
-        <p>TBD</p>
-        <p>TBD</p>
+
+    <div id="panel">
+        <h2>Statistics within 1km from selected</h2>
+        <h3>Building Area: </h3>
+        <div id="buildingAreaInfo">loading</div>
+        <h3>Road Length By Type: </h3>
+        <div id="highwayInfo">loading</div>
     </div>
-    <!-- <script src="app.js"></script> -->
-    <!-- <script src="test.js"></script> -->
+
     <script>
         var map = L.map('map').setView([0, 0], 2);
-
     </script>
     <script type="module" src="src/base.js"></script>
+    <!-- <script src="app.js"></script> -->
+    <!-- <script src="test.js"></script> -->
+
     <!-- <script type="module" src="src/test.js"></script> -->
+
 </body>
 </html>
