@@ -19,11 +19,8 @@ export function createStationMarkers(stationsData) {
                 map.removeLayer(overlayMaps["stations"]);
             }
 
-
             displaySelectStation(station.lat, station.lon);
-
-            // searchPOI(station.lat, station.lon);
-            // searchPOIFrontend(station.lat, station.lon);
+            addBorderCircle(station.lat, station.lon);
             displayAllPOI(station.lat, station.lon);
 
             displayStatistics(station.lat, station.lon);
@@ -55,8 +52,8 @@ export function handleSearchedPlace(data, searchedRes) {
         map.removeLayer(overlayMaps["border"]);
     }
 
-    if (overlayMaps.hasOwnProperty("POI")) {
-        map.removeLayer(overlayMaps["POI"]);
+    if (overlayMaps.hasOwnProperty("POI_group")) {
+        map.removeLayer(overlayMaps["POI_group"]);
     }
 
     for (var i = data.results.length - 1; i >= 0; i--) {
@@ -66,7 +63,8 @@ export function handleSearchedPlace(data, searchedRes) {
         targetMarker.on('click', function() {
             console.log(target.latlng.lat, target.latlng.lng);
             addBorderCircle(target.latlng.lat, target.latlng.lng);
-            searchAllPOI(target.latlng.lat, target.latlng.lng);
+            displayAllPOI(target.latlng.lat, target.latlng.lng);
+            displayStatistics(target.latlng.lat, target.latlng.lng);
         }
         )
         searchedRes.addLayer(targetMarker);
@@ -76,8 +74,7 @@ export function handleSearchedPlace(data, searchedRes) {
 };
 
 export function displayAllPOI(lat, lon) {
-    addBorderCircle(lat, lon);
-    displaySelectStation(lat, lon);
+
     const categories = ["amenity", "leisure", "shop", "historic"];
     var opl_arr = [];
     for (let i=0; i<categories.length; i++) {
