@@ -1,5 +1,6 @@
 import { STATIONS_DATA_FILE } from './constants.js'
 import { createStationMarkers, handleSearchedPlace} from './utils.js';
+import { ARCGIS_ACCESS_TOKEN } from './private.js';
 
 var osmBaseMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -26,12 +27,39 @@ L.control.scale().addTo(map);
 
 layerControl.addTo(map);
 
-//search box
-var searchControl = new L.esri.Controls.Geosearch().addTo(map);
-var searchedRes = new L.LayerGroup().addTo(map);
-searchControl.on('results', function(data){
-    handleSearchedPlace(data, searchedRes);
-});
+//old search control
+// var searchControl = new L.esri.Controls.Geosearch();
+// searchControl.addTo(map);
+// var searchedRes = new L.LayerGroup();
+// searchedRes.addTo(map);
+// searchControl.on('results', function(data){
+//     handleSearchedPlace(data, searchedRes);
+// });
+
+// new search control
+const searchControl1 = L.esri.Geocoding.geosearch({
+        position: "topright",
+        placeholder: "Enter an address or place e.g. 1 York St",
+        useMapBounds: false,
+        providers: [
+          L.esri.Geocoding.arcgisOnlineProvider({
+            apikey: ARCGIS_ACCESS_TOKEN,
+            nearby: {
+              lat: -33.8688,
+              lng: 151.2093
+            }
+          })
+        ]
+      }).addTo(map);
+const results = L.layerGroup().addTo(map);
+searchControl1.on("results", function (data) {
+        results.clearLayers();
+        for (let i = data.results.length - 1; i >= 0; i--) {
+          results.addLayer(L.marker(data.results[i].latlng));
+          handleSearchedPlace(data, results);
+        }
+      });
+
 
 axios.get(STATIONS_DATA_FILE)
     .then(function (response) {
@@ -45,4 +73,6 @@ axios.get(STATIONS_DATA_FILE)
     });
 
 
-console.warn = () => {};
+
+
+// console.warn = () => {};
