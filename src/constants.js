@@ -51,7 +51,6 @@ export const SOPOI_CAT = {
     ]
 };
 
-export const HIGHWAY_TYPES = "motorway,trunk,primary,secondary,tertiary,unclassified,residential";
-
-
+// export const HIGHWAY_TYPES = "motorway,trunk,primary,secondary,tertiary,unclassified,residential";
+export const HIGHWAY_TYPES = "motorway,trunk,primary,secondary,tertiary,unclassified,residential,motorway_link,living_street,pedestrian,path,track,service";
 export const OHSOME_ENDPOINT = "https://api.ohsome.org/v1/elements";
