@@ -40,7 +40,7 @@ class OverpassLayer {
     this.options.stylesNoAutoShow = this.options.stylesNoAutoShow || []
     this.options.layouts = this.options.layouts || {}
     this.options.layouts.popup = this.options.layouts.popup ||
-      '<h1>{{ object.popupTitle|default(object.title) }}</h1>' +
+      '<b>{{ object.popupTitle|default(object.title) }}</b>' +
       '{% if object.popupDescription or object.description %}<div class="description">{{ object.popupDescription|default(object.description) }}</div>{% endif %}' +
       '{% if object.popupBody or object.body %}<div class="body">{{ object.popupBody|default(object.body) }}</div>{% endif %}'
 
