@@ -23,13 +23,14 @@ export function createStationMarkers(stationsData) {
             addBorderCircle(station.lat, station.lon);
             displayAllPOI(station.lat, station.lon);
 
-            displayStatistics(station.lat, station.lon);
+            displayStatistics(station.lat, station.lon, station.pop, station.distanceToCenter);
         });
 
         overlayMaps["stations"] = stationMarker;
         stationMarkers.addLayer(stationMarker);
         stationMarker.on('mouseover', function(e) {
-            this.bindPopup("osm_id: " + station.osm_id + "<br>name: " + station.name).openPopup();
+            this.bindPopup("osm_id: " + station.osm_id +
+                            "<br>name: " + station.name).openPopup();
         });
 
     });
@@ -61,7 +62,6 @@ export function handleSearchedPlace(data, searchedRes) {
 
         var targetMarker = L.marker(target.latlng, {icon: targetIcon});
         targetMarker.on('click', function() {
-            console.log(target.latlng.lat, target.latlng.lng);
             addBorderCircle(target.latlng.lat, target.latlng.lng);
             displayAllPOI(target.latlng.lat, target.latlng.lng);
             displayStatistics(target.latlng.lat, target.latlng.lng);
