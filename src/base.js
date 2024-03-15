@@ -79,7 +79,7 @@ layerControl.addTo(map);
 
 // new search control
 const searchControl1 = L.esri.Geocoding.geosearch({
-        position: "topright",
+        position: "topleft",
         placeholder: "Enter an address or place e.g. 1 York St",
         useMapBounds: false,
         providers: [
@@ -106,6 +106,51 @@ axios.get(STATIONS_INFO_FILE)
         console.error("error fetching cache: ", error)
     });
 
-
+// add legend
+L.control.Legend({
+    title: "Legend of POI",
+    position: "bottomright",
+    legends: [
+      {
+        label: "Amenity",
+        type: "circle",
+        radius: 7,
+        color: 'red',
+        fillColor: 'red',
+        opacity: 0.9,
+        fillOpacity: 0.5
+      },
+      {
+        label: "Leisure",
+        type: "circle",
+        radius: 7,
+        color: 'green',
+        fillColor: 'green',
+        opacity: 0.9,
+        fillOpacity: 0.5
+      },
+      {
+        label: "Shop",
+        type: "circle",
+        radius: 7,
+        color: 'orange',
+        fillColor: 'orange',
+        opacity: 0.9,
+        fillOpacity: 0.5
+      },
+      {
+        label: "Historic",
+        type: "circle",
+        radius: 7,
+        color: 'blue',
+        fillColor: 'blue',
+        opacity: 0.9,
+        fillOpacity: 0.5
+      },
+    ],
+    collapsed: true,
+    symbolWidth: 20,
+    opacity: 0.8
+}).addTo(map);
 
 // console.warn = () => {};
