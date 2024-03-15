@@ -1,7 +1,21 @@
 import { SEARCH_RADIUS_METER, HIGHWAY_TYPES, OHSOME_ENDPOINT } from './constants.js'
 
-export async function displayStatistics(lat, lon) {
+export async function displayStatistics(lat, lon, population=null, distance=null) {
     // debugger;
+    const popInfoDiv = document.getElementById('popInfo');
+    if (population != null) {
+        popInfoDiv.innerHTML = population;
+    } else {
+        popInfoDiv.innerHTML = "Not available ";
+    }
+
+    const distDiv = document.getElementById('distToCenter');
+    if (distance != null) {
+        distDiv.innerHTML = distance + "meters";
+    } else {
+        distDiv.innerHTML = "Not available ";
+    }
+
     var buildingArea = await getBuildingArea(lat, lon);
 
     var highwayStatistics = await getRoadLength(lat, lon);
