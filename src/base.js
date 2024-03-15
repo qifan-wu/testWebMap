@@ -1,6 +1,6 @@
 import { STATIONS_INFO_FILE, METRO_FILE } from './constants.js'
 import { createStationMarkers, handleSearchedPlace} from './utils.js';
-import { ESRI_ACCESS_TOKEN as ESRI_ACCESS_TOKEN, MAPBOX_PUBLIC_TOKEN } from './private.js';
+import { ESRI_ACCESS_TOKEN, MAPBOX_PUBLIC_TOKEN } from './private.js';
 
 var osmBaseMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -18,7 +18,7 @@ var mapboxStreet = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/
       accessToken: MAPBOX_PUBLIC_TOKEN // Replace this with your Mapbox access token
     })
 
-
+// display metro lines
 axios.get(METRO_FILE)
     .then(function (response) {
       var metroStations = L.markerClusterGroup();
@@ -34,9 +34,9 @@ axios.get(METRO_FILE)
               });
               var linePoly = L.polyline(lineCoordinates, { color: line.color });
               metroLines.addLayer(linePoly);
-              metroLines.on('click', function(e) {
-                  this.bindPopup("line name: " + line.name +
-                                  "<br>line branch: " + line.branch).openPopup();
+              linePoly.on('mouseover', function(e) {
+                  this.bindPopup("Metro line: " + line.name +
+                                  "<br> Metro line branch: " + line.branch).openPopup();
               });
             });
 
@@ -69,8 +69,6 @@ var baseMaps = {
 
 export var overlayMaps = {
 };
-
-export var test = {'aaa': 12};
 
 export var layerControl = L.control.layers(baseMaps, overlayMaps)
 

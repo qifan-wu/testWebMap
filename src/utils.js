@@ -1,5 +1,5 @@
 import { SEARCH_RADIUS, SOPOI_CAT } from './constants.js'
-import { overlayMaps, layerControl, test } from './base.js'
+import { overlayMaps, layerControl } from './base.js'
 import { subwayIcon, targetIcon, poiIcon} from './icons.js'
 import { displayStatistics } from './statistics.js'
 
