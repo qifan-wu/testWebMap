@@ -4,22 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web Map</title>
-    <link rel="stylesheet" href="./plugins/overpass-layer-master/node_modules/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="./plugins/overpass-layer-master/demo/demo.css" />
-    <link rel="stylesheet" href="./plugins/overpass-layer-master/img/map_pointer.png" />
-    <script src="./plugins/overpass-layer-master/node_modules/leaflet/dist/leaflet.js"></script>
-    <script src="./plugins/overpass-layer-master/node_modules/leaflet-polylineoffset/leaflet.polylineoffset.js"></script>
-    <script src="./plugins/overpass-layer-master/node_modules/leaflet-polylinedecorator/dist/leaflet.polylineDecorator.js"></script>
-    <script src="./plugins/overpass-layer-master/dist/overpass-layer.js"></script>
-    <!-- <script src="./plugins/overpass-layer-master/img/map_pointer.xcf"></script> -->
 
+    <!-- Load overpas-layer plugin -->
+    <link rel="stylesheet" href="./plugins/overpass-layer/node_modules/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="./plugins/overpass-layer/demo/demo.css" />
+    <!-- <link rel="stylesheet" href="./plugins/overpass-layer/img/map_pointer.png" /> -->
+    <script src="./plugins/overpass-layer/node_modules/leaflet/dist/leaflet.js"></script>
+    <script src="./plugins/overpass-layer/node_modules/leaflet-polylineoffset/leaflet.polylineoffset.js"></script>
+    <script src="./plugins/overpass-layer/node_modules/leaflet-polylinedecorator/dist/leaflet.polylineDecorator.js"></script>
+    <script src="./plugins/overpass-layer/dist/overpass-layer.js"></script>
+    <!-- <script src="./plugins/overpass-layer/img/map_pointer.xcf"></script> -->
+
+    <!-- Load leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
+    <!-- Load markercluster plugin-->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.Default.css" />
 
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
 
     <script src="https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js"></script>
@@ -35,37 +39,9 @@
     <link rel="stylesheet" href="./plugins/leaflet-legend/src/leaflet.legend.css" crossorigin="" />
     <script src="./plugins/leaflet-legend/src/leaflet.legend.js" crossorigin=""></script>
 
-<style>
-        #map, #panel {
-            display: inline-block;
-            vertical-align: top;
-        }
+    <!-- Import style -->
+    <link rel="stylesheet" href="/static/css/style.css">
 
-        /* Set the width of the map to 70% and the panel to 30% of the viewport width */
-        #map {
-            width: 75%;
-        }
-
-        #panel {
-            width: 25%;
-            padding: 20px;
-            float:right;
-            box-sizing: border-box;
-        }
-
-        #loading-spinner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: none;
-        }
-        .my_polyline {
-            stroke: red;
-            fill: red;
-            fill-opacity: 0.5;
-        }
-</style>
 </head>
 
 <body>
