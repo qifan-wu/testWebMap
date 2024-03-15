@@ -77,15 +77,6 @@ L.control.scale().addTo(map);
 
 layerControl.addTo(map);
 
-//old search control
-// var searchControl = new L.esri.Controls.Geosearch();
-// searchControl.addTo(map);
-// var searchedRes = new L.LayerGroup();
-// searchedRes.addTo(map);
-// searchControl.on('results', function(data){
-//     handleSearchedPlace(data, searchedRes);
-// });
-
 // new search control
 const searchControl1 = L.esri.Geocoding.geosearch({
         position: "topright",
