@@ -1,4 +1,4 @@
-import { SEARCH_RADIUS_METER, HIGHWAY_TYPES, OHSOME_ENDPOINT } from './constants.js'
+import { SEARCH_RADIUS_METER, HIGHWAY_TYPES, OHSOME_ENDPOINT, MOTER_ROAD_TYPES, PEDCYCLE_ROAD_TYPES } from './constants.js'
 
 export async function displayStatistics(lat, lon, population=null, distance=null) {
     // debugger;
@@ -19,12 +19,11 @@ export async function displayStatistics(lat, lon, population=null, distance=null
     var buildingArea = await getBuildingArea(lat, lon);
 
     var highwayStatistics = await getRoadLength(lat, lon);
+    displayRoadLen(highwayStatistics);
 
     const buildingDiv = document.getElementById("buildingAreaInfo");
     buildingDiv.innerHTML = "Total Building Area: " + buildingArea + " square meter";
 
-    const highwayDiv = document.getElementById('highwayInfo');
-    highwayDiv.innerHTML = highwayStatistics;
 }
 
 export async function getBuildingArea(lat, lon) {
@@ -57,7 +56,7 @@ export async function getBuildingArea(lat, lon) {
 
 export async function getRoadLength(lat, lon) {
 
-    let bcircle = [lon,lat, SEARCH_RADIUS_METER]
+    let bcircle = [lon,lat, SEARCH_RADIUS_METER];
     const params = new URLSearchParams({
         bcircles: bcircle,
         time: "2024-01-01",
@@ -76,18 +75,63 @@ export async function getRoadLength(lat, lon) {
         }
         const data = await response.json();
 
-        var totalRoadLen = 0;
-        var highwayStatistics = "";
+        var moterLen = 0;
+        var pedestrianLen = 0;
+        var othersLen = 0;
+
         data.groupByResult.forEach((highway) => {
             const roadLen = highway.result[0].value;
-            const highwayInfo = `Type "${highway.groupByObject}" has length: ${roadLen}m`;
-            highwayStatistics += `<p>${highwayInfo}</p>`;
-            totalRoadLen += roadLen;
+            const highwayType = highway.groupByObject; // highwayType e.g. "highway=residential"
+
+            if (MOTER_ROAD_TYPES.includes(highwayType.slice(8))) {
+                moterLen += roadLen;
+            }
+            else if (PEDCYCLE_ROAD_TYPES.includes(highwayType.slice(8))) {
+                pedestrianLen += roadLen;
+            }
+            else {
+                othersLen += roadLen;
+            }
         });
-        return `<p>Total Road Length is ${totalRoadLen}m</p>` + highwayStatistics;
+
+        return {
+            moterLen: moterLen,
+            pedestrianLen: pedestrianLen,
+            othersLen: othersLen
+        };
 
     } catch (error) {
         console.error("Error fetching road length:", error);
+        return null;
     };
+
+};
+
+export function displayRoadLen(roadLenInfo) {
+    if (roadLenInfo == null) {
+        highwayDiv.innerHTML = `<p>Total Road Length Not Available</p>`;
+    }
+    document.getElementById('highway-chart').style.display = 'flex';
+
+        let moterLen = roadLenInfo.moterLen;
+        let pedestrianLen = roadLenInfo.pedestrianLen;
+        let othersLen = roadLenInfo.othersLen;
+        const totalLen = moterLen + pedestrianLen + othersLen;
+
+        const highwayDiv = document.getElementById('highwayInfo');
+        highwayDiv.innerHTML = `<p>Total Road Length is ${totalLen}m</p>`;
+
+        const moterProportion = (moterLen / totalLen) * 100;
+        const pedestrianProportion = (pedestrianLen / totalLen) * 100;
+        const othersProportion = (othersLen / totalLen) * 100;
+
+        document.getElementById('moterBar').style.setProperty('width', `${moterProportion}%`);
+        document.getElementById('pedestrianBar').style.setProperty('width', `${pedestrianProportion}%`);
+        document.getElementById('othersBar').style.setProperty('width', `${othersProportion}%`);
+
+        document.getElementById('moterBar').innerHTML = `<p>Auto<br>${moterLen.toFixed(2)}m</p>`;
+        document.getElementById('pedestrianBar').innerHTML = `<p>Biking/Pedestrian-friendly<br>${pedestrianLen.toFixed(2)}m</p>`;
+        document.getElementById('othersBar').innerHTML = `<p>Other<br>${othersLen.toFixed(2)}m</p>`;
+        console.log(moterProportion, pedestrianProportion, othersProportion);
 
 };

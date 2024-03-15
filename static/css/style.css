@@ -36,3 +36,58 @@
         fill: red;
         fill-opacity: 0.5;
     }
+
+
+    #highway-chart {
+        display: none;
+        flex-direction: row;
+        align-items: flex-end;
+        height: 40px;
+        width: 100%;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .bar {
+        margin: 0;
+        height: 100%;
+        flex-grow: 1;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+    }
+
+    #moterBar {
+        background-color: #3498db;
+    }
+
+    #pedestrianBar {
+        background-color: #2ecc71;
+        /* bottom: 10px; */
+    }
+
+    #othersBar {
+        background-color: #e74c3c;
+    }
+
+    .bar p {
+        /* position: absolute; */
+        bottom: -10px;
+        display: flex;
+        color: black;
+        font-size: 12px;
+    }
+
+    /* #moterBar p:first-child {
+        top: -20px;
+    }
+
+    #moterBar p:last-child {
+        bottom: -20px;
+    } */
+
+    /* #pedestrianBar p:last-child {
+        bottom: -50px;
+    } */
+
