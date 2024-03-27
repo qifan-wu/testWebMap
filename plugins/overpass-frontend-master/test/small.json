@@ -1,0 +1,298 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.55.4 3079d8ea",
+  "osm3s": {
+    "timestamp_osm_base": "2018-09-29T15:06:02Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+    {
+      "type": "relation",
+      "id": 276122,
+      "timestamp": "2015-01-25T19:01:10Z",
+      "version": 5,
+      "changeset": 28402799,
+      "user": "Eckhart Wörner",
+      "uid": 2675,
+      "members": [
+        {
+          "type": "way",
+          "ref": 47379824,
+          "role": "from"
+        },
+        {
+          "type": "node",
+          "ref": 17312837,
+          "role": "via"
+        },
+        {
+          "type": "way",
+          "ref": 324297228,
+          "role": "to"
+        },
+        {
+          "type": "way",
+          "ref": 324297229,
+          "role": "incomplete"
+        }
+      ],
+      "tags": {
+        "restriction": "only_straight_on",
+        "type": "restriction"
+      }
+    },
+    {
+      "type": "node",
+      "id": 378469,
+      "lat": 48.2061526,
+      "lon": 16.3373996,
+      "timestamp": "2019-05-04T02:12:52Z",
+      "version": 8,
+      "changeset": 69864791,
+      "user": "Laci",
+      "uid": 134881
+    },
+    {
+      "type": "node",
+      "id": 17312863,
+      "lat": 48.2073210,
+      "lon": 16.3381480,
+      "timestamp": "2011-12-10T02:06:51Z",
+      "version": 14,
+      "changeset": 10078045,
+      "user": "KaiRo",
+      "uid": 17047
+    },
+    {
+      "type": "node",
+      "id": 17312836,
+      "lat": 48.2085805,
+      "lon": 16.3381316,
+      "timestamp": "2015-01-25T19:01:18Z",
+      "version": 14,
+      "changeset": 28402799,
+      "user": "Eckhart Wörner",
+      "uid": 2675
+    },
+    {
+      "type": "node",
+      "id": 17312837,
+      "lat": 48.2084499,
+      "lon": 16.3388375,
+      "timestamp": "2015-01-25T19:01:18Z",
+      "version": 10,
+      "changeset": 28402799,
+      "user": "Eckhart Wörner",
+      "uid": 2675,
+      "tags": {
+        "highway": "traffic_signals"
+      }
+    },
+    {
+      "type": "node",
+      "id": 293269032,
+      "lat": 48.2085393,
+      "lon": 16.3382698,
+      "timestamp": "2013-03-24T10:56:39Z",
+      "version": 14,
+      "changeset": 15476879,
+      "user": "stefanct",
+      "uid": 303158,
+      "tags": {
+        "bicycle": "yes",
+        "crossing": "traffic_signals",
+        "foot": "yes",
+        "highway": "crossing"
+      }
+    },
+    {
+      "type": "node",
+      "id": 1538937640,
+      "lat": 48.208453,
+      "lon": 16.3389884,
+      "timestamp": "2017-02-16T14:01:24Z",
+      "version": 3,
+      "changeset": 46137877,
+      "user": "Weltstaat",
+      "uid": 3080626,
+      "tags": {
+        "crossing": "traffic_signals",
+        "highway": "crossing"
+      }
+    },
+    {
+      "type": "node",
+      "id": 2076499330,
+      "lat": 48.20846,
+      "lon": 16.3387307,
+      "timestamp": "2013-03-24T10:56:39Z",
+      "version": 2,
+      "changeset": 15476879,
+      "user": "stefanct",
+      "uid": 303158,
+      "tags": {
+        "crossing": "traffic_signals",
+        "highway": "crossing"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3310442552,
+      "lat": 48.2084566,
+      "lon": 16.3391389,
+      "timestamp": "2015-01-25T19:01:09Z",
+      "version": 1,
+      "changeset": 28402799,
+      "user": "Eckhart Wörner",
+      "uid": 2675
+    },
+    {
+      "type": "way",
+      "id": 47379824,
+      "timestamp": "2018-07-01T19:31:07Z",
+      "version": 10,
+      "changeset": 60328723,
+      "user": "JM82",
+      "uid": 2641694,
+      "nodes": [
+        17312836,
+        293269032,
+        2076499330,
+        17312837
+      ],
+      "tags": {
+        "highway": "secondary",
+        "lit": "yes",
+        "maxspeed": "50",
+        "name": "Lerchenfelder Gürtel",
+        "oneway": "yes",
+        "surface": "asphalt"
+      }
+    },
+    {
+      "type": "way",
+      "id": 324297228,
+      "timestamp": "2017-12-06T17:30:22Z",
+      "version": 3,
+      "changeset": 54407099,
+      "user": "m3h4",
+      "uid": 5140186,
+      "nodes": [
+        17312837,
+        1538937640,
+        3310442552
+      ],
+      "tags": {
+        "cycleway:right": "no",
+        "highway": "secondary",
+        "lit": "yes",
+        "maxspeed": "50",
+        "name": "Lerchenfelder Straße",
+        "oneway": "yes",
+        "surface": "asphalt"
+      }
+    },
+    {
+      "type": "way",
+      "id": 26738383,
+      "timestamp": "2020-08-26T13:21:34Z",
+      "version": 16,
+      "changeset": 89975018,
+      "user": "Hannes237",
+      "uid": 11085411,
+      "nodes": [
+        378466,
+        1541460528,
+        1541461243,
+        6447009618,
+        6447009619,
+        33240966,
+        378469,
+        1538935506,
+        17312863,
+        3310442551,
+        6447009606,
+        1538937617,
+        17312837
+      ],
+      "tags": {
+        "bicycle": "use_sidepath",
+        "cycleway:right": "no",
+        "highway": "primary",
+        "lanes": "4",
+        "lit": "yes",
+        "maxspeed": "50",
+        "name": "Lerchenfelder Gürtel",
+        "oneway": "yes",
+        "ref": "B221",
+        "source:maxspeed": "AT:urban",
+        "surface": "asphalt"
+      }
+    },
+    {
+      "type": "node",
+      "id": 7574526582,
+      "lat": 48.2083724,
+      "lon": 16.3386017,
+      "timestamp": "2020-05-31T07:32:41Z",
+      "version": 1,
+      "changeset": 86000250,
+      "user": "m3h4",
+      "uid": 5140186
+    },
+    {
+      "type": "node",
+      "id": 7574526583,
+      "lat": 48.2083887,
+      "lon": 16.3386135,
+      "timestamp": "2020-05-31T07:32:41Z",
+      "version": 1,
+      "changeset": 86000250,
+      "user": "m3h4",
+      "uid": 5140186
+    },
+    {
+      "type": "node",
+      "id": 7574526584,
+      "lat": 48.2083755,
+      "lon": 16.3386587,
+      "timestamp": "2020-05-31T07:32:41Z",
+      "version": 1,
+      "changeset": 86000250,
+      "user": "m3h4",
+      "uid": 5140186
+    },
+    {
+      "type": "node",
+      "id": 7574533785,
+      "lat": 48.2083592,
+      "lon": 16.3386486,
+      "timestamp": "2020-05-31T07:32:41Z",
+      "version": 1,
+      "changeset": 86000250,
+      "user": "m3h4",
+      "uid": 5140186
+    },
+    {
+      "type": "way",
+      "id": 810158846,
+      "timestamp": "2021-06-16T18:18:48Z",
+      "version": 2,
+      "changeset": 106484339,
+      "user": "wonderb0lt",
+      "uid": 6752061,
+      "nodes": [
+        7574526582,
+        7574526583,
+        7574526584,
+        7574533785,
+        7574526582
+      ],
+      "tags": {
+        "amenity": "fast_food",
+        "building": "yes",
+        "name": "Hot Dogs"
+      }
+    }
+  ]
+}

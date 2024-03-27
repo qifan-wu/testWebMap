@@ -1,0 +1,3 @@
+export const ESRI_ACCESS_TOKEN = "AAPKde951fadd58a46a6a19020b8ed51d76aPTRNLaLt2Pxwj4StPwOdqd_Uiv0ouVqdMvUzY-4Zqryd0UzDpLJDIc4oBx-Er3Q0";
+
+export const MAPBOX_PUBLIC_TOKEN = "pk.eyJ1IjoibHlyYXdxIiwiYSI6ImNrbng4a2R6azE0NDYyb3Jtczlid2luMWkifQ.-E72smai52OEPkSebVPgVA";

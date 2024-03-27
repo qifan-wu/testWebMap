@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Esri Leaflet Geocoder</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1" />
+
+    <!-- Load Leaflet from their CDN -->
+    <link rel="stylesheet" href="../node_modules/leaflet/dist/leaflet.css" />
+    <script src="../node_modules/leaflet/dist/leaflet-src.js"></script>
+
+    <script src="../node_modules/esri-leaflet/dist/esri-leaflet-debug.js"></script>
+
+    <link rel="stylesheet" href="../dist/esri-leaflet-geocoder.css" />
+    <script src="../dist/esri-leaflet-geocoder-debug.js"></script>
+
+    <!-- Make the map fill the entire page -->
+    <style>
+      #map {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <script>
+      var map = L.map('map').setView([37.74, -121.62], 9);
+      // var tiles = L.esri.basemapLayer('Topographic').addTo(map);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      var searchControl = L.esri.Geocoding.geosearch({
+        providers: [
+          L.esri.Geocoding.arcgisOnlineProvider({
+            // countries: ['USA', 'GUM', 'VIR', 'PRI'],
+            // categories: ['Address', 'Postal', 'Populated Place', ],
+            // maxResults: 3,
+            apikey: 'YOUR_API_KEY',
+            nearby: {
+              lat: 37.8095574, // oakland, ca
+              lng: -122.2886336
+            }
+          }),
+          L.esri.Geocoding.mapServiceProvider({
+            label: 'States and Counties',
+            url: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer',
+            layers: [2, 3],
+            searchFields: ['NAME', 'STATE_NAME']
+          }),
+          L.esri.Geocoding.featureLayerProvider({
+            url: 'https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/0',
+            searchFields: ['areaname'],
+            label: 'Cities',
+            formatSuggestion: function (feature) {
+              return feature.properties.areaname + ', ' + feature.properties.st;
+            }
+          })
+        ]
+      }).addTo(map);
+
+      var results = L.layerGroup().addTo(map);
+
+      searchControl.on('results', function(data){
+        results.clearLayers();
+        for (var i = data.results.length - 1; i >= 0; i--) {
+          results.addLayer(L.marker(data.results[i].latlng));
+        }
+      });
+    </script>
+  </body>
+</html>
