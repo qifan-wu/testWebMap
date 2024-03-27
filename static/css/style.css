@@ -6,88 +6,133 @@
     text-align: center;
 }
 
-#map, #panel {
-            display: inline-block;
-            vertical-align: top;
-        }
+
+.intro {
+    /* display: inline-block; */
+    max-width: 600px;
+
+}
+
+.guide p.intro {
+    margin: 10;
+    display: flex;
+    align-items: center;
+}
+
+p {
+    color: #666;
+}
+img {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#map {
+    width: 75%;
+}
+
+#statspanel {
+    width: 25%;
+    padding: 20px;
+    float: right;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    display:none;
+}
+
+#defaultpanel {
+    width: 25%;
+    padding-left: 15px;
+    padding-right: 15px;
+    float: right;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    font-size: small;
+}
 
 
-    #map {
-        width: 75%;
-    }
-
-    #panel {
-        width: 25%;
-        padding: 20px;
-        float:right;
-        box-sizing: border-box;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
-    #loading-spinner {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        display: none;
-    }
-    .my_polyline {
-        stroke: red;
-        fill: red;
-        fill-opacity: 0.5;
-    }
+#statspanel {
+    display: none;
+    width: 25%;
+    padding-left: 15px;
+    padding-right: 15px;
+    float: right;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    margin: 0 auto;
+    flex-direction: column;
+    font-size: small;
+}
 
 
-    #highway-chart {
-        display: none;
-        flex-direction: row;
-        align-items: flex-end;
-        height: 40px;
-        width: 100%;
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
+#highway-chart {
+    display: none;
+    flex-direction: row;
+    align-items: flex-end;
+    height: 40px;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 
-    .bar {
-        margin: 0;
-        height: 100%;
-        flex-grow: 1;
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: flex-end;
-    }
+.bar {
+    margin: 0;
+    height: 100%;
+    flex-grow: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
 
-    #moterBar {
-        background-color: #3498db;
-    }
+#moterBar {
+    background-color: #3498db;
+}
 
-    #pedestrianBar {
-        background-color: #2ecc71;
-        /* bottom: 10px; */
-    }
+#pedestrianBar {
+    background-color: #2ecc71;
+    /* bottom: 10px; */
+}
 
-    #othersBar {
-        background-color: #e74c3c;
-    }
+#othersBar {
+    background-color: #e74c3c;
+}
 
-    .bar p {
-        /* position: absolute; */
-        bottom: -10px;
-        display: flex;
-        color: black;
-        font-size: 12px;
-    }
+.bar p {
+    /* position: absolute; */
+    bottom: -10px;
+    display: flex;
+    color: black;
+    font-size: 12px;
+}
 
-    /* #moterBar p:first-child {
-        top: -20px;
-    }
 
-    #moterBar p:last-child {
-        bottom: -20px;
-    } */
+#loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+}
 
-    /* #pedestrianBar p:last-child {
-        bottom: -50px;
-    } */
+.my_polyline {
+    stroke: red;
+    fill: red;
+    fill-opacity: 0.5;
+}
 
+footer {
+    display: block;
+}

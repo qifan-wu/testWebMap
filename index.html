@@ -39,6 +39,7 @@
     <link rel="stylesheet" href="./plugins/leaflet-legend/src/leaflet.legend.css" crossorigin="" />
     <script src="./plugins/leaflet-legend/src/leaflet.legend.js" crossorigin=""></script>
 
+
     <!-- Import style -->
     <link rel="stylesheet" href="/static/css/style.css">
 
@@ -47,8 +48,53 @@
 <body>
     <div id="map"></div>
 
-    <div id="panel">
-        <h2>Statistics within 1km from selected</h2>
+    <div id="defaultpanel">
+        <div class="about">
+            <h3>About</h3>
+            <p class="intro">
+                This is a web map using <a href="https://www.openstreetmap.org/">OpenStreetMap</a> data to show the
+                distribution of social infrastructure points of interest around subway stations worldwide.
+                The goal is to further explore and disseminate insights from this project:
+                <a href="https://www.xiaofanliang.com/project/sipoi/"> Does Social Infrastructure Exist Near Subway Stations?</a>
+            </p>
+        </div>
+        <div class="guide">
+            <h3>User Guide</h3>
+            <p class="intro">
+                Use <img src="img/layers.png" alt="/" width="25"> to select basemap and turn on/off layers;
+            </p>
+            <p class="intro">
+                Use <img src="plugins/esri-leaflet-geocoder/src/img/search.png " alt="/" width="30" style="margin: 0;"> and <img src="static/images/target.svg" alt="/" width="22"> to search any place and nearby POIs
+            </p>
+            <p class="intro">Zoom in or click on cluter to view stations details</p>
+            <p class="intro">
+                Click on <img src="static/images/subway.svg" alt="/" width="18"> to get POIs near the selected subway station
+            </p>
+        </div>
+
+
+    </div>
+
+    <div id="statspanel">
+        <div id="metroInfo">
+        </div>
+        <div class="poiInfo">
+            <h3>POI INFO TBD</h3>
+        </div>
+        <div class="statsInfo">
+            <h3>Statistics of social and built environment</h3>
+            <div id="popInfo">Not Available</div>
+            <div id="distToCenter">Not Available</div>
+            <div id="buildingAreaInfo">Not Available</div>
+            <div id="highwayInfo"></div>
+            <div id="highway-chart">
+                <div class="bar" id="moterBar"></div>
+                <div class="bar" id="pedestrianBar"></div>
+                <div class="bar" id="othersBar"></div>
+            </div>
+        </div>
+
+        <!-- <h2>Statistics within 1km from selected</h2>
         <h3>Population </h3>
         <div id="popInfo">Not Available</div>
         <h3>Distance from city center </h3>
@@ -62,17 +108,17 @@
             <div class="bar" id="moterBar"></div>
             <div class="bar" id="pedestrianBar"></div>
             <div class="bar" id="othersBar"></div>
-        </div>
+        </div> -->
     </div>
 
     <script>
         var map = L.map('map').setView([0, 0], 2);
     </script>
     <script type="module" src="src/base.js"></script>
-    <!-- <script src="app.js"></script> -->
-    <!-- <script src="test.js"></script> -->
-
     <!-- <script type="module" src="src/test.js"></script> -->
-
+    <!-- <footer>
+      <p>University of Michigan<br/>
+        &copy;Qifan Wu - Taubman College of Architecture and Urban Planning</p>
+    </footer> -->
 </body>
 </html>

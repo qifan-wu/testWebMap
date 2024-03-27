@@ -53,8 +53,9 @@ axios.get(METRO_FILE)
         layerControl.addOverlay(metroLines, "metroLines");
         overlayMaps.metroLines = metroLines;
 
-        layerControl.addOverlay(metroStations, "metroStations");
-        overlayMaps.metroStations = metroStations;
+        // add stations from metro website to map
+        // layerControl.addOverlay(metroStations, "metroStations");
+        // overlayMaps.metroStations = metroStations;
     })
     .catch(function (error) {
         console.error("error fetching cache: ", error)

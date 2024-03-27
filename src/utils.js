@@ -1,4 +1,4 @@
-import { SEARCH_RADIUS, SOPOI_CAT } from './constants.js'
+import { SEARCH_RADIUS, SEARCH_RADIUS_METER, SOPOI_CAT, OVERPASS_INTERPRETER } from './constants.js'
 import { overlayMaps, layerControl } from './base.js'
 import { subwayIcon, targetIcon, poiIcon} from './icons.js'
 import { displayStatistics } from './statistics.js'
@@ -10,7 +10,6 @@ export function createStationMarkers(stationsData) {
     stationsData.forEach(function (station) {
         var stationMarker = L.marker(new L.LatLng(station.lat, station.lon), {icon: subwayIcon});
 
-    // marker.bindPopup(document.createTextNode(city.n_station).textContent);
         stationMarker.on('click', function() {
             console.log('clicked');
 
@@ -23,7 +22,7 @@ export function createStationMarkers(stationsData) {
             addBorderCircle(station.lat, station.lon);
             displayAllPOI(station.lat, station.lon);
 
-            displayStatistics(station.lat, station.lon, station.pop, station.distanceToCenter);
+            displayStatistics(station.lat, station.lon, station.name, station.pop, station.distanceToCenter);
         });
 
         overlayMaps["stations"] = stationMarker;
@@ -73,16 +72,54 @@ export function handleSearchedPlace(data, searchedRes) {
 
 };
 
-export function displayAllPOI(lat, lon) {
-
+export function getAllPOI(lat, lon) {
     const categories = ["amenity", "leisure", "shop", "historic"];
     var opl_arr = [];
     for (let i=0; i<categories.length; i++) {
         let category = categories[i];
-        var opl = searchAllPOI(lat, lon, category);
+        var opl = searchPOICat(lat, lon, category);
         opl_arr.push(opl);
     }
+    return opl_arr;
+};
+
+export function downloadPOI(lat, lon) {
+    // let query = genQueryHelper(lat, lon);
+    // let query = '(node["amenity"~".*"]; node["historic"~".*"];);out body;'
+    let query = `[out:json];
+(nwr(around:1000,${lat},${lon})["leisure"];);
+out body;`
+    console.log(query);
+
+    fetch('https://overpass-api.de/api/interpreter', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'data=' + encodeURIComponent(query)
+    })
+    .then(response => {
+        debugger;
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.error("Error with fetch", error);
+    })
+
+}
+
+export function displayAllPOI(lat, lon) {
+    let opl_arr = getAllPOI(lat, lon);
     var opl_group = L.layerGroup(opl_arr);
+
+    // var dldata = downloadPOI(lat, lon);
+    // console.log(dldata);
 
     if (overlayMaps.hasOwnProperty("POI_group")) {
         map.removeLayer(overlayMaps["POI_group"]);
@@ -91,15 +128,28 @@ export function displayAllPOI(lat, lon) {
     opl_group.addTo(map);
 }
 
-export function genQueryHelper(lat, lon, category, values) {
+export function genQueryHelper(lat, lon) {
+    let query = '[out:json];(';
+    for (const cat in SOPOI_CAT) {
+        const values = SOPOI_CAT[cat];
+        const valStr = values.join('|');
+
+        query += `nwr(around:${SEARCH_RADIUS_METER},${lat},${lon})["${cat}"~"^(${valStr})$"];`
+    }
+    query += '); out body;';
+    return query;
+};
+
+
+export function genOPLQueryHelper(lat, lon, category, values) {
     const queryHelp = values.map(value => `t["${category}"]=="${value}"`).join(" || ");
-    let poiQuery = `nwr(around:1000,${lat},${lon})(if:`;
+    let poiQuery = `nwr(around:${SEARCH_RADIUS_METER},${lat},${lon})(if:`;
     poiQuery += queryHelp;
     poiQuery += ')';
     return poiQuery;
 };
 
-export function searchAllPOI(lat, lon, category) {
+export function searchPOICat(lat, lon, category) {
     const overpassURL = '//overpass-api.de/api/interpreter';
 
     map.setView(new L.LatLng(lat, lon), 15);
@@ -118,7 +168,7 @@ export function searchAllPOI(lat, lon, category) {
     // poiQuery += genQueryHelper("amenity", SOPOI_CAT["amenity"]);
     // poiQuery += ')';
     // console.log(poiQuery);
-    let poiQuery = genQueryHelper(lat, lon, category, SOPOI_CAT[category]);
+    let poiQuery = genOPLQueryHelper(lat, lon, category, SOPOI_CAT[category]);
 
     var poi_color = 'grey';
 
@@ -141,7 +191,6 @@ export function searchAllPOI(lat, lon, category) {
 
         minZoom: 13,
         feature: {
-            // title: '{{ tags.name }}',
             title: function (info) {
                 var title = '';
                 title += '<b>' + 'id' + '</b>: ' + info.id + '<br>';
@@ -151,7 +200,6 @@ export function searchAllPOI(lat, lon, category) {
                     title += '<b>' + key + '</b>: ' + info.tags[key] + '<br>';
                 }
                 return title;
-                // return escapeHtml(ob.tags.name || ob.tags.operator || ob.tags.ref || ob.id);
             },
             style: {
                 width: 1,

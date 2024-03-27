@@ -9,6 +9,7 @@ export const SEARCH_RADIUS_METER = 1000;
 
 // Endpoints
 export const OHSOME_ENDPOINT = "https://api.ohsome.org/v1/elements";
+export const OVERPASS_INTERPRETER = "https://overpass-api.de/api/interpreter";
 
 // Categories
 // POI

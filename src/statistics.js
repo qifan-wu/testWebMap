@@ -1,19 +1,30 @@
 import { SEARCH_RADIUS_METER, HIGHWAY_TYPES, OHSOME_ENDPOINT, MOTER_ROAD_TYPES, PEDCYCLE_ROAD_TYPES } from './constants.js'
 
-export async function displayStatistics(lat, lon, population=null, distance=null) {
-    // debugger;
+export async function displayStatistics(lat, lon, name=null, population=null, distance=null) {
+
+    document.getElementById('defaultpanel').style.display = 'none';
+    document.getElementById('statspanel').style.display = 'block';
+
+    debugger;
+    const stationDiv = document.getElementById('metroInfo');
+    if (name != null) {
+        stationDiv.innerHTML = `<h3>Metro Station: ${name}</h3>`;
+    } else {
+        stationDiv.innerHTML = `<h3>Selected Target</h3>`
+    }
+
     const popInfoDiv = document.getElementById('popInfo');
     if (population != null) {
-        popInfoDiv.innerHTML = population;
+        popInfoDiv.innerHTML = `<p>Population: ${population}</p>`;
     } else {
-        popInfoDiv.innerHTML = "Not available ";
+        popInfoDiv.innerHTML = `<p>Population Not Available</p>`;
     }
 
     const distDiv = document.getElementById('distToCenter');
     if (distance != null) {
-        distDiv.innerHTML = distance + "meters";
+        distDiv.innerHTML = `<p>Distance to city center: ${distance} meters </p>`;
     } else {
-        distDiv.innerHTML = "Not available ";
+        distDiv.innerHTML = `<p>Distance to city center not available </p>`;
     }
 
     var buildingArea = await getBuildingArea(lat, lon);
@@ -22,7 +33,7 @@ export async function displayStatistics(lat, lon, population=null, distance=null
     displayRoadLen(highwayStatistics);
 
     const buildingDiv = document.getElementById("buildingAreaInfo");
-    buildingDiv.innerHTML = "Total Building Area: " + buildingArea + " square meter";
+    buildingDiv.innerHTML = `<p>Total Building Area: ${buildingArea} square meter </p>`;
 
 }
 
@@ -132,6 +143,6 @@ export function displayRoadLen(roadLenInfo) {
         document.getElementById('moterBar').innerHTML = `<p>Auto<br>${moterLen.toFixed(2)}m</p>`;
         document.getElementById('pedestrianBar').innerHTML = `<p>Biking/Pedestrian-friendly<br>${pedestrianLen.toFixed(2)}m</p>`;
         document.getElementById('othersBar').innerHTML = `<p>Other<br>${othersLen.toFixed(2)}m</p>`;
-        console.log(moterProportion, pedestrianProportion, othersProportion);
+        // console.log(moterProportion, pedestrianProportion, othersProportion);
 
 };
