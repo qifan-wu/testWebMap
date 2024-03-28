@@ -5,7 +5,6 @@ export async function displayStatistics(lat, lon, name=null, population=null, di
     document.getElementById('defaultpanel').style.display = 'none';
     document.getElementById('statspanel').style.display = 'block';
 
-    debugger;
     const stationDiv = document.getElementById('metroInfo');
     if (name != null) {
         stationDiv.innerHTML = `<h3>Metro Station: ${name}</h3>`;

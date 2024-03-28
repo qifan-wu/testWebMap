@@ -1,5 +1,5 @@
-import { SEARCH_RADIUS, SEARCH_RADIUS_METER, SOPOI_CAT, OVERPASS_INTERPRETER } from './constants.js'
-import { overlayMaps, layerControl } from './base.js'
+import { SEARCH_RADIUS, SEARCH_RADIUS_METER, CATEGORIES, SOPOI_CAT, OVERPASS_INTERPRETER } from './constants.js'
+import { overlayMaps, layerControl} from './base.js'
 import { subwayIcon, targetIcon, poiIcon} from './icons.js'
 import { displayStatistics } from './statistics.js'
 
@@ -20,7 +20,9 @@ export function createStationMarkers(stationsData) {
 
             displaySelectStation(station.lat, station.lon);
             addBorderCircle(station.lat, station.lon);
-            displayAllPOI(station.lat, station.lon);
+            displayAllPOI(station.lat, station.lon).then(() => {
+                console.log("finished displaying the pois");
+            });
 
             displayStatistics(station.lat, station.lon, station.name, station.pop, station.distanceToCenter);
         });
@@ -41,6 +43,7 @@ export function createStationMarkers(stationsData) {
     return stationMarkers;
 };
 
+// show poi on map and statistics on panel when click on a target
 export function handleSearchedPlace(data, searchedRes) {
     searchedRes.clearLayers();
 
@@ -72,12 +75,33 @@ export function handleSearchedPlace(data, searchedRes) {
 
 };
 
-export function getAllPOI(lat, lon) {
-    const categories = ["amenity", "leisure", "shop", "historic"];
+
+
+// save overpasslayer of all categories in an array, save feature info as cache
+export async function getAllPOI(lat, lon) {
+    // clear up poi cache
+    var poiCount = {};
+    var poiCache = [];
+
     var opl_arr = [];
-    for (let i=0; i<categories.length; i++) {
-        let category = categories[i];
-        var opl = searchPOICat(lat, lon, category);
+    for (let i=0; i<CATEGORIES.length; i++) {
+        let category = CATEGORIES[i];
+        // // clear up poi count
+        // poiCount[category] = 0;
+
+        // get overpassLayer and features for each category
+        var oplRes = await searchPOICat(lat, lon, category);
+
+        let opl = oplRes.opLayer;
+        let catCache = oplRes.oplFeatures;
+
+        poiCache.concat(catCache);
+        poiCount[category] = catCache.length;
+
+
+        // console.log(poiCache);
+        // console.log(poiCount);
+        // console.log("-----")
         opl_arr.push(opl);
     }
     return opl_arr;
@@ -89,7 +113,7 @@ export function downloadPOI(lat, lon) {
     let query = `[out:json];
 (nwr(around:1000,${lat},${lon})["leisure"];);
 out body;`
-    console.log(query);
+    // console.log(query);
 
     fetch('https://overpass-api.de/api/interpreter', {
         method: 'POST',
@@ -99,7 +123,6 @@ out body;`
         body: 'data=' + encodeURIComponent(query)
     })
     .then(response => {
-        debugger;
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -114,8 +137,9 @@ out body;`
 
 }
 
-export function displayAllPOI(lat, lon) {
-    let opl_arr = getAllPOI(lat, lon);
+// display all poi on the map
+export async function displayAllPOI(lat, lon) {
+    let opl_arr = await getAllPOI(lat, lon);
     var opl_group = L.layerGroup(opl_arr);
 
     // var dldata = downloadPOI(lat, lon);
@@ -128,6 +152,7 @@ export function displayAllPOI(lat, lon) {
     opl_group.addTo(map);
 }
 
+// help generate the overpass query
 export function genQueryHelper(lat, lon) {
     let query = '[out:json];(';
     for (const cat in SOPOI_CAT) {
@@ -140,7 +165,7 @@ export function genQueryHelper(lat, lon) {
     return query;
 };
 
-
+// help generate the query specifed for OverpassLayer
 export function genOPLQueryHelper(lat, lon, category, values) {
     const queryHelp = values.map(value => `t["${category}"]=="${value}"`).join(" || ");
     let poiQuery = `nwr(around:${SEARCH_RADIUS_METER},${lat},${lon})(if:`;
@@ -149,25 +174,85 @@ export function genOPLQueryHelper(lat, lon, category, values) {
     return poiQuery;
 };
 
-export function searchPOICat(lat, lon, category) {
+
+export async function searchPOICat(lat, lon, category) {
+    // const overpassURL = '//overpass-api.de/api/interpreter';
+
+    // const overpassFrontend = new OverpassFrontend(overpassURL, {
+    //     timeGap: 10,
+    //     effortPerRequest: 100
+    // });
+
+    // let poiQuery = genOPLQueryHelper(lat, lon, category, SOPOI_CAT[category]);
+
+    // var poi_color = 'grey';
+
+    // if (category == "amenity") {
+    //     poi_color = 'red';
+    // }
+    // else if (category == "leisure"){
+    //     poi_color = 'green';
+    // }
+    // else if (category == "shop"){
+    //     poi_color = 'orange';
+    // }
+    // else if (category == "historic"){
+    //     poi_color = 'blue';
+    // }
+
+    // clear up poi feature info
+    // var poiCache = [];
+    // var opl = new OverpassLayer({
+    //     overpassFrontend: overpassFrontend,
+    //     query: poiQuery,
+
+    //     minZoom: 13,
+    //     feature: {
+    //         title: function (info) {
+    //             var title = '';
+    //             title += '<b>' + 'id' + '</b>: ' + info.id + '<br>';
+    //             title += '<b>' + 'osm_id' + '</b>: ' + info.osm_id + '<br>';
+
+    //             for (var key in info.tags) {
+    //                 title += '<b>' + key + '</b>: ' + info.tags[key] + '<br>';
+    //             }
+
+    //             // for saving the info to local
+    //             // console.log(JSON.stringify(info));
+    //             var feature_info = {"osm_id": info.osm_id, "type": info.type, "tags": info.tags};
+    //             poiCache.push(feature_info);
+
+    //             return title;
+    //         },
+    //         style: {
+    //             width: 1,
+    //             color: poi_color,
+    //             fillColor: poi_color,
+    //             opacity: 0.9,
+    //             fillOpacity: 0.5
+    //         }
+    //     }
+    // });
+
+    // return {"opLayer": opl, "oplFeatures": poiCache};
+    try {
+        var myobj = await buildOPL(lat, lon, category);
+        console.log(myobj.oplFeatures);
+        return myobj;
+    } catch (error) {
+        console.error("error", error);
+    }
+
+}
+
+export function buildOPL(lat, lon, category) {
     const overpassURL = '//overpass-api.de/api/interpreter';
 
-    map.setView(new L.LatLng(lat, lon), 15);
     const overpassFrontend = new OverpassFrontend(overpassURL, {
         timeGap: 10,
         effortPerRequest: 100
     });
 
-    // var poiQuery = `nwr(around:1000,${lat},${lon})[amenity]`;
-    // var poiQuery = `nwr(around:1000,${lat},${lon})(
-    //     if:t["amenity"]=="school" || t["amenity"] == "university"
-    //     )`;
-
-    // var poiQuery = `nwr(around:1000,${lat},${lon})(if:`;
-    // poiQuery += genQueryHelper("amenity", ["school", "university"]);
-    // poiQuery += genQueryHelper("amenity", SOPOI_CAT["amenity"]);
-    // poiQuery += ')';
-    // console.log(poiQuery);
     let poiQuery = genOPLQueryHelper(lat, lon, category, SOPOI_CAT[category]);
 
     var poi_color = 'grey';
@@ -185,40 +270,51 @@ export function searchPOICat(lat, lon, category) {
         poi_color = 'blue';
     }
 
-    var opl = new OverpassLayer({
-        overpassFrontend: overpassFrontend,
-        query: poiQuery,
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            var poiCache = [];
+            let opl = new OverpassLayer({
+                overpassFrontend: overpassFrontend,
+                query: poiQuery,
 
-        minZoom: 13,
-        feature: {
-            title: function (info) {
-                var title = '';
-                title += '<b>' + 'id' + '</b>: ' + info.id + '<br>';
-                title += '<b>' + 'osm_id' + '</b>: ' + info.osm_id + '<br>';
+                minZoom: 13,
+                feature: {
+                    title: function (info) {
+                        var title = '';
+                        title += '<b>' + 'id' + '</b>: ' + info.id + '<br>';
+                        title += '<b>' + 'osm_id' + '</b>: ' + info.osm_id + '<br>';
 
-                for (var key in info.tags) {
-                    title += '<b>' + key + '</b>: ' + info.tags[key] + '<br>';
+                        for (var key in info.tags) {
+                            title += '<b>' + key + '</b>: ' + info.tags[key] + '<br>';
+                        }
+
+                        // for saving the info to local
+                        // console.log(JSON.stringify(info));
+                        var feature_info = {"osm_id": info.osm_id, "type": info.type, "tags": info.tags};
+                        poiCache.push(feature_info);
+
+                        return title;
+                    },
+                    style: {
+                        width: 1,
+                        color: poi_color,
+                        fillColor: poi_color,
+                        opacity: 0.9,
+                        fillOpacity: 0.5
+                    }
                 }
-                return title;
-            },
-            style: {
-                width: 1,
-                color: poi_color,
-                fillColor: poi_color,
-                opacity: 0.9,
-                fillOpacity: 0.5
-            }
-        }
+            });
+            resolve({"opLayer": opl, "oplFeatures": poiCache});
+        }, 10000);
     });
-
-    return opl;
-
-}
+};
 
 
 
 export function displaySelectStation(lat, lon) {
     // add selected subway station marker
+    map.setView(new L.LatLng(lat, lon), 15);
+
     if (overlayMaps.hasOwnProperty("selected")) {
         map.removeLayer(overlayMaps["selected"]);
     }

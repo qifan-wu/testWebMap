@@ -13,6 +13,7 @@ export const OVERPASS_INTERPRETER = "https://overpass-api.de/api/interpreter";
 
 // Categories
 // POI
+export const CATEGORIES = ["amenity", "leisure", "shop", "historic"];
 export const SOPOI_CAT = {
     amenity: [
         "social facility", "library", "arts centre", "school", "university", "college",

@@ -78,6 +78,8 @@ L.control.scale().addTo(map);
 
 layerControl.addTo(map);
 
+// {"amenity": 0, "leisure": 0, "shop": 0, "historic": 0};
+
 // new search control
 const searchControl1 = L.esri.Geocoding.geosearch({
         position: "topleft",
@@ -119,7 +121,7 @@ L.control.Legend({
         color: 'red',
         fillColor: 'red',
         opacity: 0.9,
-        fillOpacity: 0.5
+        fillOpacity: 0.5,
       },
       {
         label: "Leisure",
