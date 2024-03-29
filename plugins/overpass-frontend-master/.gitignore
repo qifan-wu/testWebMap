@@ -1,0 +1,6 @@
+.*.swp
+/test/conf.json
+/test/data/
+/node_modules/
+/dist/overpass-frontend.js
+/dist/test.js
