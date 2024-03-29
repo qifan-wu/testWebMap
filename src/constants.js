@@ -1,16 +1,19 @@
-
-
+// Local files
 export const STATIONS_DATA_FILE = 'data/stations_all.json'
 export const STATIONS_INFO_FILE = 'data/stations_info.json'
 export const METRO_FILE = 'data/metros.json';
 
+// variable constants
 export const SEARCH_RADIUS = 0.009; // Approximately 1km in lat/lon
 export const SEARCH_RADIUS_METER = 1000;
 
-// export function addLayerToMap(layer) {
-//     map.addLayer(layer);
-// }
+// Endpoints
+export const OHSOME_ENDPOINT = "https://api.ohsome.org/v1/elements";
+export const OVERPASS_INTERPRETER = "https://overpass-api.de/api/interpreter";
 
+// Categories
+// POI
+export const CATEGORIES = ["amenity", "leisure", "shop", "historic"];
 export const SOPOI_CAT = {
     amenity: [
         "social facility", "library", "arts centre", "school", "university", "college",
@@ -53,7 +56,8 @@ export const SOPOI_CAT = {
     ]
 };
 
-
-// export const HIGHWAY_TYPES = "motorway,trunk,primary,secondary,tertiary,unclassified,residential,motorway_link,living_street,pedestrian,path,track,service";
-export const HIGHWAY_TYPES = "motorway,primary,secondary,tertiary,residential,pedestrian,cycleway,living_street,path,footway"
-export const OHSOME_ENDPOINT = "https://api.ohsome.org/v1/elements";
+// Road
+export const HIGHWAY_TYPES = "motorway,primary,secondary,tertiary,residential,pedestrian,cycleway,living_street,path,footway";
+export const MOTER_ROAD_TYPES = ["primary", "secondary", "tertiary", "motorway"];
+export const PEDCYCLE_ROAD_TYPES = ["residential", "footway", "path", "pedestrian", "living_street", "cycleway"];
+// export const OTHER_ROAD_TYPES = ["remainder"];

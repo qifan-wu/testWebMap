@@ -47,7 +47,40 @@
 
 
 
-    <script type="module" src="./src/test.js"></script>
+    <!-- <script type="module" src="./src/test.js"></script> -->
+
+
+
+    <script src="https://unpkg.com/@esri/arcgis-rest-request@4.0.0/dist/bundled/request.umd.js"></script>
+    <script src="https://unpkg.com/@esri/arcgis-rest-geocoding@4.0.0/dist/bundled/geocoding.umd.js"></script>
+
+    <script>
+
+      const apiKey = "AAPKe7dc260a932942c1aaf4e966a8f73787Ayyy_ogN-EzYkPL5SqWIApGN124rak3cTKWE5-dGzC7VXjaX8Dcmp1kbbTeN6ka7";
+
+
+      const authentication = arcgisRest.ApiKeyManager.fromKey(apiKey);
+
+      arcgisRest
+        .geocode({
+          params: {
+            category: "Coffee shop",
+            location: "144.9850916862488,-37.798297645411",
+            maxLocations: 20
+          },
+          outFields: "*",
+          authentication
+        })
+        .then((response) => {
+          console.log("Candidates:", response.candidates);
+          document.getElementById("result").textContent = JSON.stringify(response.candidates, null, 2);
+        });
+
+
+
+
+        const serviceUrl = "http://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
+    </script>
 
 </body>
 </html>
