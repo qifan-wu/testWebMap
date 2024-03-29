@@ -78,8 +78,6 @@ L.control.scale().addTo(map);
 
 layerControl.addTo(map);
 
-// {"amenity": 0, "leisure": 0, "shop": 0, "historic": 0};
-
 // new search control
 const searchControl1 = L.esri.Geocoding.geosearch({
         position: "topleft",

@@ -75,8 +75,6 @@ export function handleSearchedPlace(data, searchedRes) {
 
 };
 
-
-
 // save overpasslayer of all categories in an array, save feature info as cache
 export async function getAllPOI(lat, lon) {
     // clear up poi cache
@@ -136,18 +134,9 @@ export async function displayAllPOI(lat, lon) {
     opl_group.addTo(map);
 }
 
-// help generate the overpass query
-export function genQueryHelper(lat, lon) {
-    let query = '[out:json];(';
-    for (const cat in SOPOI_CAT) {
-        const values = SOPOI_CAT[cat];
-        const valStr = values.join('|');
 
-        query += `nwr(around:${SEARCH_RADIUS_METER},${lat},${lon})["${cat}"~"^(${valStr})$"];`
-    }
-    query += '); out body;';
-    return query;
-};
+
+
 
 // help generate the query specifed for OverpassLayer
 export function genOPLQueryHelper(lat, lon, category, values) {
@@ -217,9 +206,6 @@ export async function searchPOICat(lat, lon, category) {
 }
 
 
-
-
-
 export function displaySelectStation(lat, lon) {
     // add selected subway station marker
     map.setView(new L.LatLng(lat, lon), 15);
@@ -252,6 +238,7 @@ export function addBorderCircle(lat, lon) {
     borderCircle.addTo(map);
     overlayMaps.border = borderCircle;
 }
+
 
 
 // ==========================================
