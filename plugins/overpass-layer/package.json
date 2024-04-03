@@ -38,7 +38,7 @@
   "files": [
     "src",
     "dist/overpass-layer.js",
-    "img/map_pointer.png",
+    // "img/map_pointer.png",
     "index.js"
   ],
   "repository": {
