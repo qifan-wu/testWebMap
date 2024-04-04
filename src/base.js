@@ -12,11 +12,29 @@ var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/service
 var mapboxStreet = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
       attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/about/">OpenStreetMap</a> contributors',
       maxZoom: 18,
-      id: 'mapbox/streets-v11', // Change this to your desired Mapbox style
+      id: 'mapbox/streets-v11',
       tileSize: 512,
       zoomOffset: -1,
-      accessToken: MAPBOX_PUBLIC_TOKEN // Replace this with your Mapbox access token
-    })
+      accessToken: MAPBOX_PUBLIC_TOKEN
+    });
+
+var mapboxLight = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+      attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/about/">OpenStreetMap</a> contributors',
+      maxZoom: 18,
+      id: 'mapbox/light-v10',
+      tileSize: 512,
+      zoomOffset: -1,
+      accessToken: MAPBOX_PUBLIC_TOKEN
+    });
+
+var mapboxDark = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+      attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/about/">OpenStreetMap</a> contributors',
+      maxZoom: 18,
+      id: 'mapbox/dark-v10',
+      tileSize: 512,
+      zoomOffset: -1,
+      accessToken: MAPBOX_PUBLIC_TOKEN
+    });
 
 // display metro lines
 axios.get(METRO_FILE)
@@ -65,7 +83,9 @@ axios.get(METRO_FILE)
 var baseMaps = {
     "OpenStreetMap": osmBaseMap,
     "Satellite": satellite,
-    'Streets': mapboxStreet
+    'Streets': mapboxStreet,
+    'Light': mapboxLight,
+    'Dark': mapboxDark
 };
 
 export var overlayMaps = {
@@ -73,42 +93,7 @@ export var overlayMaps = {
 
 export var layerControl = L.control.layers(baseMaps, overlayMaps)
 
-osmBaseMap.addTo(map);
-L.control.scale().addTo(map);
-
-layerControl.addTo(map);
-
-// new search control
-const searchControl1 = L.esri.Geocoding.geosearch({
-        position: "topleft",
-        placeholder: "Enter an address or place e.g. 1 York St",
-        useMapBounds: false,
-        providers: [
-          L.esri.Geocoding.arcgisOnlineProvider({
-            apikey: ESRI_ACCESS_TOKEN
-          })
-        ]
-      }).addTo(map);
-const results = L.layerGroup().addTo(map);
-searchControl1.on("results", function (data) {
-        results.clearLayers();
-        for (let i = data.results.length - 1; i >= 0; i--) {
-          results.addLayer(L.marker(data.results[i].latlng));
-          handleSearchedPlace(data, results);
-        }
-      });
-
-axios.get(STATIONS_INFO_FILE)
-    .then(function (response) {
-        var stationsData = response.data;
-        var stationMarkers = createStationMarkers(stationsData);
-    })
-    .catch(function (error) {
-        console.error("error fetching cache: ", error)
-    });
-
-// add legend
-L.control.Legend({
+export var poiLegend = L.control.Legend({
     title: "Legend of POI",
     position: "bottomright",
     legends: [
@@ -149,9 +134,45 @@ L.control.Legend({
         fillOpacity: 0.5
       },
     ],
-    collapsed: true,
+    collapsed: false,
     symbolWidth: 20,
     opacity: 0.8
-}).addTo(map);
+});
+
+osmBaseMap.addTo(map);
+L.control.scale().addTo(map);
+
+layerControl.addTo(map);
+
+// new search control
+const searchControl1 = L.esri.Geocoding.geosearch({
+        position: "topleft",
+        placeholder: "Enter an address or place e.g. 1 York St",
+        useMapBounds: false,
+        providers: [
+          L.esri.Geocoding.arcgisOnlineProvider({
+            apikey: ESRI_ACCESS_TOKEN
+          })
+        ]
+      }).addTo(map);
+const results = L.layerGroup().addTo(map);
+searchControl1.on("results", function (data) {
+        results.clearLayers();
+        for (let i = data.results.length - 1; i >= 0; i--) {
+          results.addLayer(L.marker(data.results[i].latlng));
+          handleSearchedPlace(data, results);
+        }
+      });
+
+axios.get(STATIONS_INFO_FILE)
+    .then(function (response) {
+        var stationsData = response.data;
+        var stationMarkers = createStationMarkers(stationsData);
+    })
+    .catch(function (error) {
+        console.error("error fetching cache: ", error)
+    });
+
+
 
 // console.warn = () => {};

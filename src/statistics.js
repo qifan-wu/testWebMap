@@ -11,33 +11,37 @@ export async function displayStatistics(lat, lon, name=null, population=null, di
     if (name != null) {
         stationDiv.innerHTML = `<h3>Metro Station: ${name}</h3>`;
     } else {
+        name = "Selected_Target";
         stationDiv.innerHTML = `<h3>Selected Target</h3>`
     }
 
+    // population
     const popInfoDiv = document.getElementById('popInfo');
     if (population != null) {
-        popInfoDiv.innerHTML = `<p>Population: ${population}</p>`;
+        popInfoDiv.innerHTML = `<p>Population: ${population.toFixed(2)}</p>`;
     } else {
         popInfoDiv.innerHTML = `<p>Population Not Available</p>`;
     }
 
+    // distance to center
     const distDiv = document.getElementById('distToCenter');
     if (distance != null) {
-        distDiv.innerHTML = `<p>Distance to city center: ${distance} meters </p>`;
+        distDiv.innerHTML = `<p>Distance to city center: ${distance.toFixed(2)} meters </p>`;
     } else {
         distDiv.innerHTML = `<p>Distance to city center not available </p>`;
     }
 
+    // building
     var buildingArea = await getBuildingArea(lat, lon);
+    const buildingDiv = document.getElementById("buildingAreaInfo");
+    buildingDiv.innerHTML = `<p>Total Building Area: ${buildingArea.toFixed(2)} square meter </p>`;
 
+    // highway
     var highwayStatistics = await getRoadLength(lat, lon);
     displayRoadLen(highwayStatistics);
 
-    const buildingDiv = document.getElementById("buildingAreaInfo");
-    buildingDiv.innerHTML = `<p>Total Building Area: ${buildingArea} square meter </p>`;
-
     // poi statistics
-    showPOIstats(lat, lon);
+    showPOIstats(lat, lon, name);
 }
 
 
@@ -135,7 +139,7 @@ export function displayRoadLen(roadLenInfo) {
         const totalLen = moterLen + pedestrianLen + othersLen;
 
         const highwayDiv = document.getElementById('highwayInfo');
-        highwayDiv.innerHTML = `<p>Total Road Length is ${totalLen}m</p>`;
+        highwayDiv.innerHTML = `<p>Total Road Length is ${totalLen.toFixed(2)}m</p>`;
 
         const moterProportion = (moterLen / totalLen) * 100;
         const pedestrianProportion = (pedestrianLen / totalLen) * 100;
@@ -145,10 +149,11 @@ export function displayRoadLen(roadLenInfo) {
         document.getElementById('pedestrianBar').style.setProperty('width', `${pedestrianProportion}%`);
         document.getElementById('othersBar').style.setProperty('width', `${othersProportion}%`);
 
-        document.getElementById('moterBar').innerHTML = `<p>Auto<br>${moterLen.toFixed(2)}m</p>`;
-        document.getElementById('pedestrianBar').innerHTML = `<p>Biking/Pedestrian-friendly<br>${pedestrianLen.toFixed(2)}m</p>`;
-        document.getElementById('othersBar').innerHTML = `<p>Other<br>${othersLen.toFixed(2)}m</p>`;
+        document.getElementById('moterBar').innerHTML = `<p>Auto<br>${moterLen.toFixed(1)}m</p>`;
+        document.getElementById('pedestrianBar').innerHTML = `<p>Biking/Pedestrian-friendly<br>${pedestrianLen.toFixed(1)}m</p>`;
+        document.getElementById('othersBar').innerHTML = `<p>Other<br>${othersLen.toFixed(1)}m</p>`;
         // console.log(moterProportion, pedestrianProportion, othersProportion);
+        document.getElementById('barLegend').style.setProperty('display', 'flex');
 
 };
 
@@ -245,19 +250,6 @@ export function convertJsonToCSV(poiData) {
     if (!poiData || poiData.length === 0) {
         return '';
     }
-    // var json = poiData;
-    // const attrs = ['id', 'type'];
-    // const fields = ['addr:city', 'name', 'amenity', 'leisure', 'shop', 'historic']
-    // var replacer = function(key, value) { return value === null ? '' : value }
-    // var csv = json.map(function(row){
-    // return fields.map(function(fieldName){
-    //     return JSON.stringify(row[fieldName], replacer)
-    // }).join(',')
-    // })
-    // csv.unshift(fields.join(',')) // add header column
-    // csv = csv.join('\r\n');
-    // return csv;
-    // const csvHeader = 'id, type, tags\n';
     const attrs = ['id', 'type'];
     const attrs_tags = ['name', 'amenity', 'leisure', 'shop', 'historic', 'cuisine', 'addr:street', 'addr:postcode', 'website']
     const csvHeader = attrs.concat(attrs_tags).join(',');
@@ -266,19 +258,15 @@ export function convertJsonToCSV(poiData) {
             return;
         }
         let csvRow = `${element.id},${element.type}`;
-        // if (element.tags !== undefined) {
-            // const tags = JSON.stringify(element.tags);
-            // debugger;
-            attrs_tags.forEach(tag_name => {
-                let tagVal = element.tags[tag_name];
-                if (tagVal == undefined) {
-                    csvRow += ",";
-                } else {
-                    csvRow += `,${tagVal}`;
-                }
-            });
-        // }
 
+        attrs_tags.forEach(tag_name => {
+            let tagVal = element.tags[tag_name];
+            if (tagVal == undefined) {
+                csvRow += ",";
+            } else {
+                csvRow += `,${tagVal}`;
+            }
+        });
         return csvRow;
     });
     // add header
@@ -287,8 +275,8 @@ export function convertJsonToCSV(poiData) {
     return csvRows.join('\r\n');
 };
 
-export async function showPOIstats(lat, lon) {
-    document.querySelector('#downloadCSV').innerText = 'Loading Data...';
+export async function showPOIstats(lat, lon, stationName) {
+    // document.querySelector('#downloadCSV').innerText = 'Loading...';
     let poiData = await getPOIdata(lat, lon);
     // console.log(JSON.stringify(poiData));
     document.querySelector('#downloadCSV').innerText = 'Download POI Data in CSV';
@@ -296,7 +284,6 @@ export async function showPOIstats(lat, lon) {
     const startTimePC = new Date().getTime();
     let poiCount = processPOIData(poiData);
 
-    console.log(poiCount);
     const poiInfoDiv = document.getElementById('poiStats');
     if (poiCount == null) {
         poiInfoDiv.innerHTML = `<p>POI information not available</p>`;
@@ -310,20 +297,24 @@ export async function showPOIstats(lat, lon) {
     const endTimePC = new Date().getTime();
     console.log("Time for Preparing poi count stats: ", (endTimePC - startTimePC) / 1000, "s");
 
+    downloadCSV(poiData, stationName);
+};
+
+export function downloadCSV(poiData, stationName) {
     document.getElementById('downloadCSV').addEventListener('click', function() {
         const startTimeCSV = new Date().getTime();
 
         const poiDataCSV = convertJsonToCSV(poiData);
         this.textContent = "Downloading";
-        downloadData(poiDataCSV, "poi_data.csv");
+        let fileName = stationName.replace(/ /g, "_") + "_POIdata.csv";
+
+        downloadData(poiDataCSV, fileName);
         this.textContent = "Download finished";
 
         const endTimeCSV = new Date().getTime();
-        console.log("Time for csv process and download: ", (endTimePC - startTimePC) / 1000, "s");
+        console.log("Time for csv download: ", (endTimeCSV - startTimeCSV) / 1000, "s");
     });
-};
-
-
+}
 export function downloadData(data, file_name) {
     var blob = new Blob([data], { type: "text/plain" });
     var link = document.createElement("a");

@@ -1,5 +1,5 @@
 import { SEARCH_RADIUS, SEARCH_RADIUS_METER, CATEGORIES, SOPOI_CAT, OVERPASS_INTERPRETER, STATIONS_DATA_FILE } from './constants.js'
-import { overlayMaps, layerControl} from './base.js'
+import { overlayMaps, layerControl, poiLegend} from './base.js'
 import { subwayIcon, targetIcon, poiIcon} from './icons.js'
 import { displayStatistics } from './statistics.js'
 
@@ -12,6 +12,13 @@ export function createStationMarkers(stationsData) {
 
         stationMarker.on('click', function() {
             console.log('clicked');
+
+            if (!overlayMaps.hasOwnProperty("legend")) {
+                overlayMaps.legend = true;
+                poiLegend.addTo(map);
+            }
+
+            document.querySelector('#downloadCSV').innerText = 'Loading...';
 
             if (overlayMaps.hasOwnProperty("stations")) {
                 map.removeControl(overlayMaps["stations"]);
