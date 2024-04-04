@@ -174,6 +174,8 @@ export function genQueryHelper(lat, lon) {
 // ====== POI statistics and data download =======
 // get poi data for download from overpass API
 export async function getPOIdata(latitude, longitude) {
+    const startTime = new Date().getTime();
+
     const overpassQuery = genQueryHelper(latitude, longitude);
     // console.log(overpassQuery);
 
@@ -190,6 +192,8 @@ export async function getPOIdata(latitude, longitude) {
         // Parsing the response
         const data = await response.json();
         // console.log(data.elements[0]);
+        const endTime = new Date().getTime();
+        console.log("Time for retrieving poi data for download", (endTime - startTime) / 1000, "s");
         return data.elements;
     } catch (error) {
         console.error('Error fetching places:', error);
@@ -224,25 +228,72 @@ export function processPOIData(poiData) {
 };
 
 
+// export function convertJsonToCSV(poiData) {
+//     if (!poiData || poiData.length === 0) {
+//         return '';
+//     }
+//     const csvHeader = 'id, type, tags\n';
+//     const csvRows = poiData.map(element => {
+//         if (element.tags !== undefined) {
+//             const tags = JSON.stringify(element.tags);
+//             return `${element.id},${element.type},${tags}`;
+//         }
+//     });
+//     return csvHeader + csvRows.join('\n');
+// };
 export function convertJsonToCSV(poiData) {
     if (!poiData || poiData.length === 0) {
         return '';
     }
-    const csvHeader = 'id, type, tags\n';
+    // var json = poiData;
+    // const attrs = ['id', 'type'];
+    // const fields = ['addr:city', 'name', 'amenity', 'leisure', 'shop', 'historic']
+    // var replacer = function(key, value) { return value === null ? '' : value }
+    // var csv = json.map(function(row){
+    // return fields.map(function(fieldName){
+    //     return JSON.stringify(row[fieldName], replacer)
+    // }).join(',')
+    // })
+    // csv.unshift(fields.join(',')) // add header column
+    // csv = csv.join('\r\n');
+    // return csv;
+    // const csvHeader = 'id, type, tags\n';
+    const attrs = ['id', 'type'];
+    const attrs_tags = ['name', 'amenity', 'leisure', 'shop', 'historic', 'cuisine', 'addr:street', 'addr:postcode', 'website']
+    const csvHeader = attrs.concat(attrs_tags).join(',');
     const csvRows = poiData.map(element => {
-        if (element.tags !== undefined) {
-            const tags = JSON.stringify(element.tags);
-            return `${element.id},${element.type},${tags}`;
+        if (element.tags == undefined) {
+            return;
         }
+        let csvRow = `${element.id},${element.type}`;
+        // if (element.tags !== undefined) {
+            // const tags = JSON.stringify(element.tags);
+            // debugger;
+            attrs_tags.forEach(tag_name => {
+                let tagVal = element.tags[tag_name];
+                if (tagVal == undefined) {
+                    csvRow += ",";
+                } else {
+                    csvRow += `,${tagVal}`;
+                }
+            });
+        // }
+
+        return csvRow;
     });
-    return csvHeader + csvRows.join('\n');
+    // add header
+    csvRows.unshift(csvHeader);
+
+    return csvRows.join('\r\n');
 };
 
-
 export async function showPOIstats(lat, lon) {
+    document.querySelector('#downloadCSV').innerText = 'Loading Data...';
     let poiData = await getPOIdata(lat, lon);
+    // console.log(JSON.stringify(poiData));
     document.querySelector('#downloadCSV').innerText = 'Download POI Data in CSV';
 
+    const startTimePC = new Date().getTime();
     let poiCount = processPOIData(poiData);
 
     console.log(poiCount);
@@ -256,11 +307,19 @@ export async function showPOIstats(lat, lon) {
         `;
     }
 
+    const endTimePC = new Date().getTime();
+    console.log("Time for Preparing poi count stats: ", (endTimePC - startTimePC) / 1000, "s");
+
     document.getElementById('downloadCSV').addEventListener('click', function() {
+        const startTimeCSV = new Date().getTime();
+
         const poiDataCSV = convertJsonToCSV(poiData);
         this.textContent = "Downloading";
         downloadData(poiDataCSV, "poi_data.csv");
         this.textContent = "Download finished";
+
+        const endTimeCSV = new Date().getTime();
+        console.log("Time for csv process and download: ", (endTimePC - startTimePC) / 1000, "s");
     });
 };
 
