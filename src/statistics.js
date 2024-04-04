@@ -149,8 +149,8 @@ export function displayRoadLen(roadLenInfo) {
         document.getElementById('pedestrianBar').style.setProperty('width', `${pedestrianProportion}%`);
         document.getElementById('othersBar').style.setProperty('width', `${othersProportion}%`);
 
-        document.getElementById('moterBar').innerHTML = `<p>Auto<br>${moterLen.toFixed(1)}m</p>`;
-        document.getElementById('pedestrianBar').innerHTML = `<p>Biking/Pedestrian-friendly<br>${pedestrianLen.toFixed(1)}m</p>`;
+        document.getElementById('moterBar').innerHTML = `<p>Motor Vehicles<br>${moterLen.toFixed(1)}m</p>`;
+        document.getElementById('pedestrianBar').innerHTML = `<p>Biking/Pedestrian friendly<br>${pedestrianLen.toFixed(1)}m</p>`;
         document.getElementById('othersBar').innerHTML = `<p>Other<br>${othersLen.toFixed(1)}m</p>`;
         // console.log(moterProportion, pedestrianProportion, othersProportion);
         document.getElementById('barLegend').style.setProperty('display', 'flex');
