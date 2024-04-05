@@ -1,5 +1,5 @@
-import { SEARCH_RADIUS, SEARCH_RADIUS_METER, CATEGORIES, SOPOI_CAT, OVERPASS_INTERPRETER } from './constants.js'
-import { overlayMaps, layerControl} from './base.js'
+import { SEARCH_RADIUS, SEARCH_RADIUS_METER, CATEGORIES, SOPOI_CAT, OVERPASS_INTERPRETER, STATIONS_DATA_FILE } from './constants.js'
+import { overlayMaps, layerControl, poiLegend} from './base.js'
 import { subwayIcon, targetIcon, poiIcon} from './icons.js'
 import { displayStatistics } from './statistics.js'
 
@@ -12,6 +12,13 @@ export function createStationMarkers(stationsData) {
 
         stationMarker.on('click', function() {
             console.log('clicked');
+
+            if (!overlayMaps.hasOwnProperty("legend")) {
+                overlayMaps.legend = true;
+                poiLegend.addTo(map);
+            }
+
+            document.querySelector('#downloadCSV').innerText = 'Loading...';
 
             if (overlayMaps.hasOwnProperty("stations")) {
                 map.removeControl(overlayMaps["stations"]);
@@ -77,15 +84,19 @@ export function handleSearchedPlace(data, searchedRes) {
 
 // save overpasslayer of all categories in an array, save feature info as cache
 export async function getAllPOI(lat, lon) {
+    const startTime = new Date().getTime();
+
     // clear up poi cache
     var opl_arr = [];
+
     for (let i=0; i<CATEGORIES.length; i++) {
         let category = CATEGORIES[i];
         // get overpassLayer for each category
         var opl = await searchPOICat(lat, lon, category);
-
         opl_arr.push(opl);
     }
+    const endTime = new Date().getTime();
+    console.log("Time for Preparing opl for map show: ", (endTime - startTime) / 1000, "s");
     return opl_arr;
 };
 
@@ -132,6 +143,7 @@ export async function displayAllPOI(lat, lon) {
     }
     overlayMaps.POI_group = opl_group;
     opl_group.addTo(map);
+
 }
 
 
@@ -149,6 +161,7 @@ export function genOPLQueryHelper(lat, lon, category, values) {
 
 
 export async function searchPOICat(lat, lon, category) {
+
     const overpassURL = '//overpass-api.de/api/interpreter';
 
     const overpassFrontend = new OverpassFrontend(overpassURL, {

@@ -8,12 +8,10 @@
     <!-- Load overpas-layer plugin -->
     <link rel="stylesheet" href="./plugins/overpass-layer/node_modules/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="./plugins/overpass-layer/demo/demo.css" />
-    <!-- <link rel="stylesheet" href="./plugins/overpass-layer/img/map_pointer.png" /> -->
     <script src="./plugins/overpass-layer/node_modules/leaflet/dist/leaflet.js"></script>
     <script src="./plugins/overpass-layer/node_modules/leaflet-polylineoffset/leaflet.polylineoffset.js"></script>
     <script src="./plugins/overpass-layer/node_modules/leaflet-polylinedecorator/dist/leaflet.polylineDecorator.js"></script>
     <script src="./plugins/overpass-layer/dist/overpass-layer.js"></script>
-    <!-- <script src="./plugins/overpass-layer/img/map_pointer.xcf"></script> -->
 
     <!-- Load leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -39,6 +37,8 @@
     <link rel="stylesheet" href="./plugins/leaflet-legend/src/leaflet.legend.css" crossorigin="" />
     <script src="./plugins/leaflet-legend/src/leaflet.legend.js" crossorigin=""></script>
 
+    <!-- Load osmtogeojson plugin -->
+    <script src="./plugins/osmtogeojson/osmtogeojson.js"></script>
 
     <!-- Import style -->
     <link rel="stylesheet" href="./static/css/style.css">
@@ -71,29 +71,29 @@
                 Click on <img src="static/images/subway.svg" alt="/" width="18"> to get POIs near the selected subway station
             </p>
         </div>
-
-
     </div>
 
     <div id="statspanel">
         <div id="metroInfo">
         </div>
         <div class="poiInfo">
-            <h3>Statistics of POI nearby</h3>
+            <h3>Statistics of POI Nearby (within 1KM)</h3>
             <div id="poiStats">Not available</div>
             <button id="downloadCSV">Loading...</button>
+            <button id="downloadGeoJson">Loading...</button>
         </div>
         <div class="statsInfo">
             <h3>Statistics of social and built environment</h3>
-            <div id="popInfo">Not Available</div>
-            <div id="distToCenter">Not Available</div>
-            <div id="buildingAreaInfo">Not Available</div>
-            <div id="highwayInfo"></div>
+            <div id="popInfo"><p>Population Information Not Available</p></div>
+            <div id="distToCenter"><p>Distance to City Center Information Not Available</p></div>
+            <div id="buildingAreaInfo"><p>Building Area Information Not Available</p></div>
+            <div id="highwayInfo"><p>Road Length Information Not Available</p></div>
             <div id="highway-chart">
                 <div class="bar" id="moterBar"></div>
                 <div class="bar" id="pedestrianBar"></div>
                 <div class="bar" id="othersBar"></div>
             </div>
+            <div id="barLegend"><p>Road Length Information By Type</p>;</div>
         </div>
 
         <!-- <h2>Statistics within 1km from selected</h2>

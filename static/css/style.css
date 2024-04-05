@@ -19,23 +19,6 @@
     align-items: center;
 }
 
-p {
-    color: #666;
-}
-img {
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
-a {
-    color: #007bff;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
 #map {
     width: 75%;
 }
@@ -84,7 +67,7 @@ a:hover {
     height: 40px;
     width: 100%;
     padding-top: 10px;
-    padding-bottom: 10px;
+    padding-bottom: 0px;
 }
 
 .bar {
@@ -98,16 +81,16 @@ a:hover {
 }
 
 #moterBar {
-    background-color: #3498db;
+    background-color: #53a8b6;
 }
 
 #pedestrianBar {
-    background-color: #2ecc71;
+    background-color: #bbe4e9;
     /* bottom: 10px; */
 }
 
 #othersBar {
-    background-color: #e74c3c;
+    background-color: #79c2d0;
 }
 
 .bar p {
@@ -118,6 +101,10 @@ a:hover {
     font-size: 12px;
 }
 
+#barLegend {
+    justify-content: center;
+    display: none;
+}
 
 #loading-spinner {
     position: absolute;
@@ -131,6 +118,24 @@ a:hover {
     stroke: red;
     fill: red;
     fill-opacity: 0.5;
+}
+
+p {
+    color: #666;
+}
+
+img {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 footer {
