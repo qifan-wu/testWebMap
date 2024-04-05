@@ -20,7 +20,7 @@ export async function displayStatistics(lat, lon, name=null, population=null, di
     if (population != null) {
         popInfoDiv.innerHTML = `<p>Population: ${population.toFixed(2)}</p>`;
     } else {
-        popInfoDiv.innerHTML = `<p>Population Not Available</p>`;
+        popInfoDiv.innerHTML = `<p>Population not available</p>`;
     }
 
     // distance to center
