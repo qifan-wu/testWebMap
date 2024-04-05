@@ -275,11 +275,21 @@ export function convertJsonToCSV(poiData) {
     return csvRows.join('\r\n');
 };
 
+export function convertJsonToGeoJson(poiData) {
+    let json = {elements: poiData};
+    let geoJson = osmtogeojson(json);
+    // console.log();
+    return JSON.stringify(geoJson);
+};
+
+
 export async function showPOIstats(lat, lon, stationName) {
-    // document.querySelector('#downloadCSV').innerText = 'Loading...';
+
     let poiData = await getPOIdata(lat, lon);
     // console.log(JSON.stringify(poiData));
+    // change download button after retrieving finished
     document.querySelector('#downloadCSV').innerText = 'Download POI Data in CSV';
+    document.querySelector('#downloadGeoJson').innerText = 'Download POI Data in Geojson';
 
     const startTimePC = new Date().getTime();
     let poiCount = processPOIData(poiData);
@@ -298,6 +308,7 @@ export async function showPOIstats(lat, lon, stationName) {
     console.log("Time for Preparing poi count stats: ", (endTimePC - startTimePC) / 1000, "s");
 
     downloadCSV(poiData, stationName);
+    downloadGeoJson(poiData, stationName);
 };
 
 export function downloadCSV(poiData, stationName) {
@@ -314,7 +325,24 @@ export function downloadCSV(poiData, stationName) {
         const endTimeCSV = new Date().getTime();
         console.log("Time for csv download: ", (endTimeCSV - startTimeCSV) / 1000, "s");
     });
+};
+
+export function downloadGeoJson(poiData, stationName) {
+    document.getElementById('downloadGeoJson').addEventListener('click', function() {
+        const startTimeGeojson = new Date().getTime();
+
+        const poiDataGeojson = convertJsonToGeoJson(poiData);
+        this.textContent = "Downloading";
+        let fileName = stationName.replace(/ /g, "_") + "_POIdata.geojson";
+
+        downloadData(poiDataGeojson, fileName);
+        this.textContent = "Download finished";
+
+        const endTimeGeojson = new Date().getTime();
+        console.log("Time for Geojson download: ", (endTimeGeojson - startTimeGeojson) / 1000, "s");
+    });
 }
+
 export function downloadData(data, file_name) {
     var blob = new Blob([data], { type: "text/plain" });
     var link = document.createElement("a");

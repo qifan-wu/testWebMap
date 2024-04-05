@@ -37,6 +37,9 @@
     <link rel="stylesheet" href="./plugins/leaflet-legend/src/leaflet.legend.css" crossorigin="" />
     <script src="./plugins/leaflet-legend/src/leaflet.legend.js" crossorigin=""></script>
 
+    <!-- Load osmtogeojson plugin -->
+    <script src="./plugins/osmtogeojson/osmtogeojson.js"></script>
+
     <!-- Import style -->
     <link rel="stylesheet" href="./static/css/style.css">
 
@@ -77,6 +80,7 @@
             <h3>Statistics of POI Nearby (Within 1KM)</h3>
             <div id="poiStats">Not available</div>
             <button id="downloadCSV">Loading...</button>
+            <button id="downloadGeoJson">Loading...</button>
         </div>
         <div class="statsInfo">
             <h3>Statistics of social and built environment</h3>

@@ -163,6 +163,12 @@ function convertJsonToCSV(poiData) {
     return csvHeader + csvRows.join('\n');
 }
 
+function ctgeojson(poiData) {
+
+    var res = osmtogeojson(poiData)
+    console.log(res);
+
+}
 function convertJsonToGeoJson(poiData) {
     if (!poiData || poiData.length === 0) {
         return { type: 'FeatureCollection', features: [] }; // Return empty GeoJSON FeatureCollection if there's no data
@@ -230,57 +236,92 @@ function convertJsonToGeoJson(poiData) {
 
 // getBuildingArea(40.632967, -73.943950);
 // getRoadLength(40.632967, -73.943950);
-test(40.632967, -73.943950);
+// test(40.632967, -73.943950);
 // getPOIgeojson(40.632967, -73.943950);
-var poiData = await getPOIdata(40.632967, -73.943950);
-processPOIData(poiData);
+// var poiData = await getPOIdata(40.632967, -73.943950);
+// processPOIData(poiData);
 // console.log(JSON.stringify(poiData));
 // var csvdata = convertJsonToCSV(poiData);
 // console.log(csvdata);
-var geojsondata = convertJsonToGeoJson(poiData);
-console.log(JSON.stringify(geojsondata))
 
 
+var xml, geojson;
+
+xml = "<osm><node id='1' lat='1.234' lon='4.321' /></osm>";
+xml = (new DOMParser()).parseFromString(xml, 'text/xml');
+
+
+axios.get("poiSmall.json")
+// axios.get("osmdataexm.json")
+    .then(function (response) {
+        var poiData = response.data;
+        // json = {
+        //     elements: [
+        //         {
+        //             type: "relation",
+        //             id:   1,
+        //             tags: {"type":"multipolygon"},
+        //             members: [{
+        //                 type: "way",
+        //                 ref:  1,
+        //                 role: "outer"
+        //             }]
+        //         }
+        //     ]
+        // };
+
+
+        console.log(JSON.stringify(poiData));
+        var json = {elements: poiData}
+        var geojsondata = ctgeojson(json);
+        // var geojsondata = ctgeojson(xml);
+        console.log(JSON.stringify(geojsondata));
+
+
+    })
 
 
 // ///////======
 
-async function getPOIgeojson(lat, lon) {
-    var poiQuery = `(
-        node(around:1000, ${lat}, ${lon})[amenity];
-        node(around:1000, ${lat}, ${lon})[leisure];
-        node(around:1000, ${lat}, ${lon})[shop];
-        node(around:1000, ${lat}, ${lon})[historic];);
-        out qt;`;
 
-    var result = await fetch(
-        "https://overpass-api.de/api/interpreter",
-        {
-            method: "POST",
-            // The body contains the query
-            // to understand the query language see "The Programmatic Query Language" on
-            // https://wiki.openstreetmap.org/wiki/Overpass_API#The_Programmatic_Query_Language_(OverpassQL)
-            body: "data="+ encodeURIComponent(`
-                [bbox:30.618338,-96.323712,30.591028,-96.330826]
-                [out:json]
-                [timeout:90]
-                ;
-                (
-                    nwr
-                        (
-                            30.626917110746,
-                            -96.348809105664,
-                            30.634468750236,
-                            -96.339893442898
-                        );
-                );
-                out geom;
-            `)
-        },
-    ).then(
-        (data)=>data.json()
-    )
-    console.log(JSON.stringify(result , null, 2));
+// async function getPOIgeojson(lat, lon) {
+//     var poiQuery = `(
+//         node(around:1000, ${lat}, ${lon})[amenity];
+//         node(around:1000, ${lat}, ${lon})[leisure];
+//         node(around:1000, ${lat}, ${lon})[shop];
+//         node(around:1000, ${lat}, ${lon})[historic];);
+//         out qt;`;
+
+//     var result = await fetch(
+//         "https://overpass-api.de/api/interpreter",
+//         {
+//             method: "POST",
+//             // The body contains the query
+//             // to understand the query language see "The Programmatic Query Language" on
+//             // https://wiki.openstreetmap.org/wiki/Overpass_API#The_Programmatic_Query_Language_(OverpassQL)
+//             body: "data="+ encodeURIComponent(`
+//                 [bbox:30.618338,-96.323712,30.591028,-96.330826]
+//                 [out:json]
+//                 [timeout:90]
+//                 ;
+//                 (
+//                     nwr
+//                         (
+//                             30.626917110746,
+//                             -96.348809105664,
+//                             30.634468750236,
+//                             -96.339893442898
+//                         );
+//                 );
+//                 out geom;
+//             `)
+//         },
+//     ).then(
+//         (data)=>data.json()
+//     )
+//     console.log(JSON.stringify(result , null, 2));
 
         // console.log(poiQuery);
-}
+// }
+
+
