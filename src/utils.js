@@ -209,8 +209,10 @@ export async function searchPOICat(lat, lon, category) {
                 color: poi_color,
                 fillColor: poi_color,
                 opacity: 0.9,
-                fillOpacity: 0.5
-            }
+                fillOpacity: 0.6,
+                radius: 5
+            },
+
         }
     });
 
