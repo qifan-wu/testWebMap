@@ -104,7 +104,7 @@ export var poiLegend = L.control.Legend({
         color: 'red',
         fillColor: 'red',
         opacity: 0.9,
-        fillOpacity: 0.5,
+        fillOpacity: 0.4,
       },
       {
         label: "Leisure",
@@ -113,7 +113,7 @@ export var poiLegend = L.control.Legend({
         color: 'green',
         fillColor: 'green',
         opacity: 0.9,
-        fillOpacity: 0.5
+        fillOpacity: 0.4
       },
       {
         label: "Shop",
@@ -122,7 +122,7 @@ export var poiLegend = L.control.Legend({
         color: 'orange',
         fillColor: 'orange',
         opacity: 0.9,
-        fillOpacity: 0.5
+        fillOpacity: 0.4
       },
       {
         label: "Historic",
@@ -131,7 +131,7 @@ export var poiLegend = L.control.Legend({
         color: 'blue',
         fillColor: 'blue',
         opacity: 0.9,
-        fillOpacity: 0.5
+        fillOpacity: 0.4
       },
     ],
     collapsed: false,
