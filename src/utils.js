@@ -1,4 +1,4 @@
-import { SEARCH_RADIUS, SEARCH_RADIUS_METER, CATEGORIES, SOPOI_CAT, OVERPASS_INTERPRETER, STATIONS_DATA_FILE } from './constants.js'
+import { SEARCH_RADIUS, SEARCH_RADIUS_METER, CATEGORIE_KEYS, SOPOI_CAT, OVERPASS_INTERPRETER, STATIONS_DATA_FILE, OSM_ORG_ENDPOINT } from './constants.js'
 import { overlayMaps, layerControl, poiLegend} from './base.js'
 import { subwayIcon, targetIcon, poiIcon} from './icons.js'
 import { displayStatistics } from './statistics.js'
@@ -106,8 +106,8 @@ export async function getAllPOI(lat, lon) {
     // clear up poi cache
     var opl_arr = [];
 
-    for (let i=0; i<CATEGORIES.length; i++) {
-        let category = CATEGORIES[i];
+    for (let i=0; i<CATEGORIE_KEYS.length; i++) {
+        let category = CATEGORIE_KEYS[i];
         // get overpassLayer for each category
         var opl = await searchPOICat(lat, lon, category);
         opl_arr.push(opl);
@@ -178,6 +178,10 @@ export function genOPLQueryHelper(lat, lon, category, values) {
     return poiQuery;
 };
 
+function openNewPage(url) {
+        window.open(url, '_blank');
+    };
+
 
 export async function searchPOICat(lat, lon, category) {
 
@@ -205,6 +209,10 @@ export async function searchPOICat(lat, lon, category) {
         poi_color = 'blue';
     }
 
+    // function openNewPage(url) {
+    //     window.open(url, '_blank');
+    // };
+
     // clear up poi feature info
     var opl = new OverpassLayer({
         overpassFrontend: overpassFrontend,
@@ -213,13 +221,21 @@ export async function searchPOICat(lat, lon, category) {
         minZoom: 13,
         feature: {
             title: function (info) {
-                var title = '';
-                title += '<b>' + 'id' + '</b>: ' + info.id + '<br>';
-                title += '<b>' + 'osm_id' + '</b>: ' + info.osm_id + '<br>';
+                let title = '';
 
-                for (var key in info.tags) {
-                    title += '<b>' + key + '</b>: ' + info.tags[key] + '<br>';
+                let headline = {};
+                for (let key in info.tags) {
+                    // title += '<b>' + key + '</b>: ' + info.tags[key] + '<br>';
+                    if (key == "name") {
+                        headline['name'] = info.tags[key];
+                    }
+                    if (CATEGORIE_KEYS.includes(key)) {
+                        headline['type'] = {'key': key, 'val': info.tags[key]};
+                    }
                 }
+
+                title += '<h2>' + headline['name'] + '</h2>';
+                title += '<h3>' + headline['type']['key'] + ': ' + headline['type']['val'] + '</h3>';
 
                 return title;
             },
@@ -231,7 +247,25 @@ export async function searchPOICat(lat, lon, category) {
                 fillOpacity: 0.4,
                 radius: 5
             },
-
+            description: function (info) {
+                if (info.osm_id === null) {
+                    return;
+                }
+                let link = `${OSM_ORG_ENDPOINT}/${info.type}/${info.osm_id}`;
+                let descrip = `<a href="#"
+                    onclick="(function(url) { window.open(url, '_blank'); })('${link}'); return false;">
+                    See something wrong? Click here to update</a>`;
+                return descrip;
+            },
+            body: function (info) {
+                let content = '<b>Other tags information:</b><br>';
+                content += '<b>' + 'id' + '</b>: ' + info.id + '<br>';
+                content += '<b>' + 'osm_id' + '</b>: ' + info.osm_id + '<br>';
+                for (let key in info.tags) {
+                    content += '<b>' + key + '</b>: ' + info.tags[key] + '<br>';
+                }
+                return content;
+            },
         }
     });
 

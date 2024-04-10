@@ -10,10 +10,10 @@ export const SEARCH_RADIUS_METER = 1000;
 // Endpoints
 export const OHSOME_ENDPOINT = "https://api.ohsome.org/v1/elements";
 export const OVERPASS_INTERPRETER = "https://overpass-api.de/api/interpreter";
-
+export const OSM_ORG_ENDPOINT = "https://www.openstreetmap.org";
 // Categories
 // POI
-export const CATEGORIES = ["amenity", "leisure", "shop", "historic"];
+export const CATEGORIE_KEYS = ["amenity", "leisure", "shop", "historic"];
 export const SOPOI_CAT = {
     amenity: [
         "social facility", "library", "arts centre", "school", "university", "college",
