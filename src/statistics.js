@@ -139,7 +139,7 @@ export function displayRoadLen(roadLenInfo) {
         const totalLen = moterLen + pedestrianLen + othersLen;
 
         const highwayDiv = document.getElementById('highwayInfo');
-        highwayDiv.innerHTML = `<p>Total Road Length is ${(totalLen / 1000).toFixed(2)}km</p>`;
+        highwayDiv.innerHTML = `<p>Total Road Length: ${(totalLen / 1000).toFixed(2)}km</p>`;
 
         const moterProportion = (moterLen / totalLen) * 100;
         const pedestrianProportion = (pedestrianLen / totalLen) * 100;
