@@ -157,11 +157,7 @@ const searchControl1 = L.esri.Geocoding.geosearch({
       }).addTo(map);
 const results = L.layerGroup().addTo(map);
 searchControl1.on("results", function (data) {
-        results.clearLayers();
-        for (let i = data.results.length - 1; i >= 0; i--) {
-          results.addLayer(L.marker(data.results[i].latlng));
-          handleSearchedPlace(data, results);
-        }
+        handleSearchedPlace(data, results);
       });
 
 axios.get(STATIONS_INFO_FILE)

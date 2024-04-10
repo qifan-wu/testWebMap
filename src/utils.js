@@ -20,12 +20,16 @@ export function createStationMarkers(stationsData) {
 
             document.querySelector('#downloadCSV').innerText = 'Loading...';
 
-            if (overlayMaps.hasOwnProperty("stations")) {
-                map.removeControl(overlayMaps["stations"]);
-                map.removeLayer(overlayMaps["stations"]);
+            // if (overlayMaps.hasOwnProperty("stations")) {
+            //     map.removeControl(overlayMaps["stations"]);
+            //     map.removeLayer(overlayMaps["stations"]);
+            // }
+
+            // displaySelectStation(station.lat, station.lon);
+            if (overlayMaps.hasOwnProperty("selected")) {
+                map.removeLayer(overlayMaps["selected"]);
             }
 
-            displaySelectStation(station.lat, station.lon);
             addBorderCircle(station.lat, station.lon);
             displayAllPOI(station.lat, station.lon).then(() => {
                 console.log("finished displaying the pois");
@@ -66,20 +70,33 @@ export function handleSearchedPlace(data, searchedRes) {
         map.removeLayer(overlayMaps["POI_group"]);
     }
 
-    for (var i = data.results.length - 1; i >= 0; i--) {
-        var target = data.results[i];
+    let selectedArr = [];
+    for (let i = data.results.length - 1; i >= 0; i--) {
+        let target = data.results[i];
+        let targetMarker = L.marker(target.latlng, {icon: targetIcon});
 
-        var targetMarker = L.marker(target.latlng, {icon: targetIcon});
-        targetMarker.on('click', function() {
-            addBorderCircle(target.latlng.lat, target.latlng.lng);
-            displayAllPOI(target.latlng.lat, target.latlng.lng);
-            displayStatistics(target.latlng.lat, target.latlng.lng);
-        }
-        )
-        searchedRes.addLayer(targetMarker);
-        overlayMaps["selected"] = targetMarker;
+        (function(target) {
+            targetMarker.on('mouseover', function(e) {
+                if (target.text !== null) {
+                    this.bindPopup(target.text).openPopup();
+                } else {
+                    this.bindPopup("searched target").openPopup();
+                }
+            });
+
+            targetMarker.on('click', function(e) {
+                addBorderCircle(target.latlng.lat, target.latlng.lng);
+                displayAllPOI(target.latlng.lat, target.latlng.lng);
+                displayStatistics(target.latlng.lat, target.latlng.lng);
+            });
+        })(target);
+
+        selectedArr.push(targetMarker);
     };
 
+    let targets = L.layerGroup(selectedArr);
+    searchedRes.addLayer(targets);
+    overlayMaps["selected"] = targets;
 };
 
 // save overpasslayer of all categories in an array, save feature info as cache
@@ -132,6 +149,8 @@ out body;`
 
 // display all poi on the map
 export async function displayAllPOI(lat, lon) {
+    map.setView(new L.LatLng(lat, lon), 15);
+
     let opl_arr = await getAllPOI(lat, lon);
     var opl_group = L.layerGroup(opl_arr);
 
