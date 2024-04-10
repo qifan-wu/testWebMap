@@ -18,7 +18,7 @@ export async function displayStatistics(lat, lon, name=null, population=null, di
     // population
     const popInfoDiv = document.getElementById('popInfo');
     if (population != null) {
-        popInfoDiv.innerHTML = `<p>Population: ${population.toFixed(2)}</p>`;
+        popInfoDiv.innerHTML = `<p>Population: ${Math.round(population).toLocaleString()}</p>`;
     } else {
         popInfoDiv.innerHTML = `<p>Population not available</p>`;
     }
@@ -26,7 +26,7 @@ export async function displayStatistics(lat, lon, name=null, population=null, di
     // distance to center
     const distDiv = document.getElementById('distToCenter');
     if (distance != null) {
-        distDiv.innerHTML = `<p>Distance to city center: ${distance.toFixed(2)} meters </p>`;
+        distDiv.innerHTML = `<p>Distance to city center: ${(distance / 1000).toFixed(2)}km </p>`;
     } else {
         distDiv.innerHTML = `<p>Distance to city center not available </p>`;
     }
@@ -34,7 +34,7 @@ export async function displayStatistics(lat, lon, name=null, population=null, di
     // building
     var buildingArea = await getBuildingArea(lat, lon);
     const buildingDiv = document.getElementById("buildingAreaInfo");
-    buildingDiv.innerHTML = `<p>Total Building Area: ${buildingArea.toFixed(2)} square meter </p>`;
+    buildingDiv.innerHTML = `<p>Total Building Area: ${Math.round(buildingArea).toLocaleString()}m² </p>`;
 
     // highway
     var highwayStatistics = await getRoadLength(lat, lon);
@@ -139,7 +139,7 @@ export function displayRoadLen(roadLenInfo) {
         const totalLen = moterLen + pedestrianLen + othersLen;
 
         const highwayDiv = document.getElementById('highwayInfo');
-        highwayDiv.innerHTML = `<p>Total Road Length is ${totalLen.toFixed(2)}m</p>`;
+        highwayDiv.innerHTML = `<p>Total Road Length is ${(totalLen / 1000).toFixed(2)}km</p>`;
 
         const moterProportion = (moterLen / totalLen) * 100;
         const pedestrianProportion = (pedestrianLen / totalLen) * 100;
@@ -149,9 +149,9 @@ export function displayRoadLen(roadLenInfo) {
         document.getElementById('pedestrianBar').style.setProperty('width', `${pedestrianProportion}%`);
         document.getElementById('othersBar').style.setProperty('width', `${othersProportion}%`);
 
-        document.getElementById('moterBar').innerHTML = `<p>Motor Vehicles<br>${moterLen.toFixed(1)}m</p>`;
-        document.getElementById('pedestrianBar').innerHTML = `<p>Biking/Pedestrian friendly<br>${pedestrianLen.toFixed(1)}m</p>`;
-        document.getElementById('othersBar').innerHTML = `<p>Other<br>${othersLen.toFixed(1)}m</p>`;
+        document.getElementById('moterBar').innerHTML = `<p>Motor Vehicles<br>${(moterLen/1000).toFixed(1)}km</p>`;
+        document.getElementById('pedestrianBar').innerHTML = `<p>Biking/Pedestrian friendly<br>${(pedestrianLen/1000).toFixed(1)}km</p>`;
+        document.getElementById('othersBar').innerHTML = `<p>Other<br>${(othersLen/1000).toFixed(1)}km</p>`;
         // console.log(moterProportion, pedestrianProportion, othersProportion);
         document.getElementById('barLegend').style.setProperty('display', 'flex');
 
