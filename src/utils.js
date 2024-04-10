@@ -174,7 +174,7 @@ export async function searchPOICat(lat, lon, category) {
     var poi_color = 'grey';
 
     if (category == "amenity") {
-        poi_color = 'red';
+        poi_color = '#f70776';
     }
     else if (category == "leisure"){
         poi_color = 'green';
