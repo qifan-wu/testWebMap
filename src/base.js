@@ -139,7 +139,7 @@ export var poiLegend = L.control.Legend({
     opacity: 0.8
 });
 
-osmBaseMap.addTo(map);
+mapboxLight.addTo(map);
 L.control.scale().addTo(map);
 
 layerControl.addTo(map);
