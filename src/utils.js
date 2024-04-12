@@ -266,7 +266,7 @@ export async function searchPOICat(lat, lon, category, detailCat) {
                 let link = `${OSM_ORG_ENDPOINT}/${info.type}/${info.osm_id}`;
                 let descrip = `<a href="#"
                     onclick="(function(url) { window.open(url, '_blank'); })('${link}'); return false;">
-                    See something wrong? Click here to update</a>`;
+                    See something wrong? Click here to update it with OSM editor</a>`;
                 return descrip;
             },
             body: function (info) {
