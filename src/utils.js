@@ -1,7 +1,8 @@
-import { SEARCH_RADIUS, SEARCH_RADIUS_METER, CATEGORIE_KEYS, SOPOI_CAT, OVERPASS_INTERPRETER, STATIONS_DATA_FILE, OSM_ORG_ENDPOINT } from './constants.js'
+import { SEARCH_RADIUS, SEARCH_RADIUS_METER, CATEGORIE_KEYS, SOPOI_CAT, SOPOI_CAT_DETAIL, OVERPASS_INTERPRETER, STATIONS_DATA_FILE, OSM_ORG_ENDPOINT } from './constants.js'
 import { overlayMaps, layerControl, poiLegend} from './base.js'
 import { subwayIcon, targetIcon, poiIcon} from './icons.js'
 import { displayStatistics } from './statistics.js'
+import { PUBLIC_INSTITUTION_COLOR, COMMERCE_COLOR, COMMUNITY_SPACE_COLOR, RECREATION_ACT_COLOR, RELIGION_COLOR} from './styles.js';
 
 // Show subway stations worldwide on the map
 export function createStationMarkers(stationsData) {
@@ -106,12 +107,14 @@ export async function getAllPOI(lat, lon) {
     // clear up poi cache
     var opl_arr = [];
 
-    for (let i=0; i<CATEGORIE_KEYS.length; i++) {
-        let category = CATEGORIE_KEYS[i];
-        // get overpassLayer for each category
-        var opl = await searchPOICat(lat, lon, category);
-        opl_arr.push(opl);
-    }
+    for (const [category, details] of Object.entries(SOPOI_CAT_DETAIL)) {
+        for (const detailCat in details) {
+            // console.log(key, detailCat, vals);
+            var opl = await searchPOICat(lat, lon, category, detailCat);
+            opl_arr.push(opl);
+        }
+    };
+
     const endTime = new Date().getTime();
     console.log("Time for Preparing opl for map show: ", (endTime - startTime) / 1000, "s");
     return opl_arr;
@@ -183,7 +186,7 @@ function openNewPage(url) {
     };
 
 
-export async function searchPOICat(lat, lon, category) {
+export async function searchPOICat(lat, lon, category, detailCat) {
 
     const overpassURL = '//overpass-api.de/api/interpreter';
 
@@ -192,21 +195,25 @@ export async function searchPOICat(lat, lon, category) {
         effortPerRequest: 100
     });
 
-    let poiQuery = genOPLQueryHelper(lat, lon, category, SOPOI_CAT[category]);
+    let poiQuery = genOPLQueryHelper(lat, lon, category, SOPOI_CAT_DETAIL[category][detailCat]);
 
     var poi_color = 'grey';
 
-    if (category == "amenity") {
-        poi_color = '#f70776';
+
+    if (detailCat == "public_institution") {
+        poi_color = PUBLIC_INSTITUTION_COLOR;
     }
-    else if (category == "leisure"){
-        poi_color = 'green';
+    else if (detailCat == "commerce"){
+        poi_color = COMMERCE_COLOR;
     }
-    else if (category == "shop"){
-        poi_color = 'orange';
+    else if (detailCat == "community_space"){
+        poi_color = COMMUNITY_SPACE_COLOR;
     }
-    else if (category == "historic"){
-        poi_color = 'blue';
+    else if (detailCat == "recreational_activities"){
+        poi_color = RECREATION_ACT_COLOR;
+    }
+    else if (detailCat == "religion"){
+        poi_color = RELIGION_COLOR;
     }
 
     // function openNewPage(url) {
@@ -234,7 +241,12 @@ export async function searchPOICat(lat, lon, category) {
                     }
                 }
 
-                title += '<h2>' + headline['name'] + '</h2>';
+                if (headline['name'] != "undefined") {
+                    title += '<h2>' + headline['name'] + '</h2>';
+                } else {
+                    title += '<h2>' + "Name Unavailable" + '</h2>';
+                }
+
                 title += '<h3>' + headline['type']['key'] + ': ' + headline['type']['val'] + '</h3>';
 
                 return title;
@@ -531,66 +543,66 @@ export function displayResults(result) {
     }
 }
 
-export function buildOPL(lat, lon, category) {
-    const overpassURL = '//overpass-api.de/api/interpreter';
+// export function buildOPL(lat, lon, category) {
+//     const overpassURL = '//overpass-api.de/api/interpreter';
 
-    const overpassFrontend = new OverpassFrontend(overpassURL, {
-        timeGap: 10,
-        effortPerRequest: 100
-    });
+//     const overpassFrontend = new OverpassFrontend(overpassURL, {
+//         timeGap: 10,
+//         effortPerRequest: 100
+//     });
 
-    let poiQuery = genOPLQueryHelper(lat, lon, category, SOPOI_CAT[category]);
+//     let poiQuery = genOPLQueryHelper(lat, lon, category, SOPOI_CAT[category]);
 
-    var poi_color = 'grey';
+//     var poi_color = 'grey';
 
-    if (category == "amenity") {
-        poi_color = 'red';
-    }
-    else if (category == "leisure"){
-        poi_color = 'green';
-    }
-    else if (category == "shop"){
-        poi_color = 'orange';
-    }
-    else if (category == "historic"){
-        poi_color = 'blue';
-    }
+//     if (category == "amenity") {
+//         poi_color = 'red';
+//     }
+//     else if (category == "leisure"){
+//         poi_color = 'green';
+//     }
+//     else if (category == "shop"){
+//         poi_color = 'orange';
+//     }
+//     else if (category == "historic"){
+//         poi_color = 'blue';
+//     }
 
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            var poiCache = [];
-            let opl = new OverpassLayer({
-                overpassFrontend: overpassFrontend,
-                query: poiQuery,
+//     return new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             var poiCache = [];
+//             let opl = new OverpassLayer({
+//                 overpassFrontend: overpassFrontend,
+//                 query: poiQuery,
 
-                minZoom: 13,
-                feature: {
-                    title: function (info) {
-                        var title = '';
-                        title += '<b>' + 'id' + '</b>: ' + info.id + '<br>';
-                        title += '<b>' + 'osm_id' + '</b>: ' + info.osm_id + '<br>';
+//                 minZoom: 13,
+//                 feature: {
+//                     title: function (info) {
+//                         var title = '';
+//                         title += '<b>' + 'id' + '</b>: ' + info.id + '<br>';
+//                         title += '<b>' + 'osm_id' + '</b>: ' + info.osm_id + '<br>';
 
-                        for (var key in info.tags) {
-                            title += '<b>' + key + '</b>: ' + info.tags[key] + '<br>';
-                        }
+//                         for (var key in info.tags) {
+//                             title += '<b>' + key + '</b>: ' + info.tags[key] + '<br>';
+//                         }
 
-                        // for saving the info to local
-                        // console.log(JSON.stringify(info));
-                        var feature_info = {"osm_id": info.osm_id, "type": info.type, "tags": info.tags};
-                        poiCache.push(feature_info);
+//                         // for saving the info to local
+//                         // console.log(JSON.stringify(info));
+//                         var feature_info = {"osm_id": info.osm_id, "type": info.type, "tags": info.tags};
+//                         poiCache.push(feature_info);
 
-                        return title;
-                    },
-                    style: {
-                        width: 1,
-                        color: poi_color,
-                        fillColor: poi_color,
-                        opacity: 0.9,
-                        fillOpacity: 0.5
-                    }
-                }
-            });
-            resolve({"opLayer": opl, "oplFeatures": poiCache});
-        }, 10000);
-    });
-};
+//                         return title;
+//                     },
+//                     style: {
+//                         width: 1,
+//                         color: poi_color,
+//                         fillColor: poi_color,
+//                         opacity: 0.9,
+//                         fillOpacity: 0.5
+//                     }
+//                 }
+//             });
+//             resolve({"opLayer": opl, "oplFeatures": poiCache});
+//         }, 10000);
+//     });
+// };

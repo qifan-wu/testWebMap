@@ -1,6 +1,7 @@
 import { STATIONS_INFO_FILE, METRO_FILE } from './constants.js'
 import { createStationMarkers, handleSearchedPlace} from './utils.js';
 import { ESRI_ACCESS_TOKEN, MAPBOX_PUBLIC_TOKEN } from './private.js';
+import { PUBLIC_INSTITUTION_COLOR, COMMERCE_COLOR, COMMUNITY_SPACE_COLOR, RECREATION_ACT_COLOR, RELIGION_COLOR} from './styles.js';
 
 var osmBaseMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -98,38 +99,47 @@ export var poiLegend = L.control.Legend({
     position: "bottomright",
     legends: [
       {
-        label: "Amenity",
+        label: "Public Institution",
         type: "circle",
         radius: 7,
-        color: '#f70776',
-        fillColor: '#f70776',
+        color: PUBLIC_INSTITUTION_COLOR,
+        fillColor: PUBLIC_INSTITUTION_COLOR,
         opacity: 0.9,
         fillOpacity: 0.4,
       },
       {
-        label: "Leisure",
+        label: "Commerce",
         type: "circle",
         radius: 7,
-        color: 'green',
-        fillColor: 'green',
+        color: COMMERCE_COLOR,
+        fillColor: COMMERCE_COLOR,
         opacity: 0.9,
         fillOpacity: 0.4
       },
       {
-        label: "Shop",
+        label: "Community Space",
         type: "circle",
         radius: 7,
-        color: 'orange',
-        fillColor: 'orange',
+        color: COMMUNITY_SPACE_COLOR,
+        fillColor: COMMUNITY_SPACE_COLOR,
         opacity: 0.9,
         fillOpacity: 0.4
       },
       {
-        label: "Historic",
+        label: "Recreation Activity",
         type: "circle",
         radius: 7,
-        color: 'blue',
-        fillColor: 'blue',
+        color: RECREATION_ACT_COLOR,
+        fillColor: RECREATION_ACT_COLOR,
+        opacity: 0.9,
+        fillOpacity: 0.4
+      },
+      {
+        label: "Religion",
+        type: "circle",
+        radius: 7,
+        color: RELIGION_COLOR,
+        fillColor: RELIGION_COLOR,
         opacity: 0.9,
         fillOpacity: 0.4
       },

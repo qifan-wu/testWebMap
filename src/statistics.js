@@ -1,4 +1,4 @@
-import { SEARCH_RADIUS_METER, HIGHWAY_TYPES, OHSOME_ENDPOINT, MOTER_ROAD_TYPES, PEDCYCLE_ROAD_TYPES, SOPOI_CAT} from './constants.js'
+import { SEARCH_RADIUS_METER, HIGHWAY_TYPES, OHSOME_ENDPOINT, MOTER_ROAD_TYPES, PEDCYCLE_ROAD_TYPES, SOPOI_CAT, SOPOI_CAT_DETAIL} from './constants.js'
 
 
 export async function displayStatistics(lat, lon, name=null, population=null, distance=null) {
@@ -208,7 +208,14 @@ export async function getPOIdata(latitude, longitude) {
 
 // get the poi count of each category
 export function processPOIData(poiData) {
-    var poiCount = {"amenity": 0, "leisure": 0, "shop": 0, "historic": 0};
+    // var poiCount = {"amenity": 0, "leisure": 0, "shop": 0, "historic": 0};
+    let poiCount = {
+        "public_institution": 0,
+        "commerce": 0,
+        "community_space": 0,
+        "recreational_activities": 0,
+        "religion": 0,
+    };
 
     for (let i=0; i<poiData.length; i++) {
         let poi = poiData[i];
@@ -216,18 +223,31 @@ export function processPOIData(poiData) {
         if (poi.tags == undefined) {
             continue;
         }
-        else if (poi.tags.hasOwnProperty("amenity")) {
-            poiCount.amenity += 1;
-        }
-        else if (poi.tags.hasOwnProperty("leisure")) {
-            poiCount.leisure += 1;
-        }
-        else if (poi.tags.hasOwnProperty("shop")) {
-            poiCount.shop += 1;
-        }
-        else if (poi.tags.hasOwnProperty("historic")) {
-            poiCount.historic += 1;
-        }
+        for (const [category, details] of Object.entries(SOPOI_CAT_DETAIL)) {
+            if (poi.tags.hasOwnProperty(category)) {
+                for (const [detailCat, vals] of Object.entries(details)) {
+                    if (vals.includes(poi.tags[category])) {
+                        poiCount[detailCat] += 1;
+                        break;
+                    }
+                };
+                break;
+            };
+        };
+
+        // else if (poi.tags.hasOwnProperty("amenity")) {
+
+        //     poiCount.amenity += 1;
+        // }
+        // else if (poi.tags.hasOwnProperty("leisure")) {
+        //     poiCount.leisure += 1;
+        // }
+        // else if (poi.tags.hasOwnProperty("shop")) {
+        //     poiCount.shop += 1;
+        // }
+        // else if (poi.tags.hasOwnProperty("historic")) {
+        //     poiCount.historic += 1;
+        // }
     }
     return poiCount;
 };
@@ -298,9 +318,15 @@ export async function showPOIstats(lat, lon, stationName) {
     if (poiCount == null) {
         poiInfoDiv.innerHTML = `<p>POI information not available</p>`;
     } else {
+        let poiInfoTxt = '';
+        let totalPOICount = 0;
+        for (const detailCat in poiCount) {
+            poiInfoTxt += `${detailCat}: ${poiCount[detailCat]}\n`;
+            totalPOICount += poiCount[detailCat];
+        }
         poiInfoDiv.innerHTML = `
-        <p>Total count of POI: ${poiCount.amenity + poiCount.leisure + poiCount.shop + poiCount.historic}</p>
-        <p>amenity: ${poiCount.amenity}, leisure: ${poiCount.leisure}, shop: ${poiCount.shop}, historic: ${poiCount.historic}</p>
+        <p>Total count of POI: ${totalPOICount}, including:</p>
+        <p>${poiInfoTxt}</p>
         `;
     }
 
