@@ -115,7 +115,7 @@ export const SOPOI_CAT_DETAIL = {
         ]
     }
 };
-export
+
 
 // Road
 export const HIGHWAY_TYPES = "motorway,primary,secondary,tertiary,residential,pedestrian,cycleway,living_street,path,footway";
