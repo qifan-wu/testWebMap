@@ -40,7 +40,7 @@ var mapboxDark = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x
 // display metro lines
 axios.get(METRO_FILE)
     .then(function (response) {
-      var metroStations = L.markerClusterGroup();
+      // var metroStations = L.markerClusterGroup();
       var metroLines = L.markerClusterGroup();
       var metroData = response.data;
       for (const metroUrl in metroData) {
@@ -55,22 +55,22 @@ axios.get(METRO_FILE)
               metroLines.addLayer(linePoly);
               linePoly.on('mouseover', function(e) {
                   this.bindPopup("Metro line: " + line.name +
-                                  "<br> Metro line branch: " + line.branch).openPopup();
+                                  "<br> Metro line branch: " + line.branch).openPopup({autoPan: false});
               });
             });
 
-            metro.stations.forEach(function(station) {
-              let stationMarkerNew = L.marker([station.lat, station.lon]);
-              metroStations.addLayer(stationMarkerNew);
-            });
+            // Plot metro stations
+            // metro.stations.forEach(function(station) {
+            //   let stationMarkerNew = L.marker([station.lat, station.lon]);
+            //   metroStations.addLayer(stationMarkerNew);
+            // });
 
           }
         }
-        // map.addLayer(metroStations);
-        map.addLayer(metroLines);
-
         layerControl.addOverlay(metroLines, "metroLines");
         overlayMaps.metroLines = metroLines;
+        map.addLayer(metroLines);
+
 
         // add stations from metro website to map
         // layerControl.addOverlay(metroStations, "metroStations");
