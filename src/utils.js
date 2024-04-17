@@ -4,6 +4,7 @@ import { subwayIcon, targetIcon, poiIcon} from './icons.js'
 import { displayStatistics } from './statistics.js'
 import { PUBLIC_INSTITUTION_COLOR, COMMERCE_COLOR, COMMUNITY_SPACE_COLOR, RECREATION_ACT_COLOR, RELIGION_COLOR} from './styles.js';
 
+var clickedStation = null;
 // Show subway stations worldwide on the map
 export function createStationMarkers(stationsData) {
     var stationMarkers = L.markerClusterGroup(
@@ -12,31 +13,18 @@ export function createStationMarkers(stationsData) {
         var stationMarker = L.marker(new L.LatLng(station.lat, station.lon), {icon: subwayIcon});
 
         stationMarker.on('click', function() {
-            console.log('clicked');
-
             if (!overlayMaps.hasOwnProperty("legend")) {
                 overlayMaps.legend = true;
                 poiLegend.addTo(map);
             }
 
-            document.querySelector('#downloadCSV').innerText = 'Loading...';
-
-            // if (overlayMaps.hasOwnProperty("stations")) {
-            //     map.removeControl(overlayMaps["stations"]);
-            //     map.removeLayer(overlayMaps["stations"]);
+            handleClickStation(station);
+            // if (!isHandlingClick) {
+            //     isHandlingClick = true;
+            //     handleClickStation(station, function() {
+            //         isHandlingClick = false;
+            //     });
             // }
-
-            // displaySelectStation(station.lat, station.lon);
-            if (overlayMaps.hasOwnProperty("selected")) {
-                map.removeLayer(overlayMaps["selected"]);
-            }
-
-            addBorderCircle(station.lat, station.lon);
-            displayAllPOI(station.lat, station.lon).then(() => {
-                console.log("finished displaying the pois");
-            });
-
-            displayStatistics(station.lat, station.lon, station.name, station.pop, station.distanceToCenter);
         });
 
         overlayMaps["stations"] = stationMarker;
@@ -54,6 +42,27 @@ export function createStationMarkers(stationsData) {
     overlayMaps.stations = stationMarkers;
     return stationMarkers;
 };
+
+export async function handleClickStation(station) {
+    if (clickedStation !== station) {
+        clickedStation = station;
+    }
+
+    document.querySelector('#downloadCSV').innerText = 'Loading...';
+    document.querySelector('#downloadGeoJson').innerText = 'Loading...';
+
+    if (overlayMaps.hasOwnProperty("selected")) {
+        map.removeLayer(overlayMaps["selected"]);
+    }
+
+    addBorderCircle(station.lat, station.lon);
+    await displayAllPOI(station.lat, station.lon).then(() => {
+        console.log("finished displaying the pois");
+    });
+
+    await displayStatistics(station.lat, station.lon, station.name, station.pop, station.distanceToCenter);
+    // callback();
+}
 
 // show poi on map and statistics on panel when click on a target
 export function handleSearchedPlace(data, searchedRes) {
@@ -116,49 +125,20 @@ export async function getAllPOI(lat, lon) {
     };
 
     const endTime = new Date().getTime();
-    console.log("Time for Preparing opl for map show: ", (endTime - startTime) / 1000, "s");
+    console.log("Time for function getAllPOI (Preparing opl for map show): ", (endTime - startTime) / 1000, "s");
     return opl_arr;
 };
 
-export function downloadPOI(lat, lon) {
-    // let query = genQueryHelper(lat, lon);
-    // let query = '(node["amenity"~".*"]; node["historic"~".*"];);out body;'
-    let query = `[out:json];
-(nwr(around:1000,${lat},${lon})["leisure"];);
-out body;`
-    // console.log(query);
-
-    fetch('https://overpass-api.de/api/interpreter', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: 'data=' + encodeURIComponent(query)
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log(data);
-    })
-    .catch(error => {
-        console.error("Error with fetch", error);
-    })
-
-}
-
 // display all poi on the map
 export async function displayAllPOI(lat, lon) {
+    const startTime = new Date().getTime();
+
     map.setView(new L.LatLng(lat, lon), 15);
 
     let opl_arr = await getAllPOI(lat, lon);
-    var opl_group = L.layerGroup(opl_arr);
 
-    // var dldata = downloadPOI(lat, lon);
-    // console.log(dldata);
+
+    var opl_group = L.layerGroup(opl_arr);
 
     if (overlayMaps.hasOwnProperty("POI_group")) {
         map.removeLayer(overlayMaps["POI_group"]);
@@ -166,11 +146,10 @@ export async function displayAllPOI(lat, lon) {
     overlayMaps.POI_group = opl_group;
     opl_group.addTo(map);
 
+    const endTime = new Date().getTime();
+    console.log("Time for function displayAllPOI to execute: ", (endTime - startTime) / 1000, "s");
+
 }
-
-
-
-
 
 // help generate the query specifed for OverpassLayer
 export function genOPLQueryHelper(lat, lon, category, values) {
@@ -241,13 +220,14 @@ export async function searchPOICat(lat, lon, category, detailCat) {
                     }
                 }
 
-                if (headline['name'] != "undefined") {
-                    title += '<h2>' + headline['name'] + '</h2>';
+
+                if (headline['name'] !== undefined) {
+                    title += '<h3>' + headline['name'] + '</h3>';
                 } else {
-                    title += '<h2>' + "Name Unavailable" + '</h2>';
+                    title += '<h3>' + "Name Undefined" + '</h3>';
                 }
 
-                title += '<h3>' + headline['type']['key'] + ': ' + headline['type']['val'] + '</h3>';
+                title += '<p>' + headline['type']['key'] + ': <em>' + headline['type']['val'] + '</em></p>';
 
                 return title;
             },
@@ -269,15 +249,15 @@ export async function searchPOICat(lat, lon, category, detailCat) {
                     See something wrong? Click here to update it with OSM editor</a>`;
                 return descrip;
             },
-            body: function (info) {
-                let content = '<b>Other tags information:</b><br>';
-                content += '<b>' + 'id' + '</b>: ' + info.id + '<br>';
-                content += '<b>' + 'osm_id' + '</b>: ' + info.osm_id + '<br>';
-                for (let key in info.tags) {
-                    content += '<b>' + key + '</b>: ' + info.tags[key] + '<br>';
-                }
-                return content;
-            },
+            // body: function (info) {
+            //     let content = '<b>Other tags information:</b><br>';
+            //     content += '<b>' + 'id' + '</b>: ' + info.id + '<br>';
+            //     content += '<b>' + 'osm_id' + '</b>: ' + info.osm_id + '<br>';
+            //     for (let key in info.tags) {
+            //         content += '<b>' + key + '</b>: ' + info.tags[key] + '<br>';
+            //     }
+            //     return content;
+            // },
         }
     });
 
