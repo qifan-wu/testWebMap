@@ -130,6 +130,14 @@
     color: #666;
 }
 
+.clearContainer {
+    display: flex;
+    justify-content: center;
+}
+#clearPOI {
+    color: grey;
+}
+
 img {
     margin-left: 5px;
     margin-right: 5px;

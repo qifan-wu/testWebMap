@@ -63,7 +63,9 @@ export async function handleClickStation(station) {
 
     await displayStatistics(station.lat, station.lon, station.name, station.pop, station.distanceToCenter);
     // callback();
-}
+    // clearPOI();
+    document.getElementById('clearPOI').addEventListener('click', clearPOI);
+};
 
 // show poi on map and statistics on panel when click on a target
 export function handleSearchedPlace(data, searchedRes) {
@@ -108,6 +110,8 @@ export function handleSearchedPlace(data, searchedRes) {
     let targets = L.layerGroup(selectedArr);
     searchedRes.addLayer(targets);
     overlayMaps["selected"] = targets;
+
+    document.getElementById('clearPOI').addEventListener('click', clearPOI);
 };
 
 // save overpasslayer of all categories in an array, save feature info as cache
@@ -301,6 +305,18 @@ export function addBorderCircle(lat, lon) {
     borderCircle.bringToBack();
 }
 
+
+export function clearPOI() {
+        if (overlayMaps.border !== undefined) {
+            map.removeLayer(overlayMaps["border"]);
+        }
+        if (overlayMaps.POI_group != undefined) {
+            map.removeLayer(overlayMaps["POI_group"]);
+        }
+        if (overlayMaps.selected !== undefined) {
+            map.removeLayer(overlayMaps["selected"]);
+        }
+};
 
 
 // ==========================================

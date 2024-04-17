@@ -80,14 +80,15 @@
         </div>
 
         <div id="statspanel">
-            <div id="metroInfo">
-            </div>
+            <div id="metroInfo"></div>
+
             <div class="poiInfo">
                 <h3> Social Infrastructure Point of Interest (SIPOI) Within 1KM</h3>
                 <div id="poiStats">Not available</div>
                 <button id="downloadCSV">Loading...</button>
                 <button id="downloadGeoJson">Loading...</button>
             </div>
+
             <div class="statsInfo">
                 <h3>Social and Built Environment Within 1KM</h3>
                 <div id="popInfo"><p>Population Information Not Available</p></div>
@@ -101,7 +102,13 @@
                 </div>
                 <div id="barLegend"><p>Road Length Information By Type</p>;</div>
             </div>
+
+            <div class="clearContainer">
+                <button id="clearPOI">Clear Current POI In Map</button>
+            </div>
+
         </div>
+
     </div>
     <script>
         var map = L.map('map').setView([0, 0], 2);
