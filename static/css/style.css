@@ -29,14 +29,14 @@
     width: 75%;
 }
 
-#statspanel {
+/* #statspanel {
     width: 25%;
     padding: 20px;
     float: right;
     box-sizing: border-box;
     font-family: Arial, sans-serif;
     display:none;
-}
+} */
 
 #defaultpanel {
     width: 25%;
@@ -126,7 +126,7 @@
     fill-opacity: 0.5;
 }
 
-p {
+.side p {
     color: #666;
 }
 
