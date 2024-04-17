@@ -30,8 +30,9 @@ export function createStationMarkers(stationsData) {
         overlayMaps["stations"] = stationMarker;
         stationMarkers.addLayer(stationMarker);
         stationMarker.on('mouseover', function(e) {
-            this.bindPopup("osm_id: " + station.osm_id +
-                            "<br>name: " + station.name).openPopup();
+            this.bindPopup(
+                // "osm_id: " + station.osm_id +
+                "<h3>Station: " + station.name + "</h3>").openPopup();
         });
 
     });
@@ -297,6 +298,7 @@ export function addBorderCircle(lat, lon) {
     });
     borderCircle.addTo(map);
     overlayMaps.border = borderCircle;
+    borderCircle.bringToBack();
 }
 
 

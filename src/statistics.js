@@ -8,17 +8,20 @@ export async function displayStatistics(lat, lon, name=null, population=null, di
     document.getElementById('statspanel').style.display = 'block';
 
     const stationDiv = document.getElementById('metroInfo');
-    if (name != null) {
-        stationDiv.innerHTML = `<h3>Metro Station: ${name}</h3>`;
-    } else {
+    if (name == null) {
         name = "Selected_Target";
-        stationDiv.innerHTML = `<h3>Selected Target</h3>`
     }
+    stationDiv.innerHTML = `<h2>${name}</h2>`;
 
     // population
     const popInfoDiv = document.getElementById('popInfo');
     if (population != null) {
-        popInfoDiv.innerHTML = `<p>Population: ${Math.round(population).toLocaleString()}</p>`;
+        if (population > 100) {
+            popInfoDiv.innerHTML = `<p>Population: ${(Math.round(population/100) * 100).toLocaleString()}</p>`; //round to 100 level
+        } else {
+            popInfoDiv.innerHTML = `<p>Population: Less than 100</p>`; //round to 100 level
+        }
+
     } else {
         popInfoDiv.innerHTML = `<p>Population not available</p>`;
     }
@@ -26,7 +29,7 @@ export async function displayStatistics(lat, lon, name=null, population=null, di
     // distance to center
     const distDiv = document.getElementById('distToCenter');
     if (distance != null) {
-        distDiv.innerHTML = `<p>Distance to city center: ${(distance / 1000).toFixed(2)}km </p>`;
+        distDiv.innerHTML = `<p>Distance to city center: ${Math.round(distance / 1000)}km </p>`;
     } else {
         distDiv.innerHTML = `<p>Distance to city center not available </p>`;
     }
@@ -34,7 +37,12 @@ export async function displayStatistics(lat, lon, name=null, population=null, di
     // building
     var buildingArea = await getBuildingArea(lat, lon);
     const buildingDiv = document.getElementById("buildingAreaInfo");
-    buildingDiv.innerHTML = `<p>Total Building Area: ${Math.round(buildingArea).toLocaleString()}m² </p>`;
+    if (buildingArea < 1000) {
+        buildingDiv.innerHTML = `<p>Total Building Area: Less than 1,000 m² </p>`;
+    } else {
+        buildingDiv.innerHTML = `<p>Total Building Area: ${(Math.round(buildingArea / 1000) * 1000).toLocaleString()}m² </p>`;
+    }
+
 
     // highway
     var highwayStatistics = await getRoadLength(lat, lon);
@@ -139,7 +147,12 @@ export function displayRoadLen(roadLenInfo) {
         const totalLen = moterLen + pedestrianLen + othersLen;
 
         const highwayDiv = document.getElementById('highwayInfo');
-        highwayDiv.innerHTML = `<p>Total Road Length: ${(totalLen / 1000).toFixed(1)}km</p>`;
+        if (totalLen < 1000) {
+            highwayDiv.innerHTML = `<p>Total Road Length: Less thatn 1km</p>`;
+        } else {
+            highwayDiv.innerHTML = `<p>Total Road Length: ${Math.round(totalLen / 1000)}km</p>`;
+        }
+
 
         const moterProportion = (moterLen / totalLen) * 100;
         const pedestrianProportion = (pedestrianLen / totalLen) * 100;
