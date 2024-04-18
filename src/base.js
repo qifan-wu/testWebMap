@@ -54,7 +54,7 @@ axios.get(METRO_FILE)
               var linePoly = L.polyline(lineCoordinates, { color: line.color });
               metroLines.addLayer(linePoly);
               linePoly.on('mouseover', function(e) {
-                  this.bindPopup("<h3>" + line.name + "</h3>" +
+                  this.bindPopup("<h3>Metro Line: " + line.name + "</h3>" +
                                   "<p><strong>" + line.branch + "</strong></p>").openPopup({autoPan: false});
               });
             });
