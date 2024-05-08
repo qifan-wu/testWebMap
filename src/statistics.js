@@ -225,8 +225,8 @@ export function processPOIData(poiData) {
     let poiCount = {
         "public_institution": 0,
         "commerce": 0,
-        "community_space": 0,
-        "recreational_activities": 0,
+        "food_drink": 0,
+        "recreation": 0,
         "religion": 0,
     };
 

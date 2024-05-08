@@ -1,7 +1,7 @@
 import { STATIONS_INFO_FILE, METRO_FILE } from './constants.js'
 import { createStationMarkers, handleSearchedPlace} from './utils.js';
 import { ESRI_ACCESS_TOKEN, MAPBOX_PUBLIC_TOKEN } from './private.js';
-import { PUBLIC_INSTITUTION_COLOR, COMMERCE_COLOR, COMMUNITY_SPACE_COLOR, RECREATION_ACT_COLOR, RELIGION_COLOR} from './styles.js';
+import { PUBLIC_INSTITUTION_COLOR, COMMERCE_COLOR, FOOD_DRINK_COLOR, RECREATION_COLOR, RELIGION_COLOR} from './styles.js';
 
 var osmBaseMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -117,20 +117,20 @@ export var poiLegend = L.control.Legend({
         fillOpacity: 0.4
       },
       {
-        label: "Community Space",
+        label: "Food & Drink",
         type: "circle",
         radius: 7,
-        color: COMMUNITY_SPACE_COLOR,
-        fillColor: COMMUNITY_SPACE_COLOR,
+        color: FOOD_DRINK_COLOR,
+        fillColor: FOOD_DRINK_COLOR,
         opacity: 0.9,
         fillOpacity: 0.4
       },
       {
-        label: "Recreation Activity",
+        label: "Recreation",
         type: "circle",
         radius: 7,
-        color: RECREATION_ACT_COLOR,
-        fillColor: RECREATION_ACT_COLOR,
+        color: RECREATION_COLOR,
+        fillColor: RECREATION_COLOR,
         opacity: 0.9,
         fillOpacity: 0.4
       },

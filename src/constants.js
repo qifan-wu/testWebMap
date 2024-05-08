@@ -59,29 +59,29 @@ export const SOPOI_CAT = {
 export const SOPOI_CAT_DETAIL = {
     amenity: {
         public_institution: [
-            "social_facility", "library", "arts_centre", "school", "university", "college"
+            "social_facility", "library", "arts_centre", "school", "university", "college",
+            "social_centre", "community_centre", "conference_centre", "events_venue",
+            "exhibition_centre", "coworking_space", "events_centre"
         ],
         commerce: [
-            "restaurant", "cafe", "fast_food", "bar", "pub", "ice_cream", "nightclub",
-            "internet_cafe", "food_court", "biergarten", "canteen", "marketplace",
+            "nightclub", "marketplace",
         ],
-        community_space: [
-            "social_centre", "community_centre", "conference_centre", "events_venue",
-            "lavoir", "coworking_space", "exhibition_centre", "kitchen", "social_club",
-            "marae", "stage", "music_venue", "concert_hall", "festival_grounds",
-            "events_centre"
+        food_drink: [
+            "restaurant", "cafe", "fast_food", "bar", "pub", "ice_cream",
+            "internet_cafe", "food_court", "biergarten", "canteen",
         ],
-        recreational_activities: [
+        recreation: [
             "theatre", "cinema", "bbq", "public_bookcase", "casino",
             "dojo", "love_hotel", "kneipp_water_cure", "karaoke_box", "hookah_lounge",
-            "stripclub", "clubhouse", "swingerclub", "public_bath"
+            "stripclub", "clubhouse", "swingerclub", "public_bath",
+            "lavoir", "kitchen", "social_club", "stage", "music_venue", "concert_hall", "festival_grounds"
         ],
         religion: [
-            "place_of_worship"
+            "place_of_worship", "marae"
         ]
     },
     leisure: {
-        recreational_activities: [
+        recreation: [
             "pitch", "swimming_pool", "park", "garden", "playground", "picnic_table",
             "sports_centre", "stadium", "track", "fitness_centre", "fitness_station",
             "outdoor_seating", "dog_park", "recreation_ground", "sports_hall", "sauna",
@@ -115,8 +115,6 @@ export const SOPOI_CAT_DETAIL = {
         ]
     }
 };
-
-
 // Road
 export const HIGHWAY_TYPES = "motorway,primary,secondary,tertiary,residential,pedestrian,cycleway,living_street,path,footway";
 export const MOTER_ROAD_TYPES = ["primary", "secondary", "tertiary", "motorway"];
