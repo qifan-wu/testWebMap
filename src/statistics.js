@@ -1,5 +1,5 @@
-import { SEARCH_RADIUS_METER, HIGHWAY_TYPES, OHSOME_ENDPOINT, MOTER_ROAD_TYPES, PEDCYCLE_ROAD_TYPES, SOPOI_CAT, SOPOI_CAT_DETAIL} from './constants.js'
-
+import { SEARCH_RADIUS_METER, HIGHWAY_TYPES, OHSOME_ENDPOINT, MOTER_ROAD_TYPES, PEDCYCLE_ROAD_TYPES, SOPOI_CATS, SOPOI_CAT_OSM, SOPOI_CAT_DETAIL} from './constants.js'
+import { SOPOI_CAT_DISPLAY } from './styles.js'
 
 export async function displayStatistics(lat, lon, name=null, population=null, distance=null) {
 
@@ -176,8 +176,8 @@ export function genQueryHelper(lat, lon) {
     let query = `
         [out:json];
         (`;
-    for (const cat in SOPOI_CAT) {
-        const values = SOPOI_CAT[cat];
+    for (const cat in SOPOI_CAT_OSM) {
+        const values = SOPOI_CAT_OSM[cat];
         const valStr = values.join('|');
         query += `nwr(around:${SEARCH_RADIUS_METER},${lat},${lon})["${cat}"~"${valStr}"];`
     }
@@ -221,13 +221,9 @@ export async function getPOIdata(latitude, longitude) {
 
 // get the poi count of each category
 export function processPOIData(poiData) {
-    // var poiCount = {"amenity": 0, "leisure": 0, "shop": 0, "historic": 0};
-    let poiCount = {
-        "public_institution": 0,
-        "commerce": 0,
-        "food_drink": 0,
-        "recreation": 0,
-        "religion": 0,
+    let poiCount = {};
+    for (let cat of SOPOI_CATS) {
+      poiCount[cat] = 0;
     };
 
     for (let i=0; i<poiData.length; i++) {
@@ -327,20 +323,30 @@ export async function showPOIstats(lat, lon, stationName) {
     const startTimePC = new Date().getTime();
     let poiCount = processPOIData(poiData);
 
-    const poiInfoDiv = document.getElementById('poiStats');
+    const poiSumDiv = document.getElementById('poiSum');
     if (poiCount == null) {
         poiInfoDiv.innerHTML = `<p>POI information not available</p>`;
     } else {
-        let poiInfoTxt = '';
         let totalPOICount = 0;
         for (const detailCat in poiCount) {
-            poiInfoTxt += `${detailCat}: ${poiCount[detailCat]}\n`;
             totalPOICount += poiCount[detailCat];
         }
-        poiInfoDiv.innerHTML = `
-        <p>Total count of POI: ${totalPOICount}, including:</p>
-        <p>${poiInfoTxt}</p>
+        poiSumDiv.innerHTML = `
+        <p>Total count of SIPOI: ${totalPOICount}
         `;
+
+        // plot display
+        let poiLabelVals = [];
+        let poiColorVals = [];
+        let poiCountVals = [];
+        for (let cat in SOPOI_CAT_DISPLAY) {
+            poiLabelVals.push(SOPOI_CAT_DISPLAY[cat].label);
+            poiColorVals.push(SOPOI_CAT_DISPLAY[cat].color);
+            poiCountVals.push(poiCount[cat]);
+        };
+        let titleText = "SIPOI Number By Type";
+        plotHorizentalBarChart('poiChart', poiLabelVals, poiColorVals, poiCountVals, titleText);
+
     }
 
     const endTimePC = new Date().getTime();
@@ -349,6 +355,95 @@ export async function showPOIstats(lat, lon, stationName) {
     downloadCSV(poiData, stationName);
     downloadGeoJson(poiData, stationName);
 };
+
+export function plotHorizentalBarChart(divName, labelVals, colorVals, countVals, titleText) {
+    // let labelVals = ['c', 'a', 'b'];
+    // let colorVals = ['rgb(255, 99, 132)', 'rgb(255, 19, 132)', 'rgb(255, 29, 132)'];
+    // let countVals = [1,2,3];
+
+    const data = {
+        grouped: false,
+        labels: labelVals,
+        datasets: [{
+            axis: 'y',
+            data: countVals,
+            backgroundColor: colorVals,
+            borderColor: colorVals,
+            borderWidth: 1
+        }]
+    };
+
+    const config = {
+        type: 'bar',
+        data,
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            scales: {
+                x: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: true,
+                    text: titleText,
+                    position: 'bottom'
+                }
+                // datalabels: {
+                //     // Position of the labels
+                //     // (start, end, center, etc.)
+                //     anchor: 'end',
+                //     // Alignment of the labels
+                //     // (start, end, center, etc.)
+                //     align: 'end',
+                //     // Color of the labels
+                //     color: 'blue',
+                //     font: {
+                //         weight: 'bold',
+                //     },
+                //     formatter: function (value, context) {
+                //         // Display the actual data value
+                //         return value;
+                //     }
+                // }
+            }
+        }
+    };
+
+    let ctx = document.getElementById(divName);
+    let chartStatus = Chart.getChart(divName); // <canvas> id
+    if (chartStatus != undefined) {
+        chartStatus.destroy();
+    }
+    let myChart = new Chart(ctx, config);
+
+}
+
+
+// export function plotHorizentalBarChart(divID, catCount) {
+//     /*
+//     catCount(map) e.g. {"public_institution": 10, "commerce": 30,"food_drink": 20};
+//     */
+
+//     console.log(catCount);
+//     // const TESTER = document.getElementById(divID);
+// 	// Plotly.newPlot( TESTER, [{
+// 	// x: [1, 2, 3, 4, 5],
+// 	// y: [1, 2, 4, 8, 16] }], {
+// 	// margin: { t: 0 } } );
+//     var data = [{
+//     type: 'bar',
+//     x: [20, 14, 23],
+//     y: ['giraffes', 'orangutans', 'monkeys'],
+//     orientation: 'h'
+//     }];
+
+//     Plotly.newPlot(divID, data);
+// }
 
 export function downloadCSV(poiData, stationName) {
     document.getElementById('downloadCSV').addEventListener('click', function() {

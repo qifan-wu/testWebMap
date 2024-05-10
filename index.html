@@ -40,6 +40,9 @@
     <!-- Load osmtogeojson plugin -->
     <script src="./plugins/osmtogeojson/osmtogeojson.js"></script>
 
+    <!-- load chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <!-- Import style -->
     <link rel="stylesheet" href="./static/css/style.css">
 
@@ -77,6 +80,16 @@
                 </p>
 
             </div>
+
+            <div class="session">
+                <p style="font-style: italic; font-size: 0.8vw;">
+                    Created by Qifan Wu
+                </p>
+            </div>
+
+            <!-- <div id="test">
+                <canvas id="myChart"></canvas>
+            </div> -->
         </div>
 
         <div id="statspanel">
@@ -84,9 +97,19 @@
 
             <div class="poiInfo">
                 <h3> Social Infrastructure Point of Interest (SIPOI) Within 1KM</h3>
-                <div id="poiStats">Not available</div>
-                <button id="downloadCSV">Loading...</button>
-                <button id="downloadGeoJson">Loading...</button>
+                <!-- <div id="poiStats">Not available</div> -->
+                <!-- <div id="poiChart">
+                    POI information not available
+                </div> -->
+                <div id="poiSum"></div>
+                <canvas id="poiChart"></canvas>
+                <div id="poiChartTitle"></div>
+
+                <div class="download">
+                    <button id="downloadCSV">Loading...</button>
+                    <button id="downloadGeoJson">Loading...</button>
+                </div>
+
             </div>
 
             <div class="statsInfo">
@@ -106,6 +129,7 @@
             <div class="clearContainer">
                 <button id="clearPOI">Clear Current POI In Map</button>
             </div>
+
         </div> <!-- statspanel -->
 
     </div>
