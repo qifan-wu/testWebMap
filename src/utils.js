@@ -1,8 +1,8 @@
-import { SEARCH_RADIUS, SEARCH_RADIUS_METER, CATEGORIE_KEYS, SOPOI_CAT, SOPOI_CAT_DETAIL, OVERPASS_INTERPRETER, STATIONS_DATA_FILE, OSM_ORG_ENDPOINT } from './constants.js'
+import { SEARCH_RADIUS, SEARCH_RADIUS_METER, CATEGORIE_KEYS, SOPOI_CAT_OSM, SOPOI_CAT_DETAIL, OVERPASS_INTERPRETER, STATIONS_DATA_FILE, OSM_ORG_ENDPOINT } from './constants.js'
+import { SOPOI_CAT_DISPLAY } from './styles.js'
 import { overlayMaps, layerControl, poiLegend} from './base.js'
 import { subwayIcon, targetIcon, poiIcon} from './icons.js'
 import { displayStatistics } from './statistics.js'
-import { PUBLIC_INSTITUTION_COLOR, COMMERCE_COLOR, FOOD_DRINK_COLOR, RECREATION_COLOR, RELIGION_COLOR} from './styles.js';
 
 var clickedStation = null;
 // Show subway stations worldwide on the map
@@ -181,24 +181,8 @@ export async function searchPOICat(lat, lon, category, detailCat) {
 
     let poiQuery = genOPLQueryHelper(lat, lon, category, SOPOI_CAT_DETAIL[category][detailCat]);
 
-    var poi_color = 'grey';
+    let poi_color = SOPOI_CAT_DISPLAY[detailCat]['color'];
 
-
-    if (detailCat == "public_institution") {
-        poi_color = PUBLIC_INSTITUTION_COLOR;
-    }
-    else if (detailCat == "commerce"){
-        poi_color = COMMERCE_COLOR;
-    }
-    else if (detailCat == "food_drink"){
-        poi_color = FOOD_DRINK_COLOR;
-    }
-    else if (detailCat == "recreation"){
-        poi_color = RECREATION_COLOR;
-    }
-    else if (detailCat == "religion"){
-        poi_color = RELIGION_COLOR;
-    }
 
     // function openNewPage(url) {
     //     window.open(url, '_blank');

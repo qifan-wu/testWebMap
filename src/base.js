@@ -1,7 +1,7 @@
-import { STATIONS_INFO_FILE, METRO_FILE } from './constants.js'
+import { STATIONS_INFO_FILE, METRO_FILE, SOPOI_CATS } from './constants.js'
+import { SOPOI_CAT_DISPLAY } from './styles.js'
 import { createStationMarkers, handleSearchedPlace} from './utils.js';
 import { ESRI_ACCESS_TOKEN, MAPBOX_PUBLIC_TOKEN } from './private.js';
-import { PUBLIC_INSTITUTION_COLOR, COMMERCE_COLOR, FOOD_DRINK_COLOR, RECREATION_COLOR, RELIGION_COLOR} from './styles.js';
 
 var osmBaseMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -94,56 +94,28 @@ export var overlayMaps = {
 
 export var layerControl = L.control.layers(baseMaps, overlayMaps)
 
+
+
+let legendVals = [];
+for (const [poi, poiDisplay] of Object.entries(SOPOI_CAT_DISPLAY)) {
+  let labelVal = poiDisplay['label'];
+  let colorVal = poiDisplay['color'];
+  let legendVal = {
+    label: labelVal,
+    type: "circle",
+    radius: 7,
+    color: colorVal,
+    fillColor: colorVal,
+    opacity: 0.9,
+    fillOpacity: 0.4,
+  }
+  legendVals.push(legendVal);
+};
+
 export var poiLegend = L.control.Legend({
     title: "Legend of POI",
     position: "bottomright",
-    legends: [
-      {
-        label: "Public Institution",
-        type: "circle",
-        radius: 7,
-        color: PUBLIC_INSTITUTION_COLOR,
-        fillColor: PUBLIC_INSTITUTION_COLOR,
-        opacity: 0.9,
-        fillOpacity: 0.4,
-      },
-      {
-        label: "Commerce",
-        type: "circle",
-        radius: 7,
-        color: COMMERCE_COLOR,
-        fillColor: COMMERCE_COLOR,
-        opacity: 0.9,
-        fillOpacity: 0.4
-      },
-      {
-        label: "Food & Drink",
-        type: "circle",
-        radius: 7,
-        color: FOOD_DRINK_COLOR,
-        fillColor: FOOD_DRINK_COLOR,
-        opacity: 0.9,
-        fillOpacity: 0.4
-      },
-      {
-        label: "Recreation",
-        type: "circle",
-        radius: 7,
-        color: RECREATION_COLOR,
-        fillColor: RECREATION_COLOR,
-        opacity: 0.9,
-        fillOpacity: 0.4
-      },
-      {
-        label: "Religion",
-        type: "circle",
-        radius: 7,
-        color: RELIGION_COLOR,
-        fillColor: RELIGION_COLOR,
-        opacity: 0.9,
-        fillOpacity: 0.4
-      },
-    ],
+    legends: legendVals,
     collapsed: false,
     symbolWidth: 20,
     opacity: 0.8
@@ -179,6 +151,12 @@ axios.get(STATIONS_INFO_FILE)
         console.error("error fetching cache: ", error)
     });
 
+    // let poiCount = {
+    //     "public_institution": 0,
+    //     "commerce": 0,
+    //     "food_drink": 0,
+    //     "recreation": 0,
+    //     "religion": 0,
+    // };
+    // initialize the poi count in every detail category
 
-
-// console.warn = () => {};

@@ -11,10 +11,13 @@ export const SEARCH_RADIUS_METER = 1000;
 export const OHSOME_ENDPOINT = "https://api.ohsome.org/v1/elements";
 export const OVERPASS_INTERPRETER = "https://overpass-api.de/api/interpreter";
 export const OSM_ORG_ENDPOINT = "https://www.openstreetmap.org";
+
 // Categories
 // POI
 export const CATEGORIE_KEYS = ["amenity", "leisure", "shop", "historic"];
-export const SOPOI_CAT = {
+export const SOPOI_CATS = ["public_institution", "commerce", "food_drink", "recreation", "religion"];
+
+export const SOPOI_CAT_OSM = {
     amenity: [
         "social_facility", "library", "arts_centre", "school", "university", "college",
         "restaurant", "cafe", "fast_food", "bar", "pub", "ice_cream", "nightclub",
@@ -115,6 +118,11 @@ export const SOPOI_CAT_DETAIL = {
         ]
     }
 };
+
+
+
+
+
 // Road
 export const HIGHWAY_TYPES = "motorway,primary,secondary,tertiary,residential,pedestrian,cycleway,living_street,path,footway";
 export const MOTER_ROAD_TYPES = ["primary", "secondary", "tertiary", "motorway"];
