@@ -2,6 +2,7 @@ import { SEARCH_RADIUS_METER, HIGHWAY_TYPES, OHSOME_ENDPOINT, MOTER_ROAD_TYPES, 
 import { SOPOI_CAT_DISPLAY } from './styles.js'
 
 export async function displayStatistics(lat, lon, name=null, population=null, distance=null) {
+    document.getElementById('map').style.setProperty('width', '75%');
 
     // build env stats
     document.getElementById('defaultpanel').style.display = 'none';
@@ -43,6 +44,11 @@ export async function displayStatistics(lat, lon, name=null, population=null, di
         buildingDiv.innerHTML = `<p>Total Building Area: ${(Math.round(buildingArea / 1000) * 1000).toLocaleString()}m² </p>`;
     }
 
+    // parking
+    var parkingArea = await getParkingArea(lat, lon);
+    const parkingDiv = document.getElementById("parkingAreaInfo");
+    parkingDiv.innerHTML = `<p>Total Parking Area: ${(Math.round(parkingArea / 1000) * 1000).toLocaleString()}m² </p>`;
+
 
     // highway
     var highwayStatistics = await getRoadLength(lat, lon);
@@ -77,12 +83,39 @@ export async function getBuildingArea(lat, lon) {
         console.error("Error fetching building area:", error);
         return -1;
     }
-
-
 };
 
+export async function getParkingArea(lat, lon) {
+    let bcircle = [lon,lat, SEARCH_RADIUS_METER]
+    const params = new URLSearchParams({
+        bcircles: bcircle,
+        time: "2024-01-01",
+        filter: "amenity=parking and type:way"
+    });
+
+    const url = `${OHSOME_ENDPOINT}/area?${params}`;
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch parking area statistics: ${response.status}`);
+        }
+        const data = await response.json();
+        var buildingArea = data.result[0].value;
+
+        return buildingArea;
+    } catch (error) {
+        console.error("Error fetching parking area:", error);
+        return -1;
+    }
+};
 
 export async function getRoadLength(lat, lon) {
+    /*
+     Return: {'moterLen': int,
+             'pedestrianLen': int,
+             'othersLen': int}
+    */
 
     let bcircle = [lon,lat, SEARCH_RADIUS_METER];
     const params = new URLSearchParams({
@@ -135,10 +168,40 @@ export async function getRoadLength(lat, lon) {
 
 };
 
+// show the total length and chart by type
 export function displayRoadLen(roadLenInfo) {
     if (roadLenInfo == null) {
         highwayDiv.innerHTML = `<p>Total Road Length Not Available</p>`;
     }
+
+    let moterLen = roadLenInfo.moterLen;
+    let pedestrianLen = roadLenInfo.pedestrianLen;
+    let othersLen = roadLenInfo.othersLen;
+    const totalLen = moterLen + pedestrianLen + othersLen;
+
+    // display total road length
+    const highwayDiv = document.getElementById('highwayInfo');
+    if (totalLen < 1000) {
+        highwayDiv.innerHTML = `<p>Total Road Length: Less thatn 1km</p>`;
+    } else {
+        highwayDiv.innerHTML = `<p>Total Road Length: ${Math.round(totalLen / 1000)}km</p>`;
+    }
+
+    // display road length horizental bar chart
+    let roadTypeLabelVals = ["Motor Vehicles", "Biking/Pedestrian friendly"];
+    let roadTypeColorVals = ['#53a8b6', '#bbe4e9'];
+    let roadTypeLenVals = [moterLen / 1000, pedestrianLen / 1000];
+    let titleText = "Road Length Information By Type";
+    plotHorizentalBarChart('roadLenChart', roadTypeLabelVals, roadTypeColorVals, roadTypeLenVals, titleText);
+}
+
+export function displayRoadLenStacked(roadLenInfo) {
+    const highwayDiv = document.getElementById('highwayInfo');
+
+    if (roadLenInfo == null) {
+        highwayDiv.innerHTML = `<p>Total Road Length Not Available</p>`;
+    }
+
     document.getElementById('highway-chart').style.display = 'flex';
 
         let moterLen = roadLenInfo.moterLen;
@@ -146,7 +209,6 @@ export function displayRoadLen(roadLenInfo) {
         let othersLen = roadLenInfo.othersLen;
         const totalLen = moterLen + pedestrianLen + othersLen;
 
-        const highwayDiv = document.getElementById('highwayInfo');
         if (totalLen < 1000) {
             highwayDiv.innerHTML = `<p>Total Road Length: Less thatn 1km</p>`;
         } else {

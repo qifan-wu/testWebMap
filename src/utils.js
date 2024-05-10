@@ -300,6 +300,9 @@ export function clearPOI() {
         if (overlayMaps.selected !== undefined) {
             map.removeLayer(overlayMaps["selected"]);
         }
+
+        document.getElementById('statspanel').style.setProperty('display', 'none');
+        document.getElementById('map').style.setProperty('width', '100%');
 };
 
 
