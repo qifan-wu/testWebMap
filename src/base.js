@@ -95,9 +95,15 @@ export var overlayMaps = {
 export var layerControl = L.control.layers(baseMaps, overlayMaps)
 
 let printImageButton = L.easyPrint({
-	title: 'Print Image button',
+	title: 'Print Map',
 	position: 'bottomright',
-	sizeModes: ['A4Portrait', 'A4Landscape']
+	sizeModes: ['Current', 'A4Landscape', 'A4Portrait'],
+  filename: 'map',
+  defaultSizeTitles: {
+      Current: 'Current Size',
+      A4Landscape: 'A4 Landscape',
+      A4Portrait: 'A4 Portrait'
+    }
 });
 printImageButton.addTo(map);
 
