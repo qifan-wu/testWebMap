@@ -94,7 +94,12 @@ export var overlayMaps = {
 
 export var layerControl = L.control.layers(baseMaps, overlayMaps)
 
-
+let printImageButton = L.easyPrint({
+	title: 'Print Image button',
+	position: 'bottomright',
+	sizeModes: ['A4Portrait', 'A4Landscape']
+});
+printImageButton.addTo(map);
 
 let legendVals = [];
 for (const [poi, poiDisplay] of Object.entries(SOPOI_CAT_DISPLAY)) {
