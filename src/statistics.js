@@ -190,9 +190,9 @@ export function displayRoadLen(roadLenInfo) {
     // display road length horizental bar chart
     let roadTypeLabelVals = ["Car-friendly", "Pedestrian-friendly"];
     let roadTypeColorVals = ['#53a8b6', '#bbe4e9'];
-    let roadTypeLenVals = [moterLen / 1000, pedestrianLen / 1000];
+    let roadTypeLenVals = [Math.round(moterLen / 1000), Math.round(pedestrianLen / 1000)];
     let titleText = "Road Length Information By Type";
-    let roadLenChartStyle = {'aspectRatio': 3};
+    let roadLenChartStyle = {'aspectRatio': 3, 'unit': 'km'};
     plotHorizentalBarChart('roadLenChart', roadTypeLabelVals, roadTypeColorVals, roadTypeLenVals, titleText, roadLenChartStyle);
 }
 
@@ -408,7 +408,7 @@ export async function showPOIstats(lat, lon, stationName) {
             poiCountVals.push(poiCount[cat]);
         };
         let titleText = "SIPOI Number By Type";
-        let poiChartStyle = {'aspectRatio': 2};
+        let poiChartStyle = {'aspectRatio': 2, 'unit': ''};
         plotHorizentalBarChart('poiChart', poiLabelVals, poiColorVals, poiCountVals, titleText, poiChartStyle);
 
     }
@@ -425,6 +425,7 @@ export function plotHorizentalBarChart(divName, labelVals, colorVals, countVals,
     // let colorVals = ['rgb(255, 99, 132)', 'rgb(255, 19, 132)', 'rgb(255, 29, 132)'];
     // let countVals = [1,2,3];
 
+    const unit = chartStyle.unit;
     const data = {
         grouped: false,
         labels: labelVals,
@@ -434,7 +435,7 @@ export function plotHorizentalBarChart(divName, labelVals, colorVals, countVals,
             backgroundColor: colorVals,
             borderColor: colorVals,
             borderWidth: 1,
-            barPercentage: 0.5
+            barPercentage: 0.5,
         }]
     };
 
@@ -450,7 +451,11 @@ export function plotHorizentalBarChart(divName, labelVals, colorVals, countVals,
                     ticks: {
                         font: {
                             size: 10,
+                        },
+                        callback: function (value) {
+                            return value + unit;
                         }
+
                     }
                 },
                 y: {
@@ -472,25 +477,13 @@ export function plotHorizentalBarChart(divName, labelVals, colorVals, countVals,
                     text: titleText,
                     position: 'bottom'
                 },
-                // responsive: true,
-
-                // datalabels: {
-                //     // Position of the labels
-                //     // (start, end, center, etc.)
-                //     anchor: 'end',
-                //     // Alignment of the labels
-                //     // (start, end, center, etc.)
-                //     align: 'end',
-                //     // Color of the labels
-                //     color: 'blue',
-                //     font: {
-                //         weight: 'bold',
-                //     },
-                //     formatter: function (value, context) {
-                //         // Display the actual data value
-                //         return value;
-                //     }
-                // }
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.parsed.x + unit;
+                        }
+                    }
+                }
             }
         }
     };
@@ -503,28 +496,6 @@ export function plotHorizentalBarChart(divName, labelVals, colorVals, countVals,
     let myChart = new Chart(ctx, config);
 
 }
-
-
-// export function plotHorizentalBarChart(divID, catCount) {
-//     /*
-//     catCount(map) e.g. {"public_institution": 10, "commerce": 30,"food_drink": 20};
-//     */
-
-//     console.log(catCount);
-//     // const TESTER = document.getElementById(divID);
-// 	// Plotly.newPlot( TESTER, [{
-// 	// x: [1, 2, 3, 4, 5],
-// 	// y: [1, 2, 4, 8, 16] }], {
-// 	// margin: { t: 0 } } );
-//     var data = [{
-//     type: 'bar',
-//     x: [20, 14, 23],
-//     y: ['giraffes', 'orangutans', 'monkeys'],
-//     orientation: 'h'
-//     }];
-
-//     Plotly.newPlot(divID, data);
-// }
 
 export function downloadCSV(poiData, stationName) {
     document.getElementById('downloadCSV').addEventListener('click', function() {
