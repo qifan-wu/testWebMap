@@ -188,7 +188,7 @@ export function displayRoadLen(roadLenInfo) {
     }
 
     // display road length horizental bar chart
-    let roadTypeLabelVals = ["Motor Vehicles", "Biking/Pedestrian friendly"];
+    let roadTypeLabelVals = ["Car-friendly", "Pedestrian-friendly"];
     let roadTypeColorVals = ['#53a8b6', '#bbe4e9'];
     let roadTypeLenVals = [moterLen / 1000, pedestrianLen / 1000];
     let titleText = "Road Length Information By Type";
