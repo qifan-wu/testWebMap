@@ -192,7 +192,8 @@ export function displayRoadLen(roadLenInfo) {
     let roadTypeColorVals = ['#53a8b6', '#bbe4e9'];
     let roadTypeLenVals = [moterLen / 1000, pedestrianLen / 1000];
     let titleText = "Road Length Information By Type";
-    plotHorizentalBarChart('roadLenChart', roadTypeLabelVals, roadTypeColorVals, roadTypeLenVals, titleText);
+    let roadLenChartStyle = {'aspectRatio': 3};
+    plotHorizentalBarChart('roadLenChart', roadTypeLabelVals, roadTypeColorVals, roadTypeLenVals, titleText, roadLenChartStyle);
 }
 
 export function displayRoadLenStacked(roadLenInfo) {
@@ -407,7 +408,8 @@ export async function showPOIstats(lat, lon, stationName) {
             poiCountVals.push(poiCount[cat]);
         };
         let titleText = "SIPOI Number By Type";
-        plotHorizentalBarChart('poiChart', poiLabelVals, poiColorVals, poiCountVals, titleText);
+        let poiChartStyle = {'aspectRatio': 2};
+        plotHorizentalBarChart('poiChart', poiLabelVals, poiColorVals, poiCountVals, titleText, poiChartStyle);
 
     }
 
@@ -418,7 +420,7 @@ export async function showPOIstats(lat, lon, stationName) {
     downloadGeoJson(poiData, stationName);
 };
 
-export function plotHorizentalBarChart(divName, labelVals, colorVals, countVals, titleText) {
+export function plotHorizentalBarChart(divName, labelVals, colorVals, countVals, titleText, chartStyle) {
     // let labelVals = ['c', 'a', 'b'];
     // let colorVals = ['rgb(255, 99, 132)', 'rgb(255, 19, 132)', 'rgb(255, 29, 132)'];
     // let countVals = [1,2,3];
@@ -431,7 +433,8 @@ export function plotHorizentalBarChart(divName, labelVals, colorVals, countVals,
             data: countVals,
             backgroundColor: colorVals,
             borderColor: colorVals,
-            borderWidth: 1
+            borderWidth: 1,
+            barPercentage: 0.5
         }]
     };
 
@@ -443,9 +446,23 @@ export function plotHorizentalBarChart(divName, labelVals, colorVals, countVals,
             responsive: true,
             scales: {
                 x: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    ticks: {
+                        font: {
+                            size: 10,
+                        }
+                    }
+                },
+                y: {
+                    ticks: {
+                        font: {
+                            size: 10,
+                        }
+                    }
                 }
             },
+            aspectRatio: chartStyle.aspectRatio,
+            maintainAspectRatio: true,
             plugins: {
                 legend: {
                     display: false
@@ -454,7 +471,9 @@ export function plotHorizentalBarChart(divName, labelVals, colorVals, countVals,
                     display: true,
                     text: titleText,
                     position: 'bottom'
-                }
+                },
+                // responsive: true,
+
                 // datalabels: {
                 //     // Position of the labels
                 //     // (start, end, center, etc.)
