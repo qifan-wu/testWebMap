@@ -138,7 +138,7 @@ export async function getAllPOI(lat, lon) {
 export async function displayAllPOI(lat, lon) {
     const startTime = new Date().getTime();
 
-    let zoom = Math.log2(map.getSize().y * 60);
+    let zoom = Math.log2(map.getSize().y * 40);
 
     map.setView(new L.LatLng(lat, lon), zoom);
 
