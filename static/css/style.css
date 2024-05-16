@@ -6,10 +6,39 @@
     text-align: center;
 }
 
+.station-popup .leaflet-popup {
+    margin: 0px;
+}
+
+.station-popup .leaflet-popup-content-wrapper {
+    background: rgba(255, 255, 255, 0.1);
+    /* background: transparent; */
+    border-radius: 5px;
+    box-shadow: none;
+    border-radius: 5px;
+}
+
+.station-popup .leaflet-popup-content {
+    margin: 0px;
+    padding: 2px;
+    box-shadow: none;
+    height: 32px
+}
+.station-popup .leaflet-popup-tip-container {
+    margin-bottom: 0px;
+    box-shadow: none;
+}
+.station-popup .leaflet-popup-tip {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
 
 .intro {
     /* display: inline-block; */
     max-width: 600px;
+    margin: 10px;
 
 }
 

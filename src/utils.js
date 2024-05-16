@@ -32,7 +32,13 @@ export function createStationMarkers(stationsData) {
         stationMarker.on('mouseover', function(e) {
             this.bindPopup(
                 // "osm_id: " + station.osm_id +
-                "<h3>Station: " + station.name + "</h3>").openPopup();
+                "<h3>Station: " + station.name + "</h3>",
+                {
+                    className: 'station-popup',
+                    closeButton: false,
+                    autoClose: false,
+                }
+            ).openPopup();
         });
 
     });
@@ -91,9 +97,23 @@ export function handleSearchedPlace(data, searchedRes) {
         (function(target) {
             targetMarker.on('mouseover', function(e) {
                 if (target.text !== null) {
-                    this.bindPopup(target.text).openPopup();
+                    this.bindPopup(
+                        "<h3>" + target.text + "</h3>",
+                        {
+                            className: 'station-popup',
+                            closeButton: false,
+                            autoClose: false,
+                        }
+                        ).openPopup();
                 } else {
-                    this.bindPopup("searched target").openPopup();
+                    this.bindPopup(
+                        "<h3>searched target</h3>",
+                        {
+                            className: 'station-popup',
+                            closeButton: false,
+                            autoClose: false,
+                        }
+                        ).openPopup();
                 }
             });
 
