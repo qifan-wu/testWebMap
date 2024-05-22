@@ -6,7 +6,15 @@ import { displayStatistics } from './statistics.js'
 
 var clickedStation = null;
 // Show subway stations worldwide on the map
-export function createStationMarkers(stationsData) {
+export async function handleClickStationAsync(station) {
+    const startTimeMain = new Date().getTime();
+    const res = await handleClickStation(station);
+    const endTimeMain = new Date().getTime();
+    const executionTimeMain = endTimeMain - startTimeMain;
+    console.log(`function handleClickStationAsync execution time: ${executionTimeMain / 1000} s`);
+}
+
+export async function createStationMarkers(stationsData) {
     var stationMarkers = L.markerClusterGroup(
     );
     stationsData.forEach(function (station) {
@@ -18,7 +26,7 @@ export function createStationMarkers(stationsData) {
                 poiLegend.addTo(map);
             }
 
-            handleClickStation(station);
+            handleClickStationAsync(station);
             // if (!isHandlingClick) {
             //     isHandlingClick = true;
             //     handleClickStation(station, function() {
@@ -175,7 +183,6 @@ export async function displayAllPOI(lat, lon) {
 
     const endTime = new Date().getTime();
     console.log("Time for function displayAllPOI to execute: ", (endTime - startTime) / 1000, "s");
-
 }
 
 // help generate the query specifed for OverpassLayer
@@ -322,9 +329,6 @@ export function clearPOI() {
         if (overlayMaps.selected !== undefined) {
             map.removeLayer(overlayMaps["selected"]);
         }
-
-        document.getElementById('statspanel').style.setProperty('display', 'none');
-        document.getElementById('map').style.setProperty('width', '100%');
 };
 
 

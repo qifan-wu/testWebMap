@@ -2,8 +2,6 @@ import { SEARCH_RADIUS_METER, HIGHWAY_TYPES, OHSOME_ENDPOINT, MOTER_ROAD_TYPES, 
 import { SOPOI_CAT_DISPLAY } from './styles.js'
 
 export async function displayStatistics(lat, lon, name=null, population=null, distance=null) {
-    document.getElementById('map').style.setProperty('width', '75%');
-
     // build env stats
     document.getElementById('defaultpanel').style.display = 'none';
     document.getElementById('statspanel').style.display = 'block';
