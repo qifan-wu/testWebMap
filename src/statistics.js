@@ -255,6 +255,10 @@ export function genQueryHelper(lat, lon) {
 // ====== POI statistics and data download =======
 // get poi data for download from overpass API
 export async function getPOIdata(latitude, longitude) {
+    // Show the mask
+    const loadingIndicator = document.getElementById('loading-indicator');
+    loadingIndicator.style.display = 'flex';
+
     const startTime = new Date().getTime();
 
     const overpassQuery = genQueryHelper(latitude, longitude);
@@ -275,9 +279,13 @@ export async function getPOIdata(latitude, longitude) {
         // console.log(data.elements[0]);
         const endTime = new Date().getTime();
         console.log("Time for retrieving poi data for download", (endTime - startTime) / 1000, "s");
+
+        // hide the mask
+        loadingIndicator.style.display = 'none';
         return data.elements;
     } catch (error) {
         console.error('Error fetching places:', error);
+        loadingIndicator.style.display = 'none';
         return null;
     }
 };
