@@ -164,6 +164,10 @@ export async function getAllPOI(lat, lon) {
 
 // display all poi on the map
 export async function displayAllPOI(lat, lon) {
+    // Show the mask
+    const loadingIndicator = document.getElementById('loading-indicator');
+    loadingIndicator.style.display = 'flex';
+
     const startTime = new Date().getTime();
 
     let zoom = Math.log2(map.getSize().y * 40);
