@@ -259,6 +259,7 @@ export async function getPOIdata(latitude, longitude) {
 
     const overpassQuery = genQueryHelper(latitude, longitude);
     // console.log(overpassQuery);
+    const loadingIndicator = document.getElementById('loading-indicator');
 
     try {
         // Sending the request to Overpass API
@@ -277,7 +278,6 @@ export async function getPOIdata(latitude, longitude) {
         console.log("Time for retrieving poi data for download", (endTime - startTime) / 1000, "s");
 
         // hide the mask
-        const loadingIndicator = document.getElementById('loading-indicator');
         loadingIndicator.style.display = 'none';
         return data.elements;
     } catch (error) {

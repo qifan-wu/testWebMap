@@ -67,6 +67,15 @@ nav ul li a:hover {
     color: black !important;
 }
 
+#closePanelBtn {
+    background-color: none;
+    border: none;
+    font-size: 1vw;
+    position: absolute;
+    right: 10px;
+    top: 45px;
+}
+
 .circle {
     width: 32px;
     height: 32px;

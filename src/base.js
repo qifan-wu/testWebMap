@@ -171,3 +171,13 @@ axios.get(STATIONS_INFO_FILE)
     // };
     // initialize the poi count in every detail category
 
+document.addEventListener('DOMContentLoaded', function() {
+    const closeBtn = document.getElementById('closePanelBtn');
+    const statsPanel = document.getElementById('statspanel');
+
+    closeBtn.addEventListener('click', function() {
+        statsPanel.style.display = 'none';
+        closeBtn.style.display='none';
+        document.getElementById('map').style.width = '100%';
+    });
+});

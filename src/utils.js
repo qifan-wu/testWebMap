@@ -25,14 +25,9 @@ export async function createStationMarkers(stationsData) {
                 overlayMaps.legend = true;
                 poiLegend.addTo(map);
             }
-
+            document.getElementById('map').style.width = '75%';
+            document.getElementById('closePanelBtn').style.display='flex';
             handleClickStationAsync(station);
-            // if (!isHandlingClick) {
-            //     isHandlingClick = true;
-            //     handleClickStation(station, function() {
-            //         isHandlingClick = false;
-            //     });
-            // }
         });
 
         overlayMaps["stations"] = stationMarker;
