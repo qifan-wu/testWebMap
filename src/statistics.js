@@ -10,7 +10,8 @@ export async function displayStatistics(lat, lon, name=null, population=null, di
     if (name == null) {
         name = "Selected_Target";
     }
-    stationDiv.innerHTML = `<h2>${name}</h2>`;
+    stationDiv.innerHTML = `<h2>${name}</h2>`
+        + "<p>Click on SIPOI to get details & view it in OpenStreetMap</p>";
 
     // population
     const popInfoDiv = document.getElementById('popInfo');
