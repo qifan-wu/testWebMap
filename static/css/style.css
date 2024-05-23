@@ -169,6 +169,7 @@ nav ul li a:hover {
     margin: 0 auto;
     /* flex-direction: column; */
     font-size: small;
+    background-color: white;
 }
 
 

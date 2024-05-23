@@ -25,8 +25,7 @@ export async function createStationMarkers(stationsData) {
                 overlayMaps.legend = true;
                 poiLegend.addTo(map);
             }
-            document.getElementById('map').style.width = '75%';
-            document.getElementById('closePanelBtn').style.display='flex';
+
             handleClickStationAsync(station);
         });
 
@@ -54,6 +53,10 @@ export async function createStationMarkers(stationsData) {
 };
 
 export async function handleClickStation(station) {
+    // set the map and close button to normal, if previously closed
+    document.getElementById('map').style.width = '75%';
+    document.getElementById('closePanelBtn').style.display='flex';
+
     if (clickedStation !== station) {
         clickedStation = station;
     }
@@ -121,6 +124,10 @@ export function handleSearchedPlace(data, searchedRes) {
             });
 
             targetMarker.on('click', function(e) {
+                // set the map and close button to normal, if previously closed
+                document.getElementById('map').style.width = '75%';
+                document.getElementById('closePanelBtn').style.display='flex';
+
                 addBorderCircle(target.latlng.lat, target.latlng.lng);
                 displayAllPOI(target.latlng.lat, target.latlng.lng);
                 displayStatistics(target.latlng.lat, target.latlng.lng);
