@@ -25,6 +25,64 @@
 
 <main>
     <div>
-        <p>TBD</p>
+        <h3>Data</h3>
+        <p>Data used in the web tool is collected from open-source database including OSM</p>
+
+    </div>
+    <div>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Notes</th>
+                <th>Data Source</th>
+                <th>Computation Method</th>
+            </tr>
+            <tr>
+                <td>Citeis</td>
+                <td>Cities that have subway systems</td>
+                <td>Wikipedia</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Metro</td>
+                <td>Subway lines and stations</td>
+                <td>https://www.metrolinemap.com/</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>SIPOI</td>
+                <td>social infrastructure point of interest </td>
+                <td>OSM</td>
+                <td>Overpass API</td>
+            </tr>
+            <tr>
+                <td>Population</td>
+                <td>population within 1km range (in thousand)</td>
+                <td>WordPop</td>
+                <td>Averaged from four nearest 1 km grid for each subway station.</td>
+            </tr>
+            <tr>
+                <td>Building Area</td>
+                <td></td>
+                <td>ohsome</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Road Length</td>
+                <td></td>
+                <td>ohsome</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Distance to City Center</td>
+                <td></td>
+                <td>Kaggle</td>
+                <td>GeoPy is used to retrieve the missing data</td>
+            </tr>
+            </table>
+    </div>
+    <div>
+        <h3>Case Studies Matching</h3>
+        <p>We used genetic matching to evaluate the effect of car-oriented infrastructure while controlling for population density, building area, road length, and continent. We focused on car-oriented infrastructure because it implies design elements that urban planners can easily impact and change. Genetic matching was chosen because we observed nonlinear relationships between the variables in the scatterplots. In this matching analysis, “treatments” refer to stations that have a high ratio of caroriented roads or parking areas (i.e., over 80% percentile of all stations). “Controls” represent stations that have similar population density, building area, road length, and continents. Among the control variables, only continents were coded as ordinal variables while others</p>
     </div>
 </main>
