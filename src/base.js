@@ -40,7 +40,8 @@ var mapboxDark = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x
 // display metro lines
 axios.get(METRO_FILE)
     .then(function (response) {
-      // var metroStations = L.markerClusterGroup();
+      var metroStations = L.markerClusterGroup(); ///
+
       var metroLines = L.markerClusterGroup();
       var metroData = response.data;
       for (const metroUrl in metroData) {
@@ -60,10 +61,10 @@ axios.get(METRO_FILE)
             });
 
             // Plot metro stations
-            // metro.stations.forEach(function(station) {
-            //   let stationMarkerNew = L.marker([station.lat, station.lon]);
-            //   metroStations.addLayer(stationMarkerNew);
-            // });
+            metro.stations.forEach(function(station) {
+              let stationMarkerNew = L.marker([station.lat, station.lon]);
+              metroStations.addLayer(stationMarkerNew);
+            });
 
           }
         }
@@ -73,8 +74,8 @@ axios.get(METRO_FILE)
 
 
         // add stations from metro website to map
-        // layerControl.addOverlay(metroStations, "metroStations");
-        // overlayMaps.metroStations = metroStations;
+        layerControl.addOverlay(metroStations, "metroStations");
+        overlayMaps.metroStations = metroStations;
     })
     .catch(function (error) {
         console.error("error fetching cache: ", error)
