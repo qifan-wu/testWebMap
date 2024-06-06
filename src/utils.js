@@ -42,6 +42,9 @@ export async function createStationMarkers(stationsData) {
                 }
             ).openPopup();
         });
+        stationMarker.on('mouseout', function(e) {
+            this.closePopup();
+        });
 
     });
 
@@ -121,6 +124,10 @@ export function handleSearchedPlace(data, searchedRes) {
                         }
                         ).openPopup();
                 }
+            });
+
+            targetMarker.on('mouseout', function(e) {
+                this.closePopup();
             });
 
             targetMarker.on('click', function(e) {
