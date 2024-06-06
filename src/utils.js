@@ -77,8 +77,7 @@ export async function handleClickStation(station) {
     });
 
     await displayStatistics(station.lat, station.lon, station.name, station.pop, station.distanceToCenter);
-    // callback();
-    // clearPOI();
+
     document.getElementById('clearPOI').addEventListener('click', clearPOI);
 };
 
@@ -333,15 +332,20 @@ export function addBorderCircle(lat, lon) {
 
 
 export function clearPOI() {
-        if (overlayMaps.border !== undefined) {
-            map.removeLayer(overlayMaps["border"]);
-        }
-        if (overlayMaps.POI_group != undefined) {
-            map.removeLayer(overlayMaps["POI_group"]);
-        }
-        if (overlayMaps.selected !== undefined) {
-            map.removeLayer(overlayMaps["selected"]);
-        }
+    if (overlayMaps.border !== undefined) {
+        map.removeLayer(overlayMaps["border"]);
+    }
+    if (overlayMaps.POI_group != undefined) {
+        map.removeLayer(overlayMaps["POI_group"]);
+    }
+    if (overlayMaps.selected !== undefined) {
+        map.removeLayer(overlayMaps["selected"]);
+    }
+
+    // document.getElementById('closePanelBtn').style.display='flex';
+    document.getElementById('defaultpanel').style.display = 'block';
+    document.getElementById('statspanel').style.display = 'none';
+
 };
 
 
