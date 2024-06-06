@@ -11,7 +11,8 @@ export async function displayStatistics(lat, lon, name=null, population=null, di
         name = "Selected_Target";
     }
     stationDiv.innerHTML = `<h2>${name}</h2>`
-        + "<p>Click on SIPOI to get details & view it in OpenStreetMap</p>";
+        + "<p>Click on SIPOI to get details & view it in OpenStreetMap</p>"
+        + "<p>(Retrieving and displaying data may take some time. Please wait till no new feature is popping up in the map)</p>";
 
     // population
     const popInfoDiv = document.getElementById('popInfo');
@@ -190,7 +191,7 @@ export function displayRoadLen(roadLenInfo) {
     let roadTypeLabelVals = ["Car-friendly", "Pedestrian-friendly"];
     let roadTypeColorVals = ['#53a8b6', '#bbe4e9'];
     let roadTypeLenVals = [Math.round(moterLen / 1000), Math.round(pedestrianLen / 1000)];
-    let titleText = "Road Length Information By Type";
+    let titleText = "Road Length By Type";
     let roadLenChartStyle = {'aspectRatio': 3, 'unit': 'km'};
     plotHorizentalBarChart('roadLenChart', roadTypeLabelVals, roadTypeColorVals, roadTypeLenVals, titleText, roadLenChartStyle);
 }
