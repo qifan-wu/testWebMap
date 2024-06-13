@@ -1,4 +1,4 @@
-import { SEARCH_RADIUS, SEARCH_RADIUS_METER, CATEGORIE_KEYS, SOPOI_CAT_OSM, SOPOI_CAT_DETAIL, OVERPASS_INTERPRETER, STATIONS_DATA_FILE, OSM_ORG_ENDPOINT } from './constants.js'
+import { SEARCH_RADIUS, SEARCH_RADIUS_METER, CATEGORIE_KEYS, SOPOI_CAT_OSM, SOPOI_CAT_DETAIL, OVERPASS_INTERPRETER, OSM_ORG_ENDPOINT } from './constants.js'
 import { SOPOI_CAT_DISPLAY } from './styles.js'
 import { overlayMaps, layerControl, poiLegend} from './base.js'
 import { subwayIcon, targetIcon, poiIcon} from './icons.js'

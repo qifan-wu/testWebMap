@@ -1,5 +1,4 @@
 // Local files
-export const STATIONS_DATA_FILE = 'data/stations_all.json'
 export const STATIONS_INFO_FILE = 'data/stations_info.json'
 export const METRO_FILE = 'data/metros.json';
 
