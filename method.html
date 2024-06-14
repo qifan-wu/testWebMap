@@ -24,65 +24,99 @@
 </header>
 
 <main>
-    <div>
-        <h3>Data</h3>
-        <p>Data used in the web tool is collected from open-source database including OSM</p>
+<!-- https://codebeautify.org/markdown-to-html -->
+<h3 id="data">Data</h3>
+<h4 id="source-updated-by-june-2024">Source (updated by June, 2024)</h4>
+<table>
+<thead>
+<tr>
+<th>Data</th>
+<th>Link/Source</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Metro Lines and Stations</strong></td>
+<td>Data from <a href="https://www.metrolinemap.com/">metrolinemap.com</a>. Scraped and parsed by <a href="https://github.com/denesdata/kontext/tree/master/metro">Dénes Csala Data Consulting</a></td>
+</tr>
+<tr>
+<td><strong>Social Infrastructure Point of Interest (SIPOI)</strong></td>
+<td>Data From <a href="https://www.openstreetmap.org/">OpenStreetMap</a>. Retrieved with <a href="https://overpass-api.de/">Overpass API</a></td>
+</tr>
+<tr>
+<td><strong>Built Environment Statistics (Building Area, Parking Area, Road Length)</strong></td>
+<td>Data from <a href="https://docs.ohsome.org/ohsome-api/stable/endpoints.html">Ohsome API</a></td>
+</tr>
+<tr>
+<td><strong>Population Density</strong></td>
+<td>Data from <a href="https://www.worldpop.org/">WorldPop</a> For each subway station, we retrieved the four nearest 1 km grid and averaged the population.</td>
+</tr>
+<tr>
+<td><strong>Distance To City Center</strong></td>
+<td>First checked <a href="https://www.kaggle.com/datasets/viswanathanc/world-cities-datasets/data">Kaggle World Cities Datasets</a>. Then added the missing values with <a href="https://geopy.readthedocs.io/en/stable/">GeoPy</a>.</td>
+</tr>
+</tbody></table>
+<h4 id="sipoi-catogory">SIPOI Catogory</h4>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>OSM values</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Public Institution</td>
+<td>&quot;social_facility&quot;, &quot;schools&quot;, &quot;college&quot;, &quot;community_centre&quot;, etc.</td>
+</tr>
+<tr>
+<td>Commerce</td>
+<td>&quot;supermarket&quot;, &quot;fashion&quot;, &quot;grocery&quot;, &quot;mall&quot;, etc.</td>
+</tr>
+<tr>
+<td>Food &amp; Drink</td>
+<td>&quot;restaurant&quot;, &quot;cafe&quot;, &quot;fast_food&quot;, &quot;bar&quot;, &quot;pub&quot;, etc.</td>
+</tr>
+<tr>
+<td>Recreation</td>
+<td>&quot;park&quot;, &quot;garden&quot;, &quot;playground&quot;, &quot;theatre&quot;, &quot;clubhouse&quot;, etc.</td>
+</tr>
+<tr>
+<td>Religion</td>
+<td>&quot;memorial&quot;, &quot;monument&quot;, &quot;cemetery&quot;, &quot;heritage&quot;</td>
+</tr>
+</tbody></table>
+<h4 id="download-data-in-the-web-tool">Download Data in the Web Tool</h4>
+<ul>
+<li>Metro Stations Info:  <a href="https://github.com/qifan-wu/testWebMap/blob/main/data/stations_info.json">stations_info.json</a></li>
+<li>TBD</li>
+</ul>
+<h3 id="tech-deck-for-web-tool-implementation">Tech Deck for Web Tool Implementation</h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>API/Plugins</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Scriping Language</strong></td>
+<td>* <a href="https://leafletjs.com/">Leaflet JS</a>: the main scripting language for web interaction</td>
+</tr>
+<tr>
+<td><strong>Data Fetching</strong></td>
+<td>* <a href="https://github.com/plepe/overpass-layer">Leaflet.Overpasslayer</a> for fetching and displaying SIPOI on the Map <br> * <a href="https://docs.ohsome.org/ohsome-api/stable/endpoints.html">Ohsome API</a> for calculating built environment statistics near the selected station</td>
+</tr>
+<tr>
+<td><strong>UI Features</strong></td>
+<td>* <a href="https://developers.arcgis.com/api-keys/">Esri developer API </a> for searchbox <br> * <a href="https://www.chartjs.org/">Chart.js</a> for showing statistics plots <br> * <a href="https://github.com/tyrasd/osmtogeojson">osmtogeojson</a> for downloading SIPOI as Geojson <br> * <a href="https://www.mapbox.com/">Mapbox</a> for base map: street <br> * <a href="https://github.com/Leaflet/Leaflet.markercluster">Leaflet.markercluster</a> for displaying metro stations in a cluster view <br> * <a href="https://github.com/ptma/Leaflet.Legend">Leaflet.Legend</a> for showing SIPOI legend <br> * <a href="https://github.com/rowanwins/leaflet-easyPrint">Leaflet-easyPrint</a> for printing map to PDF</td>
+</tr>
+<tr>
+<td><strong>Computation and Processing</strong></td>
+<td>* <strong>R</strong> for calculating population density <br> * <strong>Python</strong> (<code>pandas</code>, <code>urbanaccess</code>) for calculating the metro stations information <br></td>
+</tr>
+</tbody></table>
+<h3 id="potential-q--a-with-the-web-tool">Potential Q &amp; A with the Web Tool</h3>
+<p><strong>TBD</strong>.</p>
+<p>TBD</p>
+<p>Please email <a href="mailto:&#x71;&#x69;&#x66;&#x61;&#x6e;&#x77;&#x40;&#x75;&#x6d;&#x69;&#x63;&#104;&#x2e;&#101;&#100;&#x75;">&#x71;&#x69;&#x66;&#x61;&#x6e;&#x77;&#x40;&#x75;&#x6d;&#x69;&#x63;&#104;&#x2e;&#101;&#100;&#x75;</a> for questions.</p>
 
-    </div>
-    <div>
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>Notes</th>
-                <th>Data Source</th>
-                <th>Computation Method</th>
-            </tr>
-            <tr>
-                <td>Cities</td>
-                <td>Cities that have subway systems</td>
-                <td>Wikipedia</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Metro</td>
-                <td>Subway lines and stations</td>
-                <td>https://www.metrolinemap.com/</td>
-                <td>Scraped and parsed by https://github.com/denesdata/kontext/tree/master/metro</td>
-            </tr>
-            <tr>
-                <td>SIPOI</td>
-                <td>social infrastructure point of interest </td>
-                <td>OSM</td>
-                <td>Overpass API</td>
-            </tr>
-            <tr>
-                <td>Population</td>
-                <td>population within 1km range</td>
-                <td>WordPop</td>
-                <td>Averaged from four nearest 1 km grid for each subway station.</td>
-            </tr>
-            <tr>
-                <td>Building Area</td>
-                <td></td>
-                <td>ohsome</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Road Length</td>
-                <td></td>
-                <td>ohsome</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Distance to City Center</td>
-                <td></td>
-                <td>Kaggle</td>
-                <td>GeoPy is used to retrieve the missing data</td>
-            </tr>
-            </table>
-    </div>
-    <div>
-        <h3>Case Studies Matching</h3>
-        <p>We used genetic matching to evaluate the effect of car-oriented infrastructure while controlling for population density, building area, road length, and continent. We focused on car-oriented infrastructure because it implies design elements that urban planners can easily impact and change. Genetic matching was chosen because we observed nonlinear relationships between the variables in the scatterplots. In this matching analysis, “treatments” refer to stations that have a high ratio of caroriented roads or parking areas (i.e., over 80% percentile of all stations). “Controls” represent stations that have similar population density, building area, road length, and continents. Among the control variables, only continents were coded as ordinal variables while others</p>
-    </div>
 </main>
