@@ -17,10 +17,10 @@ Read more about project here: [Where Does Social Infrastructure Exist Near Subwa
 #### Source (updated by June, 2024)
 | Data          | Link/Source |
 | ------------- | ------------- |
-| **Metro Lines and Stations** | [metrolinemap.com](https://www.metrolinemap.com/). Scraped and parsed by [Dénes Csala Data Consulting](https://github.com/denesdata/kontext/tree/master/metro)|
-| **Social Infrastructure Point of Interest (SIPOI)** | [OpenStreetMap](https://www.openstreetmap.org/). Data retrieved with [Overpass API](https://overpass-api.de/) |
-| **Built Environment Statistics (Building Area, Parking Area, Road Length)** | [Ohsome API](https://docs.ohsome.org/ohsome-api/stable/endpoints.html)
-| **Population Density** | [WorldPop](https://www.worldpop.org/) For each subway station, we retrieved the four nearest 1 km grid and averaged the population.|
+| **Metro Lines and Stations** | Data from [metrolinemap.com](https://www.metrolinemap.com/). Scraped and parsed by [Dénes Csala Data Consulting](https://github.com/denesdata/kontext/tree/master/metro)|
+| **Social Infrastructure Point of Interest (SIPOI)** | Data From [OpenStreetMap](https://www.openstreetmap.org/). Retrieved with [Overpass API](https://overpass-api.de/) |
+| **Built Environment Statistics (Building Area, Parking Area, Road Length)** | Data from [Ohsome API](https://docs.ohsome.org/ohsome-api/stable/endpoints.html)
+| **Population Density** | Data from [WorldPop](https://www.worldpop.org/) For each subway station, we retrieved the four nearest 1 km grid and averaged the population.|
 | **Distance To City Center** | First checked [Kaggle World Cities Datasets](https://www.kaggle.com/datasets/viswanathanc/world-cities-datasets/data). Then added the missing values with [GeoPy](https://geopy.readthedocs.io/en/stable/). |
 
 #### SIPOI Catogory
@@ -39,13 +39,9 @@ Read more about project here: [Where Does Social Infrastructure Exist Near Subwa
 
 
 ### Tech Deck for Web Tool Implementation
-* **Leaflet JS**: the main scripting language for web interaction
-* **R**: the main scripting language for routing computation on the Greenway scenarios
-* **R `plumber` package**: create a customized API for R codes
-
 | Type | API/Plugins|
 | ------------- | ------------- |
-| **Scriping Language** | * [Leaflet JS](https://leafletjs.com/)
+| **Scriping Language** | * [Leaflet JS](https://leafletjs.com/): the main scripting language for web interaction
 | **Data Fetching** | * [Leaflet.Overpasslayer](https://github.com/plepe/overpass-layer) for fetching and displaying SIPOI on the Map <br> * [Ohsome API](https://docs.ohsome.org/ohsome-api/stable/endpoints.html) for calculating built environment statistics near the selected station
 | **UI Features** | * [Esri developer API ](https://developers.arcgis.com/api-keys/) for searchbox <br> * [Chart.js](https://www.chartjs.org/) for showing statistics plots <br> * [osmtogeojson](https://github.com/tyrasd/osmtogeojson) for downloading SIPOI as Geojson <br> * [Mapbox](https://www.mapbox.com/) for base map: street <br> * [Leaflet.markercluster](https://github.com/Leaflet/Leaflet.markercluster) for displaying metro stations in a cluster view <br> * [Leaflet.Legend](https://github.com/ptma/Leaflet.Legend) for showing SIPOI legend <br> * [Leaflet-easyPrint](https://github.com/rowanwins/leaflet-easyPrint) for printing map to PDF
 | **Computation and Processing** | * **R** for calculating population density <br> * **Python** (`pandas`, `urbanaccess`) for calculating the metro stations information <br>
