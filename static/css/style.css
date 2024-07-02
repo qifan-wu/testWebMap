@@ -299,3 +299,19 @@ button {
     bottom: 5px;
     right: 5px;
 }
+
+#markdown-content {
+    font-family: sans-serif;
+    color: grey;
+    /* font-size:smaller; */
+}
+
+#markdown-content h3 {
+    color: black;
+}
+
+#markdown-content table, th, td {
+    border: 0.5px solid;
+    border-collapse: collapse;
+    border-color: grey;
+}
