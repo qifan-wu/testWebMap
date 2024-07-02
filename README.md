@@ -1,4 +1,4 @@
-## Subway Socioscope - Where Does Social Infrastructure Exist Near Subway Stations?
+<!-- ## Subway Socioscope - Where Does Social Infrastructure Exist Near Subway Stations? -->
 
 ![Interactive Web tool](screenshots/default.png)
 
@@ -43,7 +43,7 @@ Data used in the web tool is collected from open-source database including OSM.
 | ------------- | ------------- |
 | **Scriping Language** | * [Leaflet JS](https://leafletjs.com/): the main scripting language for web interaction
 | **Data Fetching** | * [Leaflet.Overpasslayer](https://github.com/plepe/overpass-layer) for fetching and displaying SIPOI on the Map <br> * [Ohsome API](https://docs.ohsome.org/ohsome-api/stable/endpoints.html) for calculating built environment statistics near the selected station
-| **UI Features** | * [Esri developer API ](https://developers.arcgis.com/api-keys/) for searchbox <br> * [Chart.js](https://www.chartjs.org/) for showing statistics plots <br> * [osmtogeojson](https://github.com/tyrasd/osmtogeojson) for downloading SIPOI as Geojson <br> * [Mapbox](https://www.mapbox.com/) for base map: street <br> * [Leaflet.markercluster](https://github.com/Leaflet/Leaflet.markercluster) for displaying metro stations in a cluster view <br> * [Leaflet.Legend](https://github.com/ptma/Leaflet.Legend) for showing SIPOI legend <br> * [Leaflet-easyPrint](https://github.com/rowanwins/leaflet-easyPrint) for printing map to PDF
+| **UI Features** | * [Esri developer API ](https://developers.arcgis.com/api-keys/) for searchbox <br> * [Chart.js](https://www.chartjs.org/) for showing statistics plots <br> * [osmtogeojson](https://github.com/tyrasd/osmtogeojson) for downloading SIPOI as Geojson <br> * [Mapbox](https://www.mapbox.com/) for base map: street <br> * [Leaflet.markercluster](https://github.com/Leaflet/Leaflet.markercluster) for displaying metro stations in a cluster view <br> * [Leaflet.Legend](https://github.com/ptma/Leaflet.Legend) for showing SIPOI legend <br> * [Leaflet-easyPrint](https://github.com/rowanwins/leaflet-easyPrint) for printing map to PDF <br> * [showdownjs](https://github.com/showdownjs/showdown?tab=readme-ov-file) for README.md wrap to HTML
 | **Computation and Processing** | * **R** for calculating population density <br> * **Python** (`pandas`, `urbanaccess`) for calculating the metro stations information <br>
 
 ### Case Studies Matching

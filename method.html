@@ -8,6 +8,9 @@
 
     <!-- Import style -->
     <link rel="stylesheet" href="./static/css/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
+    <script src="./plugins/showdown/dist/showdown.min.js"></script>
 </head>
 
 <header>
@@ -24,7 +27,27 @@
 </header>
 
 <main>
-<!-- https://codebeautify.org/markdown-to-html -->
+    <div id="markdown-content"></div>
+    <script>
+        var converter = new showdown.Converter();
+        <!-- console.log(converter.getOptions()); -->
+        converter.setOption('tables', 'true');
+
+        axios.get('./README.md')
+            .then(function (response) {
+                var readme = response.data;
+
+                const html = converter.makeHtml(readme);
+                document.getElementById('markdown-content').innerHTML = html;
+            })
+            .catch(function (error) {
+                console.error("error fetching README.md: ", error)
+            });
+
+
+
+    </script>
+<!-- https://codebeautify.org/markdown-to-html
 <h3 id="data">Data</h3>
 <h4 id="source-updated-by-june-2024">Source (updated by June, 2024)</h4>
 <table>
@@ -117,6 +140,6 @@
 <h3 id="potential-q--a-with-the-web-tool">Potential Q &amp; A with the Web Tool</h3>
 <p><strong>TBD</strong>.</p>
 <p>TBD</p>
-<p>Please email <a href="mailto:&#x71;&#x69;&#x66;&#x61;&#x6e;&#x77;&#x40;&#x75;&#x6d;&#x69;&#x63;&#104;&#x2e;&#101;&#100;&#x75;">&#x71;&#x69;&#x66;&#x61;&#x6e;&#x77;&#x40;&#x75;&#x6d;&#x69;&#x63;&#104;&#x2e;&#101;&#100;&#x75;</a> for questions.</p>
+<p>Please email <a href="mailto:&#x71;&#x69;&#x66;&#x61;&#x6e;&#x77;&#x40;&#x75;&#x6d;&#x69;&#x63;&#104;&#x2e;&#101;&#100;&#x75;">&#x71;&#x69;&#x66;&#x61;&#x6e;&#x77;&#x40;&#x75;&#x6d;&#x69;&#x63;&#104;&#x2e;&#101;&#100;&#x75;</a> for questions.</p> -->
 
 </main>
