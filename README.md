@@ -1,7 +1,5 @@
 <!-- ## Subway Socioscope - Where Does Social Infrastructure Exist Near Subway Stations? -->
 
-![Interactive Web tool](screenshots/default.png)
-
 [TAKE ME TO THE MANUSCRIPT](TBD).
 
 [TAKE ME TO THE SUBWAY SOCIOSCOPE WEB TOOL](https://qifan-wu.github.io/testWebMap/).
@@ -11,6 +9,19 @@
 Subway Socioscope provides an interactive visualization of Social Infrastructure Points of Interest (SIPOI) and key social and built environment characteristics within a 1-kilometer radius of subway stations globally. This tool aims to highlight the variations in social infrastructure around subway stations and to explore how car-centric infrastructure adversely affects the availability of SIPOI.
 
 Read more about project here: [Where Does Social Infrastructure Exist Near Subway Stations? A Global Assessment Using OpenStreetMap Data](https://www.xiaofanliang.com/project/sipoi/).
+
+
+### User Guide
+#### Default Page
+This page displays all the metro stations worldwide in cluster view. The number in the circle represent the count of stations in that area.
+![Default Page](screenshots/default.png)
+#### Zoom In: City Level
+Click on the cluster / Click on the "+" on the map to zoom in and display the metro stations with station icons. Hover on the station to see its name. Click on the metro line to show the line name, start and terminal.
+![City Page](screenshots/city.png)
+#### Zoom In: Station Level
+Click on the station icon to how the Social Infrastructure Point Of Interest (SIPOI) within 1km buffer from the station, by category. See the details of SIPOI statistics / Built environment information / Download SIPOI data in CSV/Geojson format / Clear map in the side panel.
+![Station Page](screenshots/station.png)
+
 
 ### Data
 Data used in the web tool is collected from open-source database including OSM.
@@ -23,13 +34,18 @@ Data used in the web tool is collected from open-source database including OSM.
 | **Population Density** | Data from [WorldPop](https://www.worldpop.org/). For each subway station, we retrieved the four nearest 1 km grid and averaged the population.|
 | **Distance To City Center** | First checked [Kaggle World Cities Datasets](https://www.kaggle.com/datasets/viswanathanc/world-cities-datasets/data). Then added the missing values with [GeoPy](https://geopy.readthedocs.io/en/stable/). |
 
+#### Missing data?
+* Missing metro line: This may be due to incomplete data from our source, [metrolinemap.com](https://www.metrolinemap.com/).
+* Missing metro station: they are not available or are labeled as light rail stations in [OpenStreetMap](https://www.openstreetmap.org/)
+* Missing social infrastructure: Map it in [OpenStreetMap](https://www.openstreetmap.org/) to help support an open-source database.
+
 #### SIPOI Catogory
 | Category | OSM values|
 | ------------- | ------------- |
-| Public Institution | "social_facility", "schools", "college", "community_centre", etc.
-| Commerce | "supermarket", "fashion", "grocery", "mall", etc. |
-| Food & Drink| "restaurant", "cafe", "fast_food", "bar", "pub", etc. |
-| Recreation | "park", "garden", "playground", "theatre", "clubhouse", etc. |
+| Public Institution | "social_facility", "library", "arts_centre" "school", "university", "college", "social_centre", "community_centre", "conference_centre", "events_venue", "exhibition_centre", "coworking_space", "events_centre", "memorial", "monument", "cemetery", "heritage" |
+| Commerce | "nightclub", "marketplace", "convenience", "supermarket", "clothes", "hairdresser", "car repair", "bakery", "beauty", "kiosk", "hardware", "alcohol", "florist", "electronics", "shoes", "variety store", "mall", "optician", "jewelry", "doityourself", "gift", "greengrocer", "books", "bicycle", "department store", "laundry", "sports", "pet", "stationery", "confectionery", "cosmetics", "tailor", "newsagent", "beverages", "tobacco", "garden_centre", "massage", "pastry", "deli", "ticket", "toys", "seafood", "houseware", "wine", "photo", "charity", "tattoo", "art", "outdoor", "second hand", "fabric", "antiques", "coffee", "craft", "tea", "baby_goods", "musical_instrument", "music", "motorcycle_repair", "dairy", "chocolate", "cheese", "pet_grooming", "health_food", "video_games", "fishing", "grocery", "nutrition_supplements", "fashion_accessories", "watches", "cannabis", "estate_agent", "sewing", "video", "erotic", "herbalist", "frozen_food", "party", "shoe_repair", "repair", "ice_cream", "games", "pottery", "fashion", "spices", "photo_studio", "candles", "water_sports", "pasta", "honey", "rice", "anime", "nuts", "trophy", "wool", "wigs", "psychic", "ski", "shopping_centre"|
+| Food & Drink| "restaurant", "cafe", "fast_food", "bar", "pub", "ice_cream", "internet_cafe", "food_court", "biergarten", "canteen" |
+| Recreation | "theatre", "cinema", "bbq", "public_bookcase", "casino", "dojo", "love_hotel", "kneipp_water_cure", "karaoke_box", "hookah_lounge", "stripclub", "clubhouse", "swingerclub", "public_bath", "lavoir", "kitchen", "social_club", "stage", "music_venue", "concert_hall", "festival_grounds" |
 | Religion | "memorial", "monument", "cemetery", "heritage" |
 
 
