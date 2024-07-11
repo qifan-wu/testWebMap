@@ -19,7 +19,7 @@ This page displays all the metro stations worldwide in cluster view. The number 
 Click on the cluster / Click on the "+" on the map to zoom in and display the metro stations with station icons. Hover on the station to see its name. Click on the metro line to show the line name, start and terminal.
 ![City Page](screenshots/city.png)
 #### Zoom In: Station Level
-Click on the station icon to how the Social Infrastructure Point Of Interest (SIPOI) within 1km buffer from the station, by category. See the details of SIPOI statistics / Built environment information / Download SIPOI data in CSV/Geojson format / Clear map in the side panel.
+Click on the station icon to show the Social Infrastructure Point Of Interest (SIPOI) within 1km buffer from the station, by category. See the details of SIPOI statistics / Built environment information / Download SIPOI data in CSV/Geojson format / Clear map in the side panel.
 ![Station Page](screenshots/station.png)
 
 
