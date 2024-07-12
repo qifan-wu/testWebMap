@@ -25,11 +25,17 @@ Click on the cluster / Click on the "+" on the map to zoom in and display the me
 
 
 #### Zoom In: Station Level
-![Station Page](screenshots/station.png)
+![Station Page](screenshots/stationlevel.png)
 
-Click on the station icon to show the Social Infrastructure Point Of Interest (SIPOI) within 1km buffer from the station, by category. See the details of SIPOI statistics / Built environment information / Download SIPOI data in CSV/Geojson format / Clear map in the side panel.
+Click on the station icon to show the Social Infrastructure Point Of Interest (SIPOI) within 1km buffer from the station, by category. Click on a SIPOI in the map to see details. The statistics and nearby built environment information are displayed in the side panel. Click the "Clear" button to clear map in the side panel.
 
+![Edit in OSM](screenshots/osm-edit.png)
+Click on the pop-up link to see this SIPOI in OpenStreetMap.
 
+![Download CSV](screenshots/download-csv.png)
+![Download Geojson Page](screenshots/download-geojson.png)
+
+Click the buttons to download SIPOI data in CSV/Geojson format.
 
 
 ## Data
