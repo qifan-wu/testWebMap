@@ -306,12 +306,23 @@ button {
     /* font-size:smaller; */
 }
 
-#markdown-content h3 {
+#markdown-content h2 {
     color: black;
 }
+
+#markdown-content {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
 
 #markdown-content table, th, td {
     border: 0.5px solid;
     border-collapse: collapse;
     border-color: grey;
+
+}
+
+#markdown-content img {
+    width: 70%;
 }
