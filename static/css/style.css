@@ -310,6 +310,16 @@ button {
     color: black;
 }
 
+#markdown-content h2::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: grey;
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+
 #markdown-content {
     margin-left: 10px;
     margin-right: 10px;

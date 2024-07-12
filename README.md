@@ -5,29 +5,34 @@
 
 [TAKE ME TO THE SUBWAY SOCIOSCOPE WEB TOOL](https://qifan-wu.github.io/testWebMap/).
 
-## About The Project <hr>
-
+## About The Project
 Subway Socioscope provides an interactive visualization of Social Infrastructure Points of Interest (SIPOI) and key social and built environment characteristics within a 1-kilometer radius of subway stations globally. This tool aims to highlight the variations in social infrastructure around subway stations and to explore how car-centric infrastructure adversely affects the availability of SIPOI.
 
 Read more about project here: [Where Does Social Infrastructure Exist Near Subway Stations? A Global Assessment Using OpenStreetMap Data](https://www.xiaofanliang.com/project/sipoi/).
 
 
-## User Guide <hr>
+## User Guide
 #### Default Page
+![Default Page](screenshots/default.png)
+
 This page displays all the metro stations worldwide in cluster view. The number in the circle represent the count of stations in that area.
 
-![Default Page](screenshots/default.png)
+
 #### Zoom In: City Level
+![City Page](screenshots/city.png)
+
 Click on the cluster / Click on the "+" on the map to zoom in and display the metro stations with station icons. Hover on the station to see its name. Click on the metro line to show the line name, start and terminal.
 
-![City Page](screenshots/city.png)
-#### Zoom In: Station Level
-Click on the station icon to show the Social Infrastructure Point Of Interest (SIPOI) within 1km buffer from the station, by category. See the details of SIPOI statistics / Built environment information / Download SIPOI data in CSV/Geojson format / Clear map in the side panel.
 
+#### Zoom In: Station Level
 ![Station Page](screenshots/station.png)
 
+Click on the station icon to show the Social Infrastructure Point Of Interest (SIPOI) within 1km buffer from the station, by category. See the details of SIPOI statistics / Built environment information / Download SIPOI data in CSV/Geojson format / Clear map in the side panel.
 
-## Data <hr>
+
+
+
+## Data
 Data used in the web tool is collected from open-source database including OSM.
 #### Source (updated by June, 2024)
 | Data          | Link/Source |
@@ -40,7 +45,7 @@ Data used in the web tool is collected from open-source database including OSM.
 
 #### Missing data?
 * Missing metro line: This may be due to incomplete data from our source, [metrolinemap.com](https://www.metrolinemap.com/).
-* Missing metro station: they are not available or are labeled as light rail stations in [OpenStreetMap](https://www.openstreetmap.org/)
+* Missing metro station: they are not available or are labeled as light rail stations in [OpenStreetMap](https://www.openstreetmap.org/).
 * Missing social infrastructure: Map it in [OpenStreetMap](https://www.openstreetmap.org/) to help support an open-source database.
 
 #### SIPOI Catogory
@@ -58,18 +63,18 @@ Data used in the web tool is collected from open-source database including OSM.
 * TBD
 
 
-## Tech Deck for Web Tool Implementation <hr>
+## Tech Deck for Web Tool Implementation
 | Type | API/Plugins|
 | ------------- | ------------- |
 | **Scriping Language** | * [Leaflet JS](https://leafletjs.com/): the main scripting language for web interaction
 | **Data Fetching** | * [Leaflet.Overpasslayer](https://github.com/plepe/overpass-layer) for fetching and displaying SIPOI on the Map <br> * [Ohsome API](https://docs.ohsome.org/ohsome-api/stable/endpoints.html) for calculating built environment statistics near the selected station
 | **UI Features** | * [Esri developer API ](https://developers.arcgis.com/api-keys/) for searchbox <br> * [Chart.js](https://www.chartjs.org/) for showing statistics plots <br> * [osmtogeojson](https://github.com/tyrasd/osmtogeojson) for downloading SIPOI as Geojson <br> * [Mapbox](https://www.mapbox.com/) for base map: street <br> * [Leaflet.markercluster](https://github.com/Leaflet/Leaflet.markercluster) for displaying metro stations in a cluster view <br> * [Leaflet.Legend](https://github.com/ptma/Leaflet.Legend) for showing SIPOI legend <br> * [Leaflet-easyPrint](https://github.com/rowanwins/leaflet-easyPrint) for printing map to PDF <br> * [showdownjs](https://github.com/showdownjs/showdown?tab=readme-ov-file) for README.md wrap to HTML
-| **Computation and Processing** | * **R** for calculating population density <br> * **Python** (`pandas`, `urbanaccess`) for calculating the metro stations information <br>
+| **Computation and Processing** | * **R** for calculating population density <br> * **Python** (`pandas`, `geopy`) for calculating the metro stations information <br>
 
-## Case Studies Matching <hr>
+## Case Studies Matching
 We used genetic matching to evaluate the effect of car-oriented infrastructure while controlling for population density, building area, road length, and continent. We focused on car-oriented infrastructure because it implies design elements that urban planners can easily impact and change. Genetic matching was chosen because we observed nonlinear relationships between the variables in the scatterplots. In this matching analysis, “treatments” refer to stations that have a high ratio of caroriented roads or parking areas (i.e., over 80% percentile of all stations). “Controls” represent stations that have similar population density, building area, road length, and continents. Among the control variables, only continents were coded as ordinal variables while others
 
-## Citation <hr>
+## Citation
 
 If you use this dataset and/or our metrics, please cite our publication:
 
